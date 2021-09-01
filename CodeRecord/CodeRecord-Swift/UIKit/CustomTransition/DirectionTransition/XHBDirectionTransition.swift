@@ -88,24 +88,28 @@ open class XHBDirectionAnimatedTransitioning: UIViewControllerCustomAnimatedTran
             }else {
                 srcView.x = -superView.width
             }
+            break
         case .right:
             if self.forward {
                 dstView.x = 0
             }else {
                 srcView.x = superView.width
             }
+            break
         case .top:
             if self.forward {
                 dstView.y = 0
             }else {
                 srcView.y = -superView.height
             }
+            break
         case .bottom:
             if self.forward {
                 dstView.bottom = superView.height
             }else {
                 srcView.y = superView.height
             }
+            break
         case .center:
             if self.forward {
                 dstView.transform = .identity
@@ -179,6 +183,8 @@ extension UIViewController {
         public var options: UIView.AnimationOptions = [.curveEaseInOut]
         
         public static let noramlConfig = CustomTransitioningConfig(displaySize: .zero)
+        public static let windowNormalConfig = CustomTransitioningConfig(direction: .center,
+                                                                         displaySize: CGSize(width: 300, height: 300))
     }
     
     open func present(viewController: UIViewController,
