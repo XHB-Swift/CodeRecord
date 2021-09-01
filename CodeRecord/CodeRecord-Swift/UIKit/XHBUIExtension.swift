@@ -152,7 +152,7 @@ extension UIColor {
         self.init(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: alpha)
     }
     
-    public convenience init?(hexString: String, alpha: CGFloat) {
+    public convenience init?(hexString: String, alpha: CGFloat = 1.0) {
         var fixedHexStr = hexString
         if hexString.hasPrefix("#") {
             guard let fixedHex = hexString[(1..<hexString.count-1)] else { return nil }
@@ -186,18 +186,36 @@ extension UIColor {
         
         if argbHex.count == 8 {
             let a = CGFloat(argbHex[(0..<2)]?.hexStringToInt ?? 0) / 255.0
-            let r = CGFloat(argbHex[(2..<2)]?.hexStringToInt ?? 0) / 255.0
-            let g = CGFloat(argbHex[(4..<2)]?.hexStringToInt ?? 0) / 255.0
-            let b = CGFloat(argbHex[(6..<2)]?.hexStringToInt ?? 0) / 255.0
+            let r = CGFloat(argbHex[(2..<4)]?.hexStringToInt ?? 0) / 255.0
+            let g = CGFloat(argbHex[(4..<6)]?.hexStringToInt ?? 0) / 255.0
+            let b = CGFloat(argbHex[(6..<8)]?.hexStringToInt ?? 0) / 255.0
             self.init(red: r, green: g, blue: b, alpha: a)
         }else if argbHex.count == 6 {
-            let r = CGFloat(argbHex[(2..<2)]?.hexStringToInt ?? 0) / 255.0
-            let g = CGFloat(argbHex[(4..<2)]?.hexStringToInt ?? 0) / 255.0
-            let b = CGFloat(argbHex[(6..<2)]?.hexStringToInt ?? 0) / 255.0
+            let r = CGFloat(argbHex[(0..<2)]?.hexStringToInt ?? 0) / 255.0
+            let g = CGFloat(argbHex[(2..<4)]?.hexStringToInt ?? 0) / 255.0
+            let b = CGFloat(argbHex[(4..<6)]?.hexStringToInt ?? 0) / 255.0
             self.init(red: r, green: g, blue: b, alpha: 1.0)
         }else {
             return nil
         }
+    }
+    
+    open class var randomColor: UIColor? {
+        let hexColorStrs = ["D4EABD",
+                            "EAE2BD",
+                            "B5ABAE",
+                            "D8CAE0",
+                            "BAC5BA",
+                            "D6EDF1",
+                            "EABDD1",
+                            "B1B4BB",
+                            "EAC7BD",
+                            "BDD8EA",
+                            "B8B394"]
+        
+        let randomIdx = Int(arc4random() % UInt32(hexColorStrs.count))
+        let hexColorStr = hexColorStrs[randomIdx]
+        return UIColor(hexString: hexColorStr)
     }
     
 }

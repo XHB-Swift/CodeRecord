@@ -13,13 +13,7 @@ import Foundation
 extension String {
     
     public var hexStringToInt: Int {
-        
-        let result = UnsafeMutablePointer<Int>.allocate(capacity: 1)
-        _ = withVaList([result]) { pointer in
-            vsscanf(self, "%X", pointer)
-        }
-        
-        return Int(result.pointee)
+        return Int(self, radix: 16) ?? 0
     }
     
     subscript(i: Int) -> Self? {

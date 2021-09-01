@@ -13,9 +13,10 @@ open class UIViewControllerCustomAnimatedTransitioning: NSObject, UIViewControll
     
     open var forward = true //true正向动画，false反向动画
     open var duration: TimeInterval = 0
+    open var options: UIView.AnimationOptions = [.curveEaseInOut]
     
     open func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return duration
+        return (transitionContext?.isAnimated ?? false) ? duration : 0
     }
     
     open func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -27,54 +28,130 @@ open class UIViewControllerCustomAnimatedTransitioning: NSObject, UIViewControll
               let srcView = srcViewController?.view else {
             return
         }
-        let srceView: UIView
-        let destView: UIView
         if forward {
             containerView.insertSubview(dstView, aboveSubview: srcView)
-            srceView = srcView
-            destView = dstView
         } else {
-            containerView.insertSubview(dstView, belowSubview: srcView)
-            srceView = dstView
-            destView = srcView
+            if dstView.superview == nil {
+                containerView.insertSubview(dstView, belowSubview: srcView)
+            }
         }
-        doAnimation(srceView, destView, transitionContext)
+        doAnimation(srcView, dstView, transitionContext)
     }
     
     open func doAnimation(_ from: UIView, _ to: UIView, _ transitionContext: UIViewControllerContextTransitioning) {}
 }
 
-open class UIViewControllerCustomTransitioning: NSObject {
+open class UIViewCustomPresentationController: UIPresentationController {
     
-    public typealias Key = String
+    private(set) lazy var dimmingView = { () -> UIView in
+        let view = UIView(frame: .zero)
+        view.alpha = 0.5
+        view.backgroundColor = .black
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapDimmingViewAction(_:))))
+        return view
+    }()
     
-    open var interactionTransition: UIViewControllerInteractiveTransitioning?
-    fileprivate var customAnimatedTransitioningInfo = [Key : UIViewControllerCustomAnimatedTransitioning]()
-    
-    open func setCustomAnimatedTransition(_ customAnimatedTransitioning: UIViewControllerCustomAnimatedTransitioning, for key: Key) {
-        customAnimatedTransitioningInfo[key] = customAnimatedTransitioning
+    public override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+        presentedViewController.modalPresentationStyle = .custom
     }
     
-    open func customAnimatedTransition(for key: Key) -> UIViewControllerCustomAnimatedTransitioning? {
-        return customAnimatedTransitioningInfo[key]
+    open override func presentationTransitionWillBegin() {
+        dimmingView.frame = containerView?.bounds ?? .zero
+        presentedView?.frame = frameOfPresentedViewInContainerView
+        containerView?.addSubview(dimmingView)
+        let tmpAlpha = dimmingView.alpha
+        dimmingView.alpha = 0
+        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] context in
+            self?.dimmingView.alpha = tmpAlpha
+        }, completion: nil)
+    }
+    
+    open override func presentationTransitionDidEnd(_ completed: Bool) {
+        if !completed {
+            dimmingView.removeFromSuperview()
+        }
+    }
+    
+    open override func dismissalTransitionWillBegin() {
+        presentingViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] context in
+            self?.dimmingView.alpha = 0
+        }, completion: nil)
+    }
+    
+    open override func dismissalTransitionDidEnd(_ completed: Bool) {
+        if completed {
+            dimmingView.removeFromSuperview()
+        }
+    }
+    
+    open override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+        super.preferredContentSizeDidChange(forChildContentContainer: container)
+        if container.isEqual(presentedViewController) {
+            containerView?.setNeedsLayout()
+        }
+    }
+    
+    open override func size(forChildContentContainer container: UIContentContainer, withParentContainerSize parentSize: CGSize) -> CGSize {
+        if container.isEqual(presentedViewController) {
+            return frameOfPresentedViewInContainerView.size
+        }else {
+            return super.size(forChildContentContainer: container, withParentContainerSize: parentSize)
+        }
+    }
+    
+    open override func containerViewWillLayoutSubviews() {
+        super.containerViewWillLayoutSubviews()
+        dimmingView.frame = containerView?.bounds ?? .zero
+        presentedView?.frame = frameOfPresentedViewInContainerView
+    }
+    
+    @objc private func tapDimmingViewAction(_ sender: UITapGestureRecognizer) {
+        presentedViewController.dismissCustomModal(animated: true, completion: nil)
     }
 }
 
-open class UIViewControllerCustomModalTransitioning: UIViewControllerCustomTransitioning, UIViewControllerTransitioningDelegate {
+open class UIViewControllerCustomTransitioning: NSObject {
     
-    public static let present: Key = "present"
-    public static let dismiss: Key = "dismss"
+    open var interactionTransition: UIViewControllerInteractiveTransitioning?
+}
+
+open class UIViewControllerCustomModalTransitioning: UIViewControllerCustomTransitioning,
+                                                     UIViewControllerTransitioningDelegate {
     
     open var presentationController: UIPresentationController?
+    open var presentAnimation: UIViewControllerCustomAnimatedTransitioning?
+    open var dismissAnimation: UIViewControllerCustomAnimatedTransitioning?
+    
+    deinit {
+        print("deinit UIViewControllerCustomModalTransitioning")
+    }
+    
+    public override init() {}
+    
+    public init(presentAnimation: UIViewControllerCustomAnimatedTransitioning?,
+                dismissAnimation: UIViewControllerCustomAnimatedTransitioning? = nil,
+                presentationController: UIPresentationController? = nil) {
+        self.presentAnimation = presentAnimation
+        self.dismissAnimation = dismissAnimation
+        self.presentationController = presentationController
+    }
     
     open func animationController(forPresented presented: UIViewController,
                                   presenting: UIViewController,
                                   source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimatedTransition(for: UIViewControllerCustomModalTransitioning.present)
+        presentAnimation?.forward = true
+        return presentAnimation
     }
     
     open func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimatedTransition(for: UIViewControllerCustomModalTransitioning.dismiss)
+        if dismissAnimation != nil {
+            dismissAnimation?.forward = false
+            return dismissAnimation
+        }else {
+            presentAnimation?.forward = false
+            return presentAnimation
+        }
     }
     
     open func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
@@ -94,14 +171,14 @@ open class UIViewControllerCustomModalTransitioning: UIViewControllerCustomTrans
 
 open class UIViewControllerCustomNavigationTransitioning: UIViewControllerCustomTransitioning, UINavigationControllerDelegate {
     
-    public static let push: Key = "push"
-    public static let pop:  Key = "pop"
+    open var pushAnimation: UIViewControllerCustomAnimatedTransitioning?
+    open var popAnimation: UIViewControllerCustomAnimatedTransitioning?
     
     open func navigationController(_ navigationController: UINavigationController,
                                    animationControllerFor operation: UINavigationController.Operation,
                                    from fromVC: UIViewController,
                                    to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimatedTransition(for: UIViewControllerCustomNavigationTransitioning.push)
+        return pushAnimation
     }
     
     open func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
@@ -111,10 +188,13 @@ open class UIViewControllerCustomNavigationTransitioning: UIViewControllerCustom
 
 open class UIViewControllerCustomTabTransitioning: UIViewControllerCustomTransitioning, UITabBarControllerDelegate {
     
+    open var tabSwitchAnimations: [UIViewControllerCustomAnimatedTransitioning]?
+    
     open func tabBarController(_ tabBarController: UITabBarController,
                                animationControllerForTransitionFrom fromVC: UIViewController,
                                to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimatedTransitioningInfo["\(tabBarController.selectedIndex)"]
+        let selectedIdx = tabBarController.selectedIndex
+        return (selectedIdx < (tabSwitchAnimations?.count ?? 0)) ? tabSwitchAnimations?[selectedIdx] : nil
     }
     
     open func tabBarController(_ tabBarController: UITabBarController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

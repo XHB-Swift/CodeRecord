@@ -20,72 +20,108 @@ public enum XHBTransitionDirection {
 open class XHBDirectionAnimatedTransitioning: UIViewControllerCustomAnimatedTransitioning {
     
     //从左边进就从左边出
-    open var transitionDirection: XHBTransitionDirection = .left
+    open var direction: XHBTransitionDirection = .left
     
-    open override func doAnimation(_ from: UIView, _ to: UIView, _ transitionContext: UIViewControllerContextTransitioning) {
+    open override func doAnimation(_ from: UIView,
+                                   _ to: UIView,
+                                   _ transitionContext: UIViewControllerContextTransitioning) {
+        animationWillBegin(with: from, to)
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
-                       options: [.curveEaseInOut],
-                       animations: animations(from, to, self.forward)) { finished in
+                       options: options) { [weak self] in
+            self?.animationDidBegin(with: from, to)
+        } completion: { finished in
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
     
-    private func animations(_ from: UIView, _ to: UIView, _ forward: Bool) -> (() -> Void) {
-        switch transitionDirection {
-        case .top:
-            let initialeY = forward ? -from.height : 0
-            let animatedY = forward ? 0 : -from.height
-            to.y = initialeY
-            return {
-                to.y = animatedY
-                to.setNeedsDisplay()
-            }
-        case .bottom:
-            let initialeY = forward ? from.height : 0
-            let animatedY = forward ? 0 : from.height
-            to.y = initialeY
-            return {
-                to.y = animatedY
-                to.setNeedsDisplay()
-            }
+    private func animationWillBegin(with srcView: UIView, _ dstView: UIView) {
+        guard let superView = dstView.superview else { return }
+        switch direction {
         case .left:
-            let initialeX = forward ? -from.width : 0
-            let animatedX = forward ? 0 : -from.width
-            to.x = initialeX
-            return {
-                to.y = animatedX
-                to.setNeedsDisplay()
+            if self.forward {
+                dstView.x = -superView.width
+            }else {
+                srcView.x = 0
+            }
+            break
+        case .right:
+            if self.forward {
+                dstView.x = superView.width
+            }else {
+                srcView.x = 0
+            }
+            break
+        case .top:
+            if self.forward {
+                dstView.y = -superView.height
+            }else {
+                srcView.y = 0
+            }
+            break
+        case .bottom:
+            if self.forward {
+                dstView.y = superView.height
+            }else {
+                srcView.bottom = superView.height
+            }
+            break
+        case .center:
+            if self.forward {
+                dstView.transform = .identity.scaledBy(x: 0.1, y: 0.1)
+                dstView.alpha = 0
+            }else {
+                srcView.transform = .identity
+                srcView.alpha = 1
+            }
+            break
+        }
+        
+    }
+    
+    private func animationDidBegin(with srcView: UIView, _ dstView: UIView) {
+        guard let superView = srcView.superview else { return }
+        switch direction {
+        case .left:
+            if self.forward {
+                dstView.x = 0
+            }else {
+                srcView.x = -superView.width
             }
         case .right:
-            let initialeX = forward ? from.width : 0
-            let animatedX = forward ? 0 : from.width
-            to.x = initialeX
-            return {
-                to.y = animatedX
-                to.setNeedsDisplay()
+            if self.forward {
+                dstView.x = 0
+            }else {
+                srcView.x = superView.width
+            }
+        case .top:
+            if self.forward {
+                dstView.y = 0
+            }else {
+                srcView.y = -superView.height
+            }
+        case .bottom:
+            if self.forward {
+                dstView.bottom = superView.height
+            }else {
+                srcView.y = superView.height
             }
         case .center:
-            return {
-                
+            if self.forward {
+                dstView.transform = .identity
+                dstView.alpha = 1
+            }else {
+                srcView.transform = .identity.scaledBy(x: 0.1, y: 0.1)
+                srcView.alpha = 0
             }
+            break
         }
     }
 }
 
-open class XHBDirectionPresentationController: UIPresentationController {
-    
-    open var controllerSize: CGSize = .zero
-    open var dismissAnimation: UIViewControllerCustomAnimatedTransitioning?
+open class XHBDirectionPresentationController: UIViewCustomPresentationController {
     
     fileprivate var direction: XHBTransitionDirection = .left
-    fileprivate lazy var dimmingView = { () -> UIView in
-        let view = UIView(frame: .zero)
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapDimmingViewAction(_:))))
-        return view
-    }()
-    fileprivate var presentedFrame: CGRect = .zero
     
     public convenience init(presented: UIViewController, presenting: UIViewController?, direction: XHBTransitionDirection) {
         self.init(presentedViewController: presented, presenting: presenting)
@@ -94,94 +130,42 @@ open class XHBDirectionPresentationController: UIPresentationController {
     
     open override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerView = self.containerView else { return .zero }
-        var frame: CGRect = .zero
-        frame.size = size(forChildContentContainer: self.presentedViewController, withParentContainerSize: containerView.size)
-        
-        let containerSize = containerView.size
+        let preferredContentSize = self.presentedViewController.preferredContentSize
+        if preferredContentSize.width == 0 ||
+            preferredContentSize.height == 0 {
+            return containerView.bounds
+        }
+        var frame = CGRect(origin: .zero, size: preferredContentSize)
         
         switch self.direction {
         case .left:
-            frame.origin = .zero
+            frame.origin.x = 0
         case .right:
-            frame.origin.x = containerSize.width - controllerSize.width
-        case .bottom:
-            frame.origin.y = containerSize.height - controllerSize.width
+            frame.origin.x = containerView.right - preferredContentSize.width
         case .top:
-            frame.origin = .zero
+            frame.origin.y = 0
+        case .bottom:
+            frame.origin.y = containerView.height - preferredContentSize.height
         case .center:
-            frame.origin = CGPoint(x: (containerView.width - controllerSize.width) / 2,
-                                   y: (containerView.height - controllerSize.height) / 2)
+            frame.origin = CGPoint(x: (containerView.width - preferredContentSize.width) / 2,
+                                   y: (containerView.height - preferredContentSize.height) / 2)
         }
         return frame
     }
-    
-    open override var preferredContentSize: CGSize {
-        return self.controllerSize
-    }
-    
-    open override func size(forChildContentContainer container: UIContentContainer, withParentContainerSize parentSize: CGSize) -> CGSize {
-        return self.controllerSize
-    }
-    
-    open override func presentationTransitionWillBegin() {
-        guard let containerView = self.containerView else { return }
-        dimmingView.frame = containerView.bounds
-        dimmingView.alpha = 0
-        containerView.insertSubview(dimmingView, at: 0)
-        self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] context in
-            self?.dimmingView.alpha = 1.0
-        }, completion: nil)
-    }
-    
-    open override func dismissalTransitionWillBegin() {
-        dimmingView.alpha = 1
-        self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] context in
-            self?.dimmingView.alpha = 0
-        }, completion: nil)
-    }
-    
-    open override func presentationTransitionDidEnd(_ completed: Bool) {
-        if !completed {
-            dimmingView.removeFromSuperview()
-        }
-    }
-    
-    open override func dismissalTransitionDidEnd(_ completed: Bool) {
-        if completed {
-            dimmingView.removeFromSuperview()
-        }
-    }
-    
-    open override func containerViewWillLayoutSubviews() {
-        super.containerViewWillLayoutSubviews()
-        self.presentedView?.frame = frameOfPresentedViewInContainerView
-    }
-    
-    @objc private func tapDimmingViewAction(_ sender: UITapGestureRecognizer) {
-        self.presentedViewController.customDismiss(animated: true, animation: dismissAnimation, completion: nil)
-    }
 }
 
-fileprivate class XHBTransitionManager: NSObject {
+fileprivate final class XHBCustomTransitioningManager {
     
-    private var transitionTable = [Int:UIViewControllerCustomTransitioning]()
+    private var transitionings = Dictionary<String,UIViewControllerCustomTransitioning>()
+    private init() {}
+    public static let shared = XHBCustomTransitioningManager()
     
-    private override init() {
-        super.init()
+    public func setTransitioning(_ transitioning: UIViewControllerCustomTransitioning, for key: String) {
+        transitionings[key] = transitioning
     }
     
-    public static let shared = XHBTransitionManager()
-    
-    public func set(transition: UIViewControllerCustomTransitioning, for key: Int) {
-        transitionTable[key] = transition
-    }
-    
-    public func transition(for key: Int) -> UIViewControllerCustomTransitioning? {
-        return transitionTable[key]
-    }
-    
-    public func remove(transitionForKey key: Int) {
-        transitionTable.removeValue(forKey: key)
+    public func removeTransitioning(for key: String) {
+        _ = transitionings.removeValue(forKey: key)
     }
 }
 
@@ -192,38 +176,44 @@ extension UIViewController {
         public var duration: TimeInterval = 0.5
         public var direction: XHBTransitionDirection = .bottom
         public var displaySize: CGSize
+        public var options: UIView.AnimationOptions = [.curveEaseInOut]
         
         public static let noramlConfig = CustomTransitioningConfig(displaySize: .zero)
     }
     
-    open func customPresent(viewController: UIViewController,
-                            animated: Bool = true,
-                            config: CustomTransitioningConfig = .noramlConfig,
-                            completion: (()->Void)?) {
-        if animated && config.effect {
+    open func present(viewController: UIViewController,
+                      animated: Bool = true,
+                      transitionConfig: CustomTransitioningConfig = .noramlConfig,
+                      completion: (()->Void)?) {
+        
+        if animated && transitionConfig.effect {
             let presentAnimation = XHBDirectionAnimatedTransitioning()
-            presentAnimation.duration = config.duration
-            presentAnimation.transitionDirection = config.direction
-            let presentation = XHBDirectionPresentationController(presented: viewController, presenting: self, direction: config.direction)
-            if config.displaySize.width > 0 && config.displaySize.height > 0 {
-                presentation.controllerSize = config.displaySize
-            }
-            let customModalTransition = UIViewControllerCustomModalTransitioning()
-            customModalTransition.setCustomAnimatedTransition(presentAnimation, for: UIViewControllerCustomModalTransitioning.present)
-            customModalTransition.presentationController = presentation
-            viewController.modalPresentationStyle = .custom
+            presentAnimation.forward = true
+            presentAnimation.duration = transitionConfig.duration
+            presentAnimation.direction = transitionConfig.direction
+            presentAnimation.options = transitionConfig.options
+            let dismissAnimation = XHBDirectionAnimatedTransitioning()
+            dismissAnimation.forward = false
+            dismissAnimation.duration = presentAnimation.duration
+            dismissAnimation.direction = transitionConfig.direction
+            dismissAnimation.options = transitionConfig.options
+            viewController.preferredContentSize = transitionConfig.displaySize
+            let presentation = XHBDirectionPresentationController(presented: viewController,
+                                                                  presenting: self,
+                                                                  direction: transitionConfig.direction)
+            let customModalTransition = UIViewControllerCustomModalTransitioning(presentAnimation: presentAnimation,
+                                                                                 dismissAnimation: dismissAnimation,
+                                                                                 presentationController: presentation)
             viewController.transitioningDelegate = customModalTransition
-            XHBTransitionManager.shared.set(transition: customModalTransition, for: viewController.hash)
+            XHBCustomTransitioningManager.shared.setTransitioning(customModalTransition, for: "\(viewController)")
         }
         present(viewController, animated: animated, completion: completion)
     }
     
-    open func customDismiss(animated: Bool,
-                            animation: UIViewControllerCustomAnimatedTransitioning?,
-                            completion: (()->Void)?) {
-        dismiss(animated: animated) { [weak self] in
-            guard let key = self?.hash else { return }
-            XHBTransitionManager.shared.remove(transitionForKey: key)
+    open func dismissCustomModal(animated: Bool, completion: (()->Void)?) {
+        let key = "\(self)"
+        dismiss(animated: animated) {
+            XHBCustomTransitioningManager.shared.removeTransitioning(for: key)
             completion?()
         }
     }
