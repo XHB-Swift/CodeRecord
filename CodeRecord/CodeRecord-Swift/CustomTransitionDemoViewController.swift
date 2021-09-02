@@ -1,38 +1,12 @@
 //
-//  ViewController.swift
+//  CustomTransitionDemoViewController.swift
 //  CodeRecord-Swift
 //
-//  Created by 谢鸿标 on 2021/8/26.
+//  Created by xiehongbiao on 2021/9/2.
 //  Copyright © 2021 谢鸿标. All rights reserved.
 //
 
 import UIKit
-
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let button = UIButton(type: .custom)
-        button.setTitle("跳转", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(jumpAction(_:)), for: .touchUpInside)
-        button.sizeToFit()
-        button.center = CGPoint(x: (view.width-button.width) / 2,
-                                y: (view.height-button.height) / 2)
-        view.addSubview(button)
-    }
-    
-    @objc func jumpAction(_ sender: UIButton) {
-        let config = UIViewController.CustomTransitioningConfig(direction: .top,
-                                                                displaySize: CGSize(width: view.width,
-                                                                                    height: view.height / 2))
-        present(viewController: ViewController1(),
-                animated: true,
-                transitionConfig: config,
-                completion: nil)
-    }
-}
 
 class ViewController1: UIViewController {
     
@@ -52,17 +26,18 @@ class ViewController1: UIViewController {
         view.addSubview(button)
         btn = button
         
-        let button1 = UIButton(type: .custom)
-        button1.setTitle("导航", for: .normal)
-        button1.setTitleColor(.black, for: .normal)
-        button1.addTarget(self, action: #selector(btn1Action(_:)), for: .touchUpInside)
-        button1.sizeToFit()
-        button1.origin = CGPoint(x: button.right + 30, y: button.y)
-        view.addSubview(button1)
+        if self.navigationController != nil {
+            let button1 = UIButton(type: .custom)
+            button1.setTitle("导航", for: .normal)
+            button1.setTitleColor(.black, for: .normal)
+            button1.addTarget(self, action: #selector(btn1Action(_:)), for: .touchUpInside)
+            button1.sizeToFit()
+            button1.origin = CGPoint(x: button.right + 30, y: button.y)
+            view.addSubview(button1)
+        }
     }
     
     @objc func btnAction(_ sender: UIButton) {
-//        dismiss(animated: true, completion: nil)
         dismissCustomModal(animated: true, completion: nil)
     }
     
@@ -91,7 +66,34 @@ class ViewController2: UIViewController {
     }
     
     @objc func btnAction(_ sender: UIButton) {
-//        dismiss(animated: true, completion: nil)
         dismissCustomModal(animated: true, completion: nil)
+    }
+}
+
+
+class CustomTransitionDemoViewController: UIViewController {
+    
+    private var jumpButton: UIButton?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let button = UIButton(type: .custom)
+        button.setTitle("跳转", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(jumpButtonAction(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        jumpButton = button
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        jumpButton?.centerX = view.width / 2
+        jumpButton?.centerY = 100
+    }
+    
+    @objc func jumpButtonAction(_ sender: UIButton) {
+        present(viewController: ViewController1(), animated: true, transitionConfig: .windowNormalConfig, completion: nil)
     }
 }
