@@ -10,6 +10,7 @@
 		4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */; };
 		4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */; };
 		4294C30626E0AAEA00F2D97D /* scene-speach.png in Resources */ = {isa = PBXBuildFile; fileRef = 4294C30526E0AAEA00F2D97D /* scene-speach.png */; };
+		4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -45,6 +46,7 @@
 		4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntranceViewController.swift; sourceTree = "<group>"; };
 		4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionDemoViewController.swift; sourceTree = "<group>"; };
 		4294C30526E0AAEA00F2D97D /* scene-speach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-speach.png"; sourceTree = "<group>"; };
+		4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBrowserView.swift; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -118,6 +120,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4294C30726E1D17200F2D97D /* ContentBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */,
+			);
+			path = ContentBrowser;
+			sourceTree = "<group>";
+		};
 		C6368BD026D028A00099A7D3 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +161,7 @@
 		C6368BF626D6B04F0099A7D3 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				4294C30726E1D17200F2D97D /* ContentBrowser */,
 				C6368BFC26DA7FC40099A7D3 /* CustomTransition */,
 				C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */,
 			);
@@ -367,6 +378,7 @@
 				C6368BE526D6B0410099A7D3 /* AppDelegate.swift in Sources */,
 				C6368BFE26DA7FF00099A7D3 /* UIViewControllerCustomTransition.swift in Sources */,
 				4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */,
+				4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */,
 				C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */,
 				4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */,
 			);

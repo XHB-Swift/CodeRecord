@@ -21,8 +21,11 @@ class MainEntranceTableCell: UITableViewCell {
         selectionStyle = .none
         accessoryType = .disclosureIndicator
         textLayer = CATextLayer()
-        textLayer?.font = CTFontCreateWithName(("PingFang-SC-Medium") as CFString, 18, nil)
+        textLayer?.contentsScale = UIScreen.main.scale
+        textLayer?.font = CTFontCreateWithName(("PingFang-SC-Medium") as CFString, 0, nil)
         textLayer?.fontSize = 18
+        textLayer?.alignmentMode = .left
+        textLayer?.foregroundColor = UIColor(white: 0, alpha: 1).cgColor
         if let txtLayer = textLayer {
             contentView.layer.addSublayer(txtLayer)
         }
@@ -52,10 +55,20 @@ class MainEntranceTableCell: UITableViewCell {
     }
 }
 
+struct MainEntranceModel {
+    var title: String
+    var vcName: String
+}
+
 class MainEntranceViewModel: NSObject, UITableViewDataSource {
     
-    weak var tableView: UITableView?
-    private var mainEntrances = Array<String>()
+    weak var tableView: UITableView? {
+        didSet {
+            tableView?.register(UITableViewCell.self, forCellReuseIdentifier: "MainEntranceTableErrorCell")
+            tableView?.register(MainEntranceTableCell.self, forCellReuseIdentifier: MainEntranceTableCell.cellIdentifier)
+        }
+    }
+    private var mainEntrances = Array<MainEntranceModel>()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mainEntrances.count
@@ -64,11 +77,34 @@ class MainEntranceViewModel: NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let index = indexPath.row
         let count = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
-        if index < count {
-            return tableView.dequeueReusableCell(withIdentifier: MainEntranceTableCell.cellIdentifier, for: indexPath)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: MainEntranceTableCell.cellIdentifier, for: indexPath) as? MainEntranceTableCell,
+           index < count {
+            cell.update(title: mainEntrances[index].title)
+            return cell
         }else {
             return tableView.dequeueReusableCell(withIdentifier: "MainEntranceTableErrorCell", for: indexPath)
         }
+    }
+    
+    func append(_ entrance: MainEntranceModel) {
+        mainEntrances.append(entrance)
+        tableView?.reloadData()
+    }
+    
+    func appendEntrance(with title: String, vcName: String) {
+        mainEntrances.append(MainEntranceModel(title: title, vcName: vcName))
+        tableView?.reloadData()
+    }
+    
+    func append(_ entrances: [MainEntranceModel]) {
+        if entrances.isEmpty { return }
+        mainEntrances.append(contentsOf: entrances)
+        tableView?.reloadData()
+    }
+    
+    func entranceVCName(at index: Int) -> String? {
+        guard let space = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String else { return nil }
+        return "\(space.replacingOccurrences(of: "-", with: "_")).\(mainEntrances[index].vcName)"
     }
 }
 
@@ -82,6 +118,7 @@ class MainEntranceViewController: UIViewController {
         
         view.backgroundColor = .white
         setupSubviews()
+        setupEntrances()
     }
     
     func setupSubviews() {
@@ -90,11 +127,15 @@ class MainEntranceViewController: UIViewController {
         tableView?.delegate = self
         tableView?.dataSource = mainEntranceViewModel
         tableView?.tableFooterView = UIView()
-        tableView?.register(UITableViewCell.self, forCellReuseIdentifier: "MainEntranceTableErrorCell")
-        tableView?.register(MainEntranceTableCell.self, forCellReuseIdentifier: MainEntranceTableCell.cellIdentifier)
         guard let table = tableView else { return }
         view.addSubview(table)
         mainEntranceViewModel.tableView = tableView
+    }
+    
+    func setupEntrances() {
+        mainEntranceViewModel.append([
+            MainEntranceModel(title: "自定义模态转场", vcName: "CustomTransitionDemoViewController")
+        ])
     }
     
     override func viewWillLayoutSubviews() {
@@ -106,7 +147,12 @@ class MainEntranceViewController: UIViewController {
 extension MainEntranceViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        guard let vcName = mainEntranceViewModel.entranceVCName(at: indexPath.row),
+              let vcClass = NSClassFromString(vcName),
+              let vcType = vcClass as? UIViewController.Type
+        else { return }
+        let targetVC = vcType.init()
+        self.navigationController?.pushViewController(targetVC, animated: true)
     }
 }
 

@@ -78,6 +78,7 @@ class CustomTransitionDemoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
         let button = UIButton(type: .custom)
         button.setTitle("跳转", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -89,8 +90,9 @@ class CustomTransitionDemoViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        let navigationBarBottom = navigationController?.navigationBar.height ?? 0
         jumpButton?.centerX = view.width / 2
-        jumpButton?.centerY = 100
+        jumpButton?.centerY = 100 + navigationBarBottom
     }
     
     @objc func jumpButtonAction(_ sender: UIButton) {
