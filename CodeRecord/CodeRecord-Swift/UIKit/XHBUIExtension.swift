@@ -143,6 +143,23 @@ extension UIView {
             return self.center.y
         }
     }
+    
+    open func sizeToFit(maxWidth: CGFloat, horizontalMargin: CGFloat = 0) {
+        sizeToFit(maxSize: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+                  insets: UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: horizontalMargin))
+    }
+    
+    open func sizeToFit(maxHeight: CGFloat, verticalMargin: CGFloat = 0) {
+        sizeToFit(maxSize: CGSize(width: .greatestFiniteMagnitude, height: maxHeight),
+                  insets: UIEdgeInsets(top: verticalMargin, left: 0, bottom: verticalMargin, right: 0))
+    }
+    
+    open func sizeToFit(maxSize: CGSize, insets: UIEdgeInsets = .zero) {
+        sizeToFit()
+        let fitW = min(width + insets.left + insets.right, maxSize.width)
+        let fitH = min(height + insets.top + insets.bottom, maxSize.height)
+        size = CGSize(width: fitW, height: fitH)
+    }
 }
 
 extension UIColor {
