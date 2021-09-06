@@ -15,6 +15,7 @@ class ViewController1: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "ViewController1"
         view.backgroundColor = .randomColor
         
         let button = UIButton(type: .custom)
@@ -26,7 +27,7 @@ class ViewController1: UIViewController {
         view.addSubview(button)
         btn = button
         
-        if self.navigationController != nil {
+        if navigationController != nil {
             let button1 = UIButton(type: .custom)
             button1.setTitle("导航", for: .normal)
             button1.setTitleColor(.black, for: .normal)
@@ -42,31 +43,71 @@ class ViewController1: UIViewController {
     }
     
     @objc func btn1Action(_ sender: UIButton) {
-        
+        navigationController?.pushViewController(ViewController2(), animated: true)
     }
 }
 
 class ViewController2: UIViewController {
     
     var btn: UIButton?
+    var txtField: UITextField?
+    var keyboardOffsetY: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "ViewController2"
         view.backgroundColor = .randomColor
         let button = UIButton(type: .custom)
         button.setTitle("返回", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(btnAction(_:)), for: .touchUpInside)
         button.sizeToFit()
-        button.center = CGPoint(x: (view.width-button.width) / 2,
-                                y: (view.height-button.height) / 2)
         view.addSubview(button)
         btn = button
+        
+        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+        textField.textColor = .black
+        textField.borderStyle = .bezel
+        view.addSubview(textField)
+        txtField = textField
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(keyboardControl(_:)), name: UITextField.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyboardControl(_:)), name: UITextField.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        _ = view.endEditing(true)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        btn?.center = CGPoint(x: (view.width-(btn?.width ?? 0)) / 2,
+                              y: (view.height-(btn?.height ?? 0)) / 2)
+        txtField?.centerX = btn?.centerX ?? 0
+        txtField?.bottom = (view.height - 20)
     }
     
     @objc func btnAction(_ sender: UIButton) {
         dismissCustomModal(animated: true, completion: nil)
+    }
+    
+    @objc func keyboardControl(_ sender: Notification) {
+        guard let keyboardRect = sender.userInfo?[UITextField.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        
+        let contentView: UIView = navigationController?.view ?? view
+        
+        if keyboardRect.minY < contentView.bottom {
+            keyboardOffsetY = contentView.bottom - keyboardRect.minY
+            contentView.bottom -= keyboardOffsetY
+        }else {
+            contentView.bottom += keyboardOffsetY
+        }
     }
 }
 
@@ -96,6 +137,12 @@ class CustomTransitionDemoViewController: UIViewController {
     }
     
     @objc func jumpButtonAction(_ sender: UIButton) {
-        present(viewController: ViewController1(), animated: true, transitionConfig: .windowNormalConfig, completion: nil)
+        let halfWindowConfig = UIViewController.CustomTransitioningConfig(direction: .bottom,
+                                                                          displaySize: CGSize(width: view.width,
+                                                                                              height: view.height / 2))
+        present(viewController: UINavigationController(rootViewController: ViewController1()),
+                animated: true,
+                transitionConfig: halfWindowConfig,
+                completion: nil)
     }
 }

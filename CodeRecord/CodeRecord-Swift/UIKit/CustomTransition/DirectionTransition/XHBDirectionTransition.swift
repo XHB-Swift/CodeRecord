@@ -136,7 +136,8 @@ open class XHBDirectionPresentationController: UIViewCustomPresentationControlle
         guard let containerView = self.containerView else { return .zero }
         let preferredContentSize = self.presentedViewController.preferredContentSize
         if preferredContentSize.width == 0 ||
-            preferredContentSize.height == 0 {
+            preferredContentSize.height == 0 ||
+            preferredContentSize.height >= containerView.height {
             return containerView.bounds
         }
         var frame = CGRect(origin: .zero, size: preferredContentSize)

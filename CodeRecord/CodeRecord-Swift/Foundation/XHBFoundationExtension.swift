@@ -7,8 +7,23 @@
 //
 
 import Foundation
+import CryptoKit
+import CommonCrypto
 
+public struct FoundationError: Error {
+    
+    let code: Int
+    let description: String
+}
 
+extension FoundationError {
+    
+    public static let nilValue    = FoundationError(code: -98, description: "nil值")
+    public static let emptyString = FoundationError(code: -99, description: "空字符串")
+    public static let notFoundDir = FoundationError(code: -100, description: "找不到文件夹")
+    public static let notFoundBundleName = FoundationError(code: -101, description: "找不到包名")
+    public static let needToDebugDetails = FoundationError(code: -1024, description: "Need to Debug here")
+}
 
 extension String {
     
@@ -51,4 +66,56 @@ extension String {
         return self[rr]
     }
     
+    public var objectClassName: String? {
+        
+        guard let space = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String else { return nil }
+        return "\(space.replacingOccurrences(of: "-", with: "_")).\(self)"
+    }
+    
+    public var md5String: String {
+        if isEmpty { return self }
+        if #available(iOS 13.0, *) {
+            guard let d = self.data(using: .utf8) else { return "" }
+            return Insecure.MD5.hash(data: d).map {
+                String(format: "%02hhx", $0)
+            }.joined()
+        }else {
+            let data = Data(utf8)
+            let hash = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> [UInt8] in
+                var array = Array<UInt8>(repeating: 0, count: Int(CC_MD5_BLOCK_BYTES))
+                CC_MD5(bytes.baseAddress, CC_LONG(data.count), &array)
+                return array
+            }
+            return hash.map { String(format: "%02x", $0) }.joined()
+        }
+    }
+    
+}
+
+extension Timer {
+    
+    public typealias TimerUpdateAction = (TimeInterval)->Void
+    
+    public class func scheduled(interval: TimeInterval,
+                                loopInCommonModes: Bool,
+                                repeats: Bool,
+                                action: @escaping TimerUpdateAction) -> Timer {
+        
+        let timer = Timer.scheduledTimer(timeInterval: interval,
+                                         target: self,
+                                         selector: #selector(timerAction(_:)),
+                                         userInfo: action,
+                                         repeats: repeats)
+        
+        if loopInCommonModes {
+            RunLoop.current.add(timer, forMode: .common)
+        }
+        
+        return timer
+    }
+    
+    @objc private class func timerAction(_ sender: Timer) {
+        guard let action = sender.userInfo as? TimerUpdateAction else { return }
+        action(sender.timeInterval)
+    }
 }

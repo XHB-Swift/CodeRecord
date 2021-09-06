@@ -103,8 +103,7 @@ class MainEntranceViewModel: NSObject, UITableViewDataSource {
     }
     
     func entranceVCName(at index: Int) -> String? {
-        guard let space = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String else { return nil }
-        return "\(space.replacingOccurrences(of: "-", with: "_")).\(mainEntrances[index].vcName)"
+        return mainEntrances[index].vcName.objectClassName
     }
 }
 
@@ -134,7 +133,9 @@ class MainEntranceViewController: UIViewController {
     
     func setupEntrances() {
         mainEntranceViewModel.append([
-            MainEntranceModel(title: "自定义模态转场", vcName: "CustomTransitionDemoViewController")
+            MainEntranceModel(title: "自定义模态转场", vcName: "CustomTransitionDemoViewController"),
+            MainEntranceModel(title: "缓存网络图片", vcName: "ImageWebCacheDemoViewController"),
+            MainEntranceModel(title: "CollectionView轮播", vcName: "ContentBrowserDemoViewController")
         ])
     }
     

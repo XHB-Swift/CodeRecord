@@ -11,7 +11,7 @@ import UIKit
 open class ContentBrowserViewCell: UICollectionViewCell {
     
     open class var cellIdentifier: String {
-        return NSStringFromClass(self)
+        return String(describing: self)
     }
     
     public override init(frame: CGRect) {
@@ -60,6 +60,16 @@ open class ContentBrowserViewModel<T>: NSObject, UICollectionViewDataSource {
         }else {
             return nil
         }
+    }
+    
+    open func append(_ content: T) {
+        contents.append(content)
+        collectionView?.reloadData()
+    }
+    
+    open func append(_ contentArr: [T]) {
+        contents.append(contentsOf: contentArr)
+        collectionView?.reloadData()
     }
     
     open func scroll(to page: Int) {
@@ -123,6 +133,7 @@ open class ContentBrowserCollectionView: UICollectionView {
         return cell
     }
     private(set) var flowlayout: ContentBrowserFlowlayout?
+    private var cellIdentifiers = Set<String>()
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -153,19 +164,26 @@ open class ContentBrowserCollectionView: UICollectionView {
         isScrollEnabled = !(view?.isKind(of: UISlider.self) ?? false)
         return view
     }
+    
+    open func reuseIdentifier(for cellClass: AnyClass) -> String {
+        let identifier = String(describing: cellClass)
+        if !cellIdentifiers.contains(identifier) {
+            self .register(cellClass, forCellWithReuseIdentifier: identifier)
+        }
+        return identifier
+    }
 }
 
 open class ContentBrowserView<T>: UIView, UICollectionViewDelegate {
     
-    fileprivate var collectionView: UICollectionView?
+    fileprivate var collectionView: ContentBrowserCollectionView?
     
     open var viewModel: ContentBrowserViewModel<T>? {
         didSet {
+            viewModel?.collectionView = collectionView
             collectionView?.dataSource = viewModel
         }
     }
-    
-    open var flowlayout = ContentBrowserFlowlayout()
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -173,9 +191,10 @@ open class ContentBrowserView<T>: UIView, UICollectionViewDelegate {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        flowlayout.scrollDirection = .horizontal
-        flowlayout.itemSize = bounds.size
-        let collection = UICollectionView(frame: bounds, collectionViewLayout: flowlayout)
+        backgroundColor = .white
+        let collection = ContentBrowserCollectionView(frame: bounds)
+        collection.flowlayout?.itemSize = bounds.size
+        collection.flowlayout?.scrollDirection = .horizontal
         collection.backgroundColor = .white
         collection.delegate = self;
         collection.isPagingEnabled = true
@@ -195,7 +214,7 @@ open class ContentBrowserView<T>: UIView, UICollectionViewDelegate {
         super.layoutSubviews()
         
         collectionView?.frame = bounds
-        flowlayout.itemSize = bounds.size
+        collectionView?.flowlayout?.itemSize = bounds.size
     }
     
     open func scroll(to page: Int) {
@@ -213,13 +232,57 @@ open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDele
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let imgView = UIImageView()
-        imgView.contentMode = .scaleToFill
-        let scroll = UIScrollView()
-        scroll.addSubview(imgView)
-        imageView = imgView
+        backgroundColor = .white
+        setupSubviews()
+        setupGestures()
+    }
+    
+    private func setupSubviews() {
+        let scroll = UIScrollView(frame: bounds)
+        scroll.minimumZoomScale = 1
+        scroll.showsVerticalScrollIndicator = false
+        scroll.showsHorizontalScrollIndicator = false
+        scroll.decelerationRate = .fast
+        scroll.alwaysBounceVertical = false
+        scroll.alwaysBounceHorizontal = false
+        if #available(iOS 11.0, *) {
+            scroll.contentInsetAdjustmentBehavior = .never
+        }
         contentView.addSubview(scroll)
         scrollView = scroll
+        let imgView = UIImageView(frame: bounds)
+        imgView.contentMode = .scaleAspectFill
+        scroll.addSubview(imgView)
+        imageView = imgView
+    }
+    
+    private func setupGestures() {
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(singleTapAction(_:)))
+        singleTap.numberOfTapsRequired = 1
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(doubleTapAction(_:)))
+        doubleTap.numberOfTapsRequired = 2
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+        pan.maximumNumberOfTouches = 1
+        
+        singleTap.require(toFail: doubleTap)
+        singleTap.require(toFail: pan)
+        doubleTap.require(toFail: pan)
+        
+        contentView.addGestureRecognizer(singleTap)
+        contentView.addGestureRecognizer(doubleTap)
+        contentView.addGestureRecognizer(pan)
+    }
+    
+    @objc private func singleTapAction(_ sender: UITapGestureRecognizer) {
+        
+    }
+    
+    @objc private func doubleTapAction(_ sender: UITapGestureRecognizer) {
+        
+    }
+    
+    @objc private func panAction(_ sender: UIPanGestureRecognizer) {
+        
     }
     
     public required init?(coder: NSCoder) {
@@ -228,6 +291,39 @@ open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDele
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
+    }
+    
+    public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        guard var imageFrame = imageView?.frame else { return }
+        
+        let scrollFrame = scrollView.frame
+        if imageFrame.height > scrollFrame.height {
+            imageFrame.origin.y = 0
+        }else {
+            imageFrame.origin.y = (scrollFrame.height - imageFrame.height) / 2
+        }
+        if imageFrame.width > scrollFrame.width {
+            imageFrame.origin.x = 0
+        }else {
+            imageFrame.origin.x = (scrollFrame.width - imageFrame.width) / 2
+        }
+        imageView?.frame = imageFrame
+    }
+    
+    public override func update<T>(_ content: T) {
+        if let url = content as? URL {
+            imageView?.setImage(with: url)
+            return
+        }
+        if let urlString = content as? String {
+            imageView?.setImage(with: urlString)
+            return
+        }
+    }
+    
+    open override func prepareForReuse() {
+        imageView?.image = nil
+        super.prepareForReuse()
     }
 }
 

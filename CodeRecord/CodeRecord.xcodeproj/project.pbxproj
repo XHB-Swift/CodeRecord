@@ -11,6 +11,9 @@
 		4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */; };
 		4294C30626E0AAEA00F2D97D /* scene-speach.png in Resources */ = {isa = PBXBuildFile; fileRef = 4294C30526E0AAEA00F2D97D /* scene-speach.png */; };
 		4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */; };
+		4294C30C26E5AD6900F2D97D /* UIImageViewWebCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30B26E5AD6900F2D97D /* UIImageViewWebCache.swift */; };
+		4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */; };
+		4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -47,6 +50,9 @@
 		4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionDemoViewController.swift; sourceTree = "<group>"; };
 		4294C30526E0AAEA00F2D97D /* scene-speach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-speach.png"; sourceTree = "<group>"; };
 		4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBrowserView.swift; sourceTree = "<group>"; };
+		4294C30B26E5AD6900F2D97D /* UIImageViewWebCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewWebCache.swift; sourceTree = "<group>"; };
+		4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWebCacheDemoViewController.swift; sourceTree = "<group>"; };
+		4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBrowserDemoViewController.swift; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -128,6 +134,14 @@
 			path = ContentBrowser;
 			sourceTree = "<group>";
 		};
+		4294C30A26E5AD3F00F2D97D /* WebCacheImage */ = {
+			isa = PBXGroup;
+			children = (
+				4294C30B26E5AD6900F2D97D /* UIImageViewWebCache.swift */,
+			);
+			path = WebCacheImage;
+			sourceTree = "<group>";
+		};
 		C6368BD026D028A00099A7D3 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +168,8 @@
 				C6368BF226D6B0440099A7D3 /* Info.plist */,
 				4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */,
 				4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */,
+				4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */,
+				4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */,
 			);
 			path = "CodeRecord-Swift";
 			sourceTree = "<group>";
@@ -161,6 +177,7 @@
 		C6368BF626D6B04F0099A7D3 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				4294C30A26E5AD3F00F2D97D /* WebCacheImage */,
 				4294C30726E1D17200F2D97D /* ContentBrowser */,
 				C6368BFC26DA7FC40099A7D3 /* CustomTransition */,
 				C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */,
@@ -376,10 +393,13 @@
 				C6368C0126DA86950099A7D3 /* XHBDirectionTransition.swift in Sources */,
 				C6368BF826D6B0740099A7D3 /* XHBUIExtension.swift in Sources */,
 				C6368BE526D6B0410099A7D3 /* AppDelegate.swift in Sources */,
+				4294C30C26E5AD6900F2D97D /* UIImageViewWebCache.swift in Sources */,
 				C6368BFE26DA7FF00099A7D3 /* UIViewControllerCustomTransition.swift in Sources */,
 				4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */,
 				4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */,
+				4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */,
 				C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */,
+				4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */,
 				4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,7 +468,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y4K7BN45NN;
 				INFOPLIST_FILE = "CodeRecord-Swift/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -471,7 +491,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y4K7BN45NN;
 				INFOPLIST_FILE = "CodeRecord-Swift/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
