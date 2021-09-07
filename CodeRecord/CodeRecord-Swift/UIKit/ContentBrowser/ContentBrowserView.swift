@@ -8,11 +8,21 @@
 
 import UIKit
 
-open class ContentBrowserViewCell: UICollectionViewCell {
+public protocol ContentBrowserPageData {
+    
+    associatedtype C
+    
+    var content: C { get set }
+    var shouldCleanContent: Bool { get set }
+}
+
+open class ContentBrowserViewCell<P: ContentBrowserPageData>: UICollectionViewCell {
     
     open class var cellIdentifier: String {
         return String(describing: self)
     }
+    
+    private(set) var pageData: P?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,28 +34,39 @@ open class ContentBrowserViewCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
-    public func update<T>(_ content: T) {}
+    public func update(_ page: P) {
+        self.pageData = page
+    }
 }
 
-open class ContentBrowserViewModel<T>: NSObject, UICollectionViewDataSource {
+open class ContentBrowserViewModel<P: ContentBrowserPageData>: NSObject, UICollectionViewDataSource {
     
     open weak var collectionView: UICollectionView? {
         didSet {
-            collectionView?.register(ContentBrowserViewCell.self,
-                                     forCellWithReuseIdentifier: ContentBrowserViewCell.cellIdentifier)
-            collectionView?.register(ContentBrowserViewCell.self, forCellWithReuseIdentifier: "ContentBrowserViewErrorCell")
+            collectionView?.register(ContentBrowserViewCell<P>.self,
+                                     forCellWithReuseIdentifier: ContentBrowserViewCell<P>.cellIdentifier)
+            collectionView?.register(ContentBrowserViewCell<P>.self, forCellWithReuseIdentifier: "ContentBrowserViewErrorCell")
         }
     }
-    private var contents = Array<T>()
+    
+    open var shouldInfinitelyCarousel = false {
+        didSet {
+            collectionView?.reloadData()
+        }
+    }
+    
+    private(set) var realContentCount = 0
+    
+    private var contents = Array<P>()
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return contents.count
+        return contents.count * (shouldInfinitelyCarousel ? realContentCount : 1)
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if let content = content(at: indexPath.item),
-           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentBrowserViewCell.cellIdentifier, for: indexPath) as? ContentBrowserViewCell {
+           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentBrowserViewCell<P>.cellIdentifier, for: indexPath) as? ContentBrowserViewCell<P> {
             cell.update(content)
             return cell
         }else {
@@ -54,21 +75,27 @@ open class ContentBrowserViewModel<T>: NSObject, UICollectionViewDataSource {
         
     }
     
-    open func content(at index: Int) -> T? {
-        if index < contents.count {
-            return contents[index]
+    open func content(at index: Int) -> P? {
+        guard let collection = collectionView else { return nil }
+        let numnberOfItems = collectionView(collection, numberOfItemsInSection: 0)
+        let idx = shouldInfinitelyCarousel ? (index % realContentCount) : index
+        if idx < numnberOfItems {
+            return contents[idx]
         }else {
             return nil
         }
     }
     
-    open func append(_ content: T) {
+    open func append(_ content: P) {
         contents.append(content)
+        realContentCount = contents.count
         collectionView?.reloadData()
     }
     
-    open func append(_ contentArr: [T]) {
+    open func append(_ contentArr: [P]) {
+        if contentArr.isEmpty { return }
         contents.append(contentsOf: contentArr)
+        realContentCount = contents.count
         collectionView?.reloadData()
     }
     
@@ -172,18 +199,26 @@ open class ContentBrowserCollectionView: UICollectionView {
         }
         return identifier
     }
+    
 }
 
-open class ContentBrowserView<T>: UIView, UICollectionViewDelegate {
+public protocol ContentBrowserViewDelegate: AnyObject {
+    
+    func didClickEmptyArea<P: ContentBrowserPageData>(in view: ContentBrowserView<P>)
+}
+
+open class ContentBrowserView<P: ContentBrowserPageData>: UIView, UICollectionViewDelegate {
     
     fileprivate var collectionView: ContentBrowserCollectionView?
     
-    open var viewModel: ContentBrowserViewModel<T>? {
+    open var viewModel: ContentBrowserViewModel<P>? {
         didSet {
             viewModel?.collectionView = collectionView
             collectionView?.dataSource = viewModel
         }
     }
+    
+    open weak var delegate: ContentBrowserViewDelegate?
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -191,11 +226,11 @@ open class ContentBrowserView<T>: UIView, UICollectionViewDelegate {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .black
         let collection = ContentBrowserCollectionView(frame: bounds)
         collection.flowlayout?.itemSize = bounds.size
         collection.flowlayout?.scrollDirection = .horizontal
-        collection.backgroundColor = .white
+        collection.backgroundColor = .black
         collection.delegate = self;
         collection.isPagingEnabled = true
         collection.decelerationRate = .fast
@@ -218,28 +253,66 @@ open class ContentBrowserView<T>: UIView, UICollectionViewDelegate {
     }
     
     open func scroll(to page: Int) {
-        viewModel?.scroll(to: page)
+        viewModel?.scroll(to: page - 1)
+    }
+    
+    public override func responds(value: Any?, from sender: UIResponder, event name: String) {
+        if name == .clickEmptyArea {
+            delegate?.didClickEmptyArea(in: self)
+        }
+    }
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+    }
+    
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let dataSource = viewModel,
+              dataSource.shouldInfinitelyCarousel,
+              let collection = collectionView else { return }
+        
+        let numberOfItems = dataSource.collectionView(collection, numberOfItemsInSection: 0)
+        let offsetX = scrollView.contentOffset.x
+        var page = Int(offsetX / width)
+        
+        if page == 0 {
+            page = dataSource.realContentCount
+            dataSource.scroll(to: page)
+        } else if page == numberOfItems {
+            page = dataSource.realContentCount - 1
+            dataSource.scroll(to: page)
+        }
     }
 }
 
 //MARK: 按通用封装
 
-open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDelegate {
+extension String {
+    
+    public static let clickEmptyArea = "ContentBrowserViewImageCell.click.empty"
+    public static let clickContentArea = "ContentBrowserViewImageCell.click.content"
+}
+
+open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowserViewCell<P>,
+                                                                   UIScrollViewDelegate,
+                                                                   UIGestureRecognizerDelegate {
     
     private var imageView: UIImageView?
     private var scrollView: UIScrollView?
+    private var currentLocation = CGPoint.zero
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
+        backgroundColor = .black
         setupSubviews()
         setupGestures()
     }
     
     private func setupSubviews() {
         let scroll = UIScrollView(frame: bounds)
-        scroll.minimumZoomScale = 1
+        scroll.delegate = self
+        scroll.minimumZoomScale = 0.5
         scroll.showsVerticalScrollIndicator = false
         scroll.showsHorizontalScrollIndicator = false
         scroll.decelerationRate = .fast
@@ -251,9 +324,17 @@ open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDele
         contentView.addSubview(scroll)
         scrollView = scroll
         let imgView = UIImageView(frame: bounds)
+        imgView.isUserInteractionEnabled = true
+        imgView.layer.shouldRasterize = true
         imgView.contentMode = .scaleAspectFill
         scroll.addSubview(imgView)
         imageView = imgView
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        scrollView?.frame = contentView.bounds
+        imageView?.center = CGPoint(x: contentView.width/2 , y: contentView.height/2)
     }
     
     private func setupGestures() {
@@ -263,6 +344,7 @@ open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDele
         doubleTap.numberOfTapsRequired = 2
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
         pan.maximumNumberOfTouches = 1
+        pan.delegate = self
         
         singleTap.require(toFail: doubleTap)
         singleTap.require(toFail: pan)
@@ -270,23 +352,73 @@ open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDele
         
         contentView.addGestureRecognizer(singleTap)
         contentView.addGestureRecognizer(doubleTap)
-        contentView.addGestureRecognizer(pan)
+        imageView?.addGestureRecognizer(pan)
     }
     
     @objc private func singleTapAction(_ sender: UITapGestureRecognizer) {
-        
+        guard let imgView = imageView else { return }
+        let touchedPoint = sender.location(in: contentView)
+        let clickEvent: String = !imgView.frame.contains(touchedPoint) ? .clickEmptyArea : .clickContentArea
+        next?.responds(value: nil, from: self, event: clickEvent)
     }
     
     @objc private func doubleTapAction(_ sender: UITapGestureRecognizer) {
-        
+        guard let scroll = scrollView else { return }
+        let point = sender.location(in: contentView)
+        if scroll.zoomScale >= scroll.maximumZoomScale {
+            scroll.setZoomScale(1, animated: true)
+        }else {
+            let maxScale = scroll.maximumZoomScale
+            let s_width = scroll.width / maxScale
+            let s_height = scroll.height / maxScale
+            scroll.zoom(to: CGRect(origin: CGPoint(x: point.x - s_width/2, y: point.y - s_height/2),
+                                   size: CGSize(width: s_width, height: s_height)),
+                        animated: true)
+        }
     }
     
     @objc private func panAction(_ sender: UIPanGestureRecognizer) {
+        guard let imgView = imageView,
+              (imgView.frame.isEmpty || imgView.image != nil) else { return }
+        let location = sender.location(in: contentView)
+        let point = sender.translation(in: contentView)
+        let velocity = sender.velocity(in: contentView)
         
+        switch sender.state {
+        case .began:
+            currentLocation = location
+            break
+        case .changed:
+            let isRightSlide = (currentLocation.x > contentView.width / 2)
+            let denominator = isRightSlide ? contentView.height : contentView.width
+            let angel = (isRightSlide ? 1 : -1) * CGFloat.pi/2 * (point.y / denominator)
+            let transformAngel = CGAffineTransform(rotationAngle: angel)
+            let transformTranslation = CGAffineTransform(translationX: 0, y: point.y)
+            let transformConcat = transformAngel.concatenating(transformTranslation)
+            imageView?.transform = transformConcat
+            break
+        case .cancelled, .ended:
+            if abs(point.y) > 200 || abs(velocity.y) > 500 {
+                rotationCompletionAnimation(from: point)
+            }else {
+                cancelAnimation()
+            }
+            break
+        default:
+            break
+        }
     }
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let scroll = scrollView, let panGest = gestureRecognizer as? UIPanGestureRecognizer else { return true }
+        if scroll.contentSize.height > scroll.height { return false }
+        
+        let velocity = panGest.velocity(in: contentView)
+        return !(abs(velocity.x) > abs(velocity.y))
     }
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -310,36 +442,119 @@ open class ContentBrowserViewImageCell: ContentBrowserViewCell, UIScrollViewDele
         imageView?.frame = imageFrame
     }
     
-    public override func update<T>(_ content: T) {
-        if let url = content as? URL {
-            imageView?.setImage(with: url)
+    public override func update(_ page: P) {
+        if let url = page.content as? URL {
+            imageView?.setImage(with: url) {[weak self] result in
+                switch result {
+                case .success(let image):
+                    self?.updateImageViewFrame(image)
+                    break
+                case .failure(_):
+                    self?.imageView?.frame = self?.contentView.bounds ?? .zero
+                    break
+                }
+            }
             return
         }
-        if let urlString = content as? String {
-            imageView?.setImage(with: urlString)
+        if let urlString = page.content as? String {
+            imageView?.setImage(with: urlString) {[weak self] result in
+                switch result {
+                case .success(let image):
+                    self?.updateImageViewFrame(image)
+                    break
+                case .failure(_):
+                    self?.imageView?.frame = self?.contentView.bounds ?? .zero
+                    break
+                }
+            }
             return
         }
     }
     
     open override func prepareForReuse() {
-        imageView?.image = nil
+        if pageData?.shouldCleanContent == true {
+            imageView?.image = nil
+        }
         super.prepareForReuse()
+    }
+    
+    private func updateImageViewFrame(_ image: UIImage) {
+        let imageSize = image.size
+        let simageWidth = contentView.width
+        let simageHeight = contentView.width * (imageSize.height / imageSize.width)
+        imageView?.size = CGSize(width: simageWidth, height: simageHeight)
+        if simageHeight <= contentView.height {
+            imageView?.center = CGPoint(x: contentView.width/2, y: contentView.height/2)
+        }else {
+            imageView?.center = CGPoint(x: contentView.width/2, y: simageHeight/2)
+        }
+        
+        if simageWidth / simageHeight > 2 {
+            scrollView?.maximumZoomScale = contentView.height / simageHeight
+        }
+        scrollView?.contentSize = imageView?.size ?? .zero
+        
+        let screenScale = UIScreen.main.scale
+        if screenScale == 0 { return }
+        
+        let widthScale = imageSize.width / screenScale / simageWidth
+        scrollView?.zoomScale = 1
+        scrollView?.minimumZoomScale = 1
+        scrollView?.maximumZoomScale = max(widthScale, 1) * 1.5
+    }
+    
+    private func rotationCompletionAnimation(from point: CGPoint) {
+        
+        let throwToTop = point.y < 0
+        let fromLeft = currentLocation.x < contentView.width / 2
+        
+        let angel = (fromLeft && throwToTop ? 1 : -1) * CGFloat.pi_2
+        let translateY = (fromLeft && throwToTop ? -1 : 1) * contentView.height
+        
+        let isLeftSlide = currentLocation.x < contentView.width/2
+        let angel0 = (isLeftSlide ? -1 : 1) * (point.y / contentView.height)
+        
+        let rotateAnim = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotateAnim.fromValue = angel0
+        rotateAnim.toValue = angel
+        let translateAnim = CABasicAnimation(keyPath: "transform.translation.y")
+        translateAnim.fromValue = point.y
+        translateAnim.toValue = translateY
+        let animGroup = CAAnimationGroup()
+        animGroup.duration = 0.6
+        animGroup.timingFunction = CAMediaTimingFunction(name: .linear)
+        animGroup.animations = [rotateAnim, translateAnim]
+        imageView?.layer.add(animGroup, forKey: "animGroup")
+        
+        let transformConcat = CGAffineTransform(rotationAngle: angel).concatenating(CGAffineTransform(translationX: 0, y: translateY))
+        imageView?.transform = transformConcat
+        
+        UIView.animate(withDuration: 0.6, animations: { [weak self] in
+            self?.contentView.backgroundColor = .clear
+        }, completion: nil)
+    }
+    
+    private func cancelAnimation() {
+        UIView.animate(withDuration: 0.6, animations: { [weak self] in
+            self?.imageView?.transform = .identity
+            self?.superview?.superview?.backgroundColor = .black
+        }, completion: nil)
     }
 }
 
-open class ContentBrowserImageViewModel<T>: ContentBrowserViewModel<T> {
+open class ContentBrowserImageViewModel<P: ContentBrowserPageData>: ContentBrowserViewModel<P> {
     
     open override var collectionView: UICollectionView? {
         didSet {
-            collectionView?.register(ContentBrowserViewImageCell.self, forCellWithReuseIdentifier: ContentBrowserViewImageCell.cellIdentifier)
-            collectionView?.register(ContentBrowserViewImageCell.self, forCellWithReuseIdentifier: "ContentBrowserViewImageErrorCell")
+            collectionView?.register(ContentBrowserViewImageCell<P>.self, forCellWithReuseIdentifier: ContentBrowserViewImageCell<P>.cellIdentifier)
+            collectionView?.register(ContentBrowserViewImageCell<P>.self, forCellWithReuseIdentifier: "ContentBrowserViewImageErrorCell")
         }
     }
     
     public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let content = content(at: indexPath.item),
-           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentBrowserViewImageCell.cellIdentifier,
-                                                         for: indexPath) as? ContentBrowserViewCell {
+           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentBrowserViewImageCell<P>.cellIdentifier,
+                                                         for: indexPath) as? ContentBrowserViewCell<P> {
             cell.update(content)
             return cell
         }else {

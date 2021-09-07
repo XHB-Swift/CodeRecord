@@ -92,6 +92,15 @@ extension String {
     
 }
 
+extension Double {
+    
+    public static let pi_2 = pi / 2
+    public static let pi_3 = pi / 3
+    public static let pi_4 = pi / 4
+    public static let pi_6 = pi / 6
+    public static let m_2_pi = pi * 2
+}
+
 extension Timer {
     
     public typealias TimerUpdateAction = (TimeInterval)->Void

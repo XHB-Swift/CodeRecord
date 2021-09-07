@@ -162,6 +162,50 @@ extension UIView {
     }
 }
 
+extension UIButton {
+    
+    public convenience init(title: String, titleColor: UIColor? = .black, state: UIControl.State) {
+        self.init(type: .custom)
+        setTitle(title, for: state)
+        setTitleColor(titleColor, for: state)
+        sizeToFit()
+    }
+}
+
+extension UIWindow {
+    
+    open class var currentWindow: UIWindow? {
+        
+        let app = UIApplication.shared
+        
+        if #available(iOS 13.0, *) {
+            
+            return app.windows.first
+            
+        }else {
+            
+            return app.keyWindow
+            
+        }
+    }
+    
+}
+
+extension UIResponder {
+    
+    @objc public func responds(value: Any?, from sender: UIResponder, event name: String) {
+        next?.responds(value: value, from: sender, event: name)
+    }
+}
+
+extension CGFloat {
+    public static let pi_2 = pi / 2
+    public static let pi_3 = pi / 3
+    public static let pi_4 = pi / 4
+    public static let pi_6 = pi / 6
+    public static let m_2_pi = pi * 2
+}
+
 extension UIColor {
     
     public convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
