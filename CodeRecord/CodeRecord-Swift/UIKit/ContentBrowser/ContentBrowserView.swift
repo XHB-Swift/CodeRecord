@@ -39,9 +39,139 @@ open class ContentBrowserViewCell<P: ContentBrowserPageData>: UICollectionViewCe
     }
 }
 
+open class ContentBrowserFlowlayout: UICollectionViewFlowLayout {
+    
+    open var pageMargin: CGFloat = 20
+    
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    public override init() {
+        super.init()
+        minimumLineSpacing = 0
+        minimumInteritemSpacing = 0
+        sectionInset = .zero
+        scrollDirection = .horizontal
+    }
+    
+    open override func prepare() {
+        super.prepare()
+        
+        guard let pageSize = collectionView?.size else { return }
+        itemSize = pageSize
+    }
+    
+    open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        let copyAttrs = super.layoutAttributesForElements(in: rect)
+        guard let collection = collectionView else { return copyAttrs }
+        switch scrollDirection {
+        case .horizontal:
+            let halfWidth = collection.width / 2.0
+            let centerX = collection.contentOffset.x + halfWidth
+            
+            copyAttrs?.forEach({ attribute in
+                let x = attribute.center.x + (attribute.center.x - centerX) / halfWidth * pageMargin / 2
+                attribute.center = CGPoint(x: x, y: attribute.center.y)
+            })
+            break
+        case .vertical:
+            let halfHeight = collection.height / 2.0
+            let centerY = collection.contentOffset.y + halfHeight
+            
+            copyAttrs?.forEach({ attribute in
+                let y = attribute.center.y + (attribute.center.y - centerY) / halfHeight * pageMargin / 2
+                attribute.center = CGPoint(x: attribute.center.x, y: y)
+            })
+            break
+        @unknown default:
+            break
+        }
+        
+        return copyAttrs
+    }
+    
+    open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
+}
+
+open class ContentBrowserCollectionView: UICollectionView {
+    
+    open var centerCell: UICollectionViewCell? {
+        guard var cell = visibleCells.first,
+              let scrollDirection = flowlayout?.scrollDirection else { return nil }
+        switch scrollDirection {
+        case .horizontal:
+            let pageCenterX = contentOffset.x + width / 2.0
+            for i in 1..<visibleCells.count {
+                let icell = visibleCells[i]
+                if abs(icell.centerX - pageCenterX) < abs(cell.centerX - pageCenterX) {
+                    cell = icell
+                }
+            }
+            break
+        case .vertical:
+            let pageCenterY = contentOffset.y + height / 2.0
+            for i in 1..<visibleCells.count {
+                let icell = visibleCells[i]
+                if abs(icell.centerY - pageCenterY) < abs(cell.centerY - pageCenterY) {
+                    cell = icell
+                }
+            }
+            break
+        @unknown default:
+            break
+        }
+        
+        return cell
+    }
+    private(set) var flowlayout: ContentBrowserFlowlayout?
+    private var cellIdentifiers = Set<String>()
+    
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    public init(frame: CGRect) {
+        let layout = ContentBrowserFlowlayout()
+        super.init(frame: frame, collectionViewLayout: layout)
+        flowlayout = layout
+    }
+    
+    open func scroll(to page: Int) {
+        guard let layout = flowlayout else { return }
+        switch layout.scrollDirection {
+        case .horizontal:
+            contentOffset = CGPoint(x: width * CGFloat(page), y: 0)
+            break
+        case .vertical:
+            contentOffset = CGPoint(x: 0, y: height * CGFloat(page))
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        isScrollEnabled = !(view?.isKind(of: UISlider.self) ?? false)
+        return view
+    }
+    
+    open func reuseIdentifier(for cellClass: AnyClass) -> String {
+        let identifier = String(describing: cellClass)
+        if !cellIdentifiers.contains(identifier) {
+            self .register(cellClass, forCellWithReuseIdentifier: identifier)
+        }
+        return identifier
+    }
+    
+}
+
 open class ContentBrowserViewModel<P: ContentBrowserPageData>: NSObject, UICollectionViewDataSource {
     
-    open weak var collectionView: UICollectionView? {
+    open weak var collectionView: ContentBrowserCollectionView? {
         didSet {
             collectionView?.register(ContentBrowserViewCell<P>.self,
                                      forCellWithReuseIdentifier: ContentBrowserViewCell<P>.cellIdentifier)
@@ -100,106 +230,18 @@ open class ContentBrowserViewModel<P: ContentBrowserPageData>: NSObject, UIColle
     }
     
     open func scroll(to page: Int) {
-        collectionView?.contentOffset = CGPoint(x: (collectionView?.width ?? 0) * CGFloat(page), y: 0)
-    }
-}
-
-open class ContentBrowserFlowlayout: UICollectionViewFlowLayout {
-    
-    open var pageMargin: CGFloat = 20
-    
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    public override init() {
-        super.init()
-        minimumLineSpacing = 0
-        minimumInteritemSpacing = 0
-        sectionInset = .zero
-        scrollDirection = .horizontal
-    }
-    
-    open override func prepare() {
-        super.prepare()
-        
-        guard let pageSize = collectionView?.size else { return }
-        itemSize = pageSize
-    }
-    
-    open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let copyAttrs = super.layoutAttributesForElements(in: rect)
-        guard let collection = collectionView else { return copyAttrs }
-        let halfWidth = collection.width / 2.0
-        let centerX = collection.contentOffset.x + halfWidth
-        
-        copyAttrs?.forEach({ attribute in
-            let x = attribute.center.x + (attribute.center.x - centerX) / halfWidth * pageMargin / 2
-            attribute.center = CGPoint(x: x, y: attribute.center.y)
-        })
-        
-        return copyAttrs
-    }
-    
-    open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        return true
-    }
-}
-
-open class ContentBrowserCollectionView: UICollectionView {
-    
-    open var centerCell: UICollectionViewCell? {
-        guard var cell = visibleCells.first else { return nil }
-        let pageCenterX = contentOffset.x + width / 2.0
-        for i in 1..<visibleCells.count {
-            let icell = visibleCells[i]
-            if abs(icell.centerX - pageCenterX) < abs(cell.centerX - pageCenterX) {
-                cell = icell
-            }
-        }
-        return cell
-    }
-    private(set) var flowlayout: ContentBrowserFlowlayout?
-    private var cellIdentifiers = Set<String>()
-    
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    public init(frame: CGRect) {
-        let layout = ContentBrowserFlowlayout()
-        super.init(frame: frame, collectionViewLayout: layout)
-        flowlayout = layout
-    }
-    
-    open func scroll(to page: Int) {
-        guard let layout = flowlayout else { return }
-        switch layout.scrollDirection {
+        guard let scrollDirection = collectionView?.flowlayout?.scrollDirection else { return }
+        switch scrollDirection {
         case .horizontal:
-            contentOffset = CGPoint(x: width * CGFloat(page), y: 0)
+            collectionView?.contentOffset = CGPoint(x: (collectionView?.width ?? 0) * CGFloat(page), y: 0)
             break
         case .vertical:
-            contentOffset = CGPoint(x: 0, y: height * CGFloat(page))
+            collectionView?.contentOffset = CGPoint(x: 0, y: (collectionView?.height ?? 0) * CGFloat(page))
             break
         @unknown default:
             break
         }
     }
-    
-    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let view = super.hitTest(point, with: event)
-        isScrollEnabled = !(view?.isKind(of: UISlider.self) ?? false)
-        return view
-    }
-    
-    open func reuseIdentifier(for cellClass: AnyClass) -> String {
-        let identifier = String(describing: cellClass)
-        if !cellIdentifiers.contains(identifier) {
-            self .register(cellClass, forCellWithReuseIdentifier: identifier)
-        }
-        return identifier
-    }
-    
 }
 
 public protocol ContentBrowserViewDelegate: AnyObject {
@@ -209,7 +251,7 @@ public protocol ContentBrowserViewDelegate: AnyObject {
 
 open class ContentBrowserView<P: ContentBrowserPageData>: UIView, UICollectionViewDelegate {
     
-    fileprivate var collectionView: ContentBrowserCollectionView?
+    private(set) var collectionView: ContentBrowserCollectionView?
     
     open var viewModel: ContentBrowserViewModel<P>? {
         didSet {
@@ -269,11 +311,24 @@ open class ContentBrowserView<P: ContentBrowserPageData>: UIView, UICollectionVi
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard let dataSource = viewModel,
               dataSource.shouldInfinitelyCarousel,
-              let collection = collectionView else { return }
+              let collection = collectionView ,
+              let scrollDirection = collection.flowlayout?.scrollDirection else { return }
         
         let numberOfItems = dataSource.collectionView(collection, numberOfItemsInSection: 0)
-        let offsetX = scrollView.contentOffset.x
-        var page = Int(offsetX / width)
+        let offset: CGFloat
+        var page: Int
+        switch scrollDirection {
+        case .horizontal:
+            offset = scrollView.contentOffset.x
+            page = Int(offset / width)
+            break
+        case .vertical:
+            offset = scrollView.contentOffset.y
+            page = Int(offset / height)
+            break
+        @unknown default:
+            return
+        }
         
         if page == 0 {
             page = dataSource.realContentCount
@@ -378,35 +433,35 @@ open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowse
     }
     
     @objc private func panAction(_ sender: UIPanGestureRecognizer) {
-        guard let imgView = imageView,
-              (imgView.frame.isEmpty || imgView.image != nil) else { return }
-        let location = sender.location(in: contentView)
-        let point = sender.translation(in: contentView)
-        let velocity = sender.velocity(in: contentView)
-        
-        switch sender.state {
-        case .began:
-            currentLocation = location
-            break
-        case .changed:
-            let isRightSlide = (currentLocation.x > contentView.width / 2)
-            let denominator = isRightSlide ? contentView.height : contentView.width
-            let angel = (isRightSlide ? 1 : -1) * CGFloat.pi/2 * (point.y / denominator)
-            let transformAngel = CGAffineTransform(rotationAngle: angel)
-            let transformTranslation = CGAffineTransform(translationX: 0, y: point.y)
-            let transformConcat = transformAngel.concatenating(transformTranslation)
-            imageView?.transform = transformConcat
-            break
-        case .cancelled, .ended:
-            if abs(point.y) > 200 || abs(velocity.y) > 500 {
-                rotationCompletionAnimation(from: point)
-            }else {
-                cancelAnimation()
-            }
-            break
-        default:
-            break
-        }
+//        guard let imgView = imageView,
+//              (imgView.frame.isEmpty || imgView.image != nil) else { return }
+//        let location = sender.location(in: contentView)
+//        let point = sender.translation(in: contentView)
+//        let velocity = sender.velocity(in: contentView)
+//        
+//        switch sender.state {
+//        case .began:
+//            currentLocation = location
+//            break
+//        case .changed:
+//            let isRightSlide = (currentLocation.x > contentView.width / 2)
+//            let denominator = isRightSlide ? contentView.height : contentView.width
+//            let angel = (isRightSlide ? 1 : -1) * CGFloat.pi/2 * (point.y / denominator)
+//            let transformAngel = CGAffineTransform(rotationAngle: angel)
+//            let transformTranslation = CGAffineTransform(translationX: 0, y: point.y)
+//            let transformConcat = transformAngel.concatenating(transformTranslation)
+//            imageView?.transform = transformConcat
+//            break
+//        case .cancelled, .ended:
+//            if abs(point.y) > 200 || abs(velocity.y) > 500 {
+//                rotationCompletionAnimation(from: point)
+//            }else {
+//                cancelAnimation()
+//            }
+//            break
+//        default:
+//            break
+//        }
     }
     
     public required init?(coder: NSCoder) {
@@ -511,8 +566,7 @@ open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowse
         let angel = (fromLeft && throwToTop ? 1 : -1) * CGFloat.pi_2
         let translateY = (fromLeft && throwToTop ? -1 : 1) * contentView.height
         
-        let isLeftSlide = currentLocation.x < contentView.width/2
-        let angel0 = (isLeftSlide ? -1 : 1) * (point.y / contentView.height)
+        let angel0 = (fromLeft ? -1 : 1) * (point.y / contentView.height)
         
         let rotateAnim = CABasicAnimation(keyPath: "transform.rotation.z")
         rotateAnim.fromValue = angel0
@@ -531,7 +585,10 @@ open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowse
         
         UIView.animate(withDuration: 0.6, animations: { [weak self] in
             self?.contentView.backgroundColor = .clear
-        }, completion: nil)
+        }, completion: { [weak self] finished in
+            guard let strongSelf = self else { return }
+            strongSelf.next?.responds(value: nil, from: strongSelf, event: .clickEmptyArea)
+        })
     }
     
     private func cancelAnimation() {
@@ -544,7 +601,7 @@ open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowse
 
 open class ContentBrowserImageViewModel<P: ContentBrowserPageData>: ContentBrowserViewModel<P> {
     
-    open override var collectionView: UICollectionView? {
+    open override var collectionView: ContentBrowserCollectionView? {
         didSet {
             collectionView?.register(ContentBrowserViewImageCell<P>.self, forCellWithReuseIdentifier: ContentBrowserViewImageCell<P>.cellIdentifier)
             collectionView?.register(ContentBrowserViewImageCell<P>.self, forCellWithReuseIdentifier: "ContentBrowserViewImageErrorCell")

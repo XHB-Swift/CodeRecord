@@ -36,6 +36,7 @@ class ContentBrowserDemoViewController: UIViewController {
     @objc func tapShowBrowser(_ sender: UIButton) {
         let cbview = ContentBrowserView<ContentBrowserImageData<String>>(frame: CGRect(x: 0, y: view.height, width: view.width, height: view.height))
         cbview.delegate = self
+        cbview.collectionView?.flowlayout?.scrollDirection = .vertical
         cbview.viewModel = contentBrowserViewModel
         contentBrowserViewModel.append([
                                         ContentBrowserImageData(content: imageUrl1, shouldCleanContent: false),

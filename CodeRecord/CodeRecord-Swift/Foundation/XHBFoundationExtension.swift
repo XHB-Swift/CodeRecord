@@ -21,8 +21,9 @@ extension FoundationError {
     public static let nilValue    = FoundationError(code: -98, description: "nil值")
     public static let emptyString = FoundationError(code: -99, description: "空字符串")
     public static let notFoundDir = FoundationError(code: -100, description: "找不到文件夹")
-    public static let notFoundBundleName = FoundationError(code: -101, description: "找不到包名")
-    public static let needToDebugDetails = FoundationError(code: -1024, description: "Need to Debug here")
+    public static let keyPathSetting = FoundationError(code: -101, description: "关键属性设置失败")
+    public static let notFoundBundleName = FoundationError(code: -102, description: "找不到包名")
+    public static let needToDebugDetails = FoundationError(code: -1024, description: "此处需要调试")
 }
 
 extension String {
@@ -126,5 +127,48 @@ extension Timer {
     @objc private class func timerAction(_ sender: Timer) {
         guard let action = sender.userInfo as? TimerUpdateAction else { return }
         action(sender.timeInterval)
+    }
+}
+
+extension Sequence {
+    
+    public func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
+        return map { $0[keyPath: keyPath] }
+    }
+}
+
+extension Collection {
+    
+    public func sorted<Value: Comparable>(on property: KeyPath<Element, Value>,
+                                        by areIncreasingOrder: (Value, Value)->Bool) -> [Element] {
+        return sorted { value1, value2 in
+            areIncreasingOrder(value1[keyPath: property], value2[keyPath: property])
+        }
+    }
+}
+
+extension MutableCollection where Self: RandomAccessCollection {
+    
+    public mutating func sort<Value: Comparable>(on property: KeyPath<Element, Value>, by order: (Value, Value) throws -> Bool) rethrows {
+        
+        try sort { try order($0[keyPath: property], $1[keyPath: property]) }
+    }
+    
+}
+
+public protocol KeyPathEditable {
+    
+    func set<T>(value: T, for property: PartialKeyPath<Self>) throws -> Self
+}
+
+extension KeyPathEditable {
+    
+    func set<T>(value: T, for property: PartialKeyPath<Self>) throws -> Self {
+        guard let writableProperty = property as? WritableKeyPath<Self,T> else {
+            throw FoundationError.keyPathSetting
+        }
+        var newSelf = self
+        newSelf[keyPath: writableProperty] = value
+        return newSelf
     }
 }
