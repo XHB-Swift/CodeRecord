@@ -14,17 +14,23 @@ class ThemeSwitchDemoViewController: UIViewController {
     var textLabel: UILabel?
     var switchControl: UISwitch?
     
+    deinit {
+        ThemeManager.shared.clean(in: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        view.theme_set(backgroundColor: ColorStyle(color: "ffffff", alpha: 1), for: .light)
-        view.theme_set(backgroundColor: ColorStyle(color: "000000", alpha: 1), for: .dark)
+        view.theme_set(backgroundColor: ColorStyle(color: "000000", alpha: 1), for: .dark, in: self)
+        view.theme_set(backgroundColor: ColorStyle(color: "ffffff", alpha: 1), for: .light, in: self)
+        navigationController?.navigationBar.theme_set(backgroundColor: ColorStyle(color: "000000", alpha: 1), for: .dark, in: self)
+        navigationController?.navigationBar.theme_set(backgroundColor: ColorStyle(color: "ffffff", alpha: 1), for: .light, in: self)
         let label = UILabel()
         label.text = "123456"
         label.textColor = .black
-        label.theme_set(textColor: ColorStyle(color: "000000", alpha: 1), for: .light)
-        label.theme_set(textColor: ColorStyle(color: "ffffff", alpha: 1), for: .dark)
+        label.theme_set(textColor: ColorStyle(color: "000000", alpha: 1), for: .light, in: self)
+        label.theme_set(textColor: ColorStyle(color: "ffffff", alpha: 1), for: .dark, in: self)
         label.font = UIFont(name: "PingFangSC-Regular", size: 18)
         label.sizeToFit()
         view.addSubview(label)
@@ -44,7 +50,7 @@ class ThemeSwitchDemoViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        textLabel?.y = 100
+        textLabel?.y = 120
         textLabel?.centerX = view.width / 2
         
         switchControl?.y = (textLabel?.bottom ?? 0) + 30

@@ -121,8 +121,6 @@ open class Theme {
 
 fileprivate class ThemeObject {
     
-    fileprivate static let shouldReleaseObject = NSNotification.Name(rawValue: "shouldReleaseObject")
-    
     fileprivate var viewId: String
     fileprivate weak var view: ThemeUpdatable?
     fileprivate var themeInfo = Dictionary<String, Theme>()
@@ -135,12 +133,16 @@ fileprivate class ThemeObject {
         guard let theme = themeInfo[style] else { return }
         view?.theme_effect(for: style, theme: theme)
     }
+    
+    deinit {
+        themeInfo.removeAll()
+    }
 }
 
 fileprivate class ThemeScene {
     
     fileprivate var sceneId: String
-    fileprivate var themeObjects = Dictionary<String,ThemeObject>()
+    fileprivate var themeObjects = Dictionary<String, ThemeObject>()
     
     public init(sceneId: String) {
         self.sceneId = sceneId
@@ -151,64 +153,56 @@ fileprivate class ThemeScene {
             value.update(style: style)
         }
     }
+    
+    deinit {
+        themeObjects.removeAll()
+    }
 }
 
 open class ThemeManager {
     
-    private init() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(releaseThemeObject(_:)),
-                                               name: ThemeObject.shouldReleaseObject,
-                                               object: nil)
-    }
+    private init() {}
     public static let shared = ThemeManager()
-    /*
-     {
-      "scene-1":{
-          "view-1" : {
-            "style1": {}
-         }
-       }
-     }
-    */
-    private var themeObjects = Dictionary<String, ThemeObject>()
+    private var themeScenes = Dictionary<String, ThemeScene>()
     
-    open func set(theme: Theme, style: String, for view: ThemeUpdatable) {
+    open func set(theme: Theme, style: String, for view: ThemeUpdatable, in scene: Any) {
         
         let viewId = "\(view)"
-        if let themeObject = themeObjects[viewId] {
-            themeObject.themeInfo[style] = theme
+        let sceneId = "\(scene)"
+        if let themeScene = themeScenes[sceneId] {
+            if let themeObject = themeScene.themeObjects[viewId] {
+                themeObject.themeInfo[style] = theme
+            }else {
+                let themeObject = ThemeObject(viewId: viewId)
+                themeObject.view = view
+                themeObject.themeInfo[style] = theme
+                themeScene.themeObjects[viewId] = themeObject
+            }
         }else {
+            let themeScene = ThemeScene(sceneId: sceneId)
             let themeObject = ThemeObject(viewId: viewId)
             themeObject.view = view
             themeObject.themeInfo[style] = theme
-            themeObjects[viewId] = themeObject
+            themeScene.themeObjects[viewId] = themeObject
+            themeScenes[sceneId] = themeScene
         }
     }
     
-    @objc fileprivate func releaseThemeObject(_ sender: Notification) {
-        guard let themeObject = sender.object as? ThemeObject else { return }
-        print("releaseThemeObject = \(themeObject.viewId)")
-        _ = themeObjects.removeValue(forKey: themeObject.viewId)
+    open func clean(in scene: Any) {
+        _ = themeScenes.removeValue(forKey: "\(scene)")
     }
     
-    open func clean(for view: ThemeUpdatable) {
-        clean(for: [view])
-    }
-    
-    open func clean(for views: [ThemeUpdatable]) {
-        views.forEach { view in
-            let viewId = "\(view)"
-            _ = themeObjects.removeValue(forKey: viewId)
-        }
+    open func clean(for view: ThemeUpdatable, in scene: Any) {
+        guard let themeScene = themeScenes["\(scene)"] else { return }
+        _ = themeScene.themeObjects.removeValue(forKey: "\(view)")
     }
     
     open func cleanAll() {
-        themeObjects.removeAll()
+        themeScenes.removeAll()
     }
     
     open func switchTo(style: String) {
-        themeObjects.forEach { key, value in
+        themeScenes.forEach { key, value in
             value.update(style: style)
         }
     }
@@ -223,9 +217,9 @@ extension String {
 
 extension UIBarItem: ThemeUpdatable {
     
-    open func theme_set(image: ImageStyle, for style: String) {
+    open func theme_set(image: ImageStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UIBarItem.image, style: image)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
     @objc open func theme_effect(for style: String, theme: AnyObject?) {
@@ -238,24 +232,24 @@ extension UIBarItem: ThemeUpdatable {
 
 extension UINavigationBar {
     
-    open func theme_set(barStyle: UIBarStyle, for style: String) {
+    open func theme_set(barStyle: UIBarStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UINavigationBar.barStyle, style: barStyle)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(barTintColor: ColorStyle, for style: String) {
+    open func theme_set(barTintColor: ColorStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UINavigationBar.barTintColor, style: barTintColor)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(titleAttributes: RichTextStyle.RichTextAttributes, for style: String) {
+    open func theme_set(titleAttributes: RichTextStyle.RichTextAttributes, for style: String, in scene: Any) {
         let theme = Theme(property: \UINavigationBar.titleTextAttributes, style: titleAttributes)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(largeTitleAttributes: RichTextStyle.RichTextAttributes, for style: String) {
+    open func theme_set(largeTitleAttributes: RichTextStyle.RichTextAttributes, for style: String, in scene: Any) {
         let theme = Theme(property: \UINavigationBar.largeTitleTextAttributes, style: largeTitleAttributes)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
     @objc open override func theme_effect(for style: String, theme: AnyObject?) {
@@ -265,16 +259,16 @@ extension UINavigationBar {
 
 extension UIView: ThemeUpdatable {
     
-    open func theme_set(backgroundColor: ColorStyle, for style: String) {
+    open func theme_set(backgroundColor: ColorStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UIView.backgroundColor, style:backgroundColor)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_clean(includingSubviews: Bool = true) {
+    open func theme_clean(includingSubviews: Bool = true, in scene: Any) {
         let manager = ThemeManager.shared
-        manager.clean(for: self)
+        manager.clean(for: self, in: scene)
         subviews.forEach { subview in
-            manager.clean(for: subview)
+            manager.clean(for: subview, in: scene)
         }
     }
     
@@ -288,29 +282,29 @@ extension UIView: ThemeUpdatable {
 
 extension UILabel {
 
-    open func theme_set(textColor: ColorStyle, for style: String) {
+    open func theme_set(textColor: ColorStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UILabel.textColor, style: textColor)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(shadowColor: ColorStyle, for style: String) {
+    open func theme_set(shadowColor: ColorStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UILabel.shadowColor, style: shadowColor)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(font: FontStyle, for style: String) {
+    open func theme_set(font: FontStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UILabel.font, style: font)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(attributedText: RichTextStyle, for style: String) {
+    open func theme_set(attributedText: RichTextStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UILabel.font, style: attributedText)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
-    open func theme_set(highlightedTextColor: ColorStyle, for style: String) {
+    open func theme_set(highlightedTextColor: ColorStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UILabel.highlightedTextColor, style: highlightedTextColor)
-        ThemeManager.shared.set(theme: theme, style: style, for: self)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
     open override func theme_effect(for style: String, theme: AnyObject?) {
