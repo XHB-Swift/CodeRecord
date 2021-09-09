@@ -15,6 +15,7 @@
 		4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */; };
 		4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */; };
 		429BB2E426E8BAC300D3667C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB2E326E8BAC300D3667C /* Theme.swift */; };
+		429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -55,6 +56,7 @@
 		4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWebCacheDemoViewController.swift; sourceTree = "<group>"; };
 		4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBrowserDemoViewController.swift; sourceTree = "<group>"; };
 		429BB2E326E8BAC300D3667C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitchDemoViewController.swift; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */,
 				4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */,
 				4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */,
+				429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */,
 			);
 			path = "CodeRecord-Swift";
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				C6368BF826D6B0740099A7D3 /* XHBUIExtension.swift in Sources */,
 				C6368BE526D6B0410099A7D3 /* AppDelegate.swift in Sources */,
 				4294C30C26E5AD6900F2D97D /* UIImageViewWebCache.swift in Sources */,
+				429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */,
 				C6368BFE26DA7FF00099A7D3 /* UIViewControllerCustomTransition.swift in Sources */,
 				4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */,
 				4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */,

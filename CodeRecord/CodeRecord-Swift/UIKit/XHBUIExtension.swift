@@ -208,6 +208,25 @@ extension CGFloat {
 
 extension UIColor {
     
+    open var rgbHexString: (String, CGFloat)? {
+        
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
+        var rStr = String(Int(255.0 * red), radix: 16),
+            gStr = String(Int(255.0 * green), radix: 16),
+            bStr = String(Int(255.0 * blue), radix: 16)
+        rStr = (rStr.count == 1) ? "0\(rStr)" : rStr
+        gStr = (gStr.count == 1) ? "0\(gStr)" : gStr
+        bStr = (bStr.count == 1) ? "0\(bStr)" : bStr
+        let rgb = "\(rStr)\(gStr)\(bStr)"
+        return (rgb,alpha)
+    }
+    
+    open var argbHexString: String? {
+        guard let rgbStr = rgbHexString else { return nil }
+        return "\(String(format: "%02X", Int(rgbStr.1 * 255.0)))\(rgbStr.0)"
+    }
+    
     public convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
         let alpha = (0...1.0).contains(a) ? a : 1.0
         self.init(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: alpha)

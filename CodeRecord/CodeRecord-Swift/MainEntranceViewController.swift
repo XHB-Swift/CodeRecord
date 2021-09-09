@@ -135,7 +135,8 @@ class MainEntranceViewController: UIViewController {
         mainEntranceViewModel.append([
             MainEntranceModel(title: "自定义模态转场", vcName: "CustomTransitionDemoViewController"),
             MainEntranceModel(title: "缓存网络图片", vcName: "ImageWebCacheDemoViewController"),
-            MainEntranceModel(title: "CollectionView轮播", vcName: "ContentBrowserDemoViewController")
+            MainEntranceModel(title: "CollectionView轮播", vcName: "ContentBrowserDemoViewController"),
+            MainEntranceModel(title: "主题切换", vcName: "ThemeSwitchDemoViewController")
         ])
     }
     
