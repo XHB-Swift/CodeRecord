@@ -10,11 +10,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol XHBThemeObject <NSObject>
+typedef NSString *XHBThemeStyle;
+
+UIKIT_EXTERN XHBThemeStyle const XHBThemeStyleDark;
+UIKIT_EXTERN XHBThemeStyle const XHBThemeStyleLight;
+
+
+@protocol XHBThemeUpdatable <NSObject>
 
 @optional
 
-- (void)shouldUpdateTheme:(NSDictionary<NSString *,id> *)theme forName:(NSString *)name;
+- (void)updateTheme:(id)theme forStyle:(XHBThemeStyle)style;
 
 @end
 
@@ -22,13 +28,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedManager;
 
-- (void)setTheme:(NSDictionary<NSString *,id> *)theme forName:(NSString *)name view:(__kindof UIView<XHBThemeObject> *)view;
-- (nullable NSDictionary<NSString *,id> *)themeForName:(NSString *)name withView:(__kindof UIView<XHBThemeObject> *)view;
-- (void)removeThemeForName:(NSString *)name view:(__kindof UIView<XHBThemeObject> *)view;
-- (void)removeThemeForName:(NSString *)name views:(NSArray<__kindof UIView<XHBThemeObject> *> *)views;
-- (void)removeThemeForName:(NSString *)name;
+- (void)setTheme:(id)theme style:(XHBThemeStyle)style forView:(id<XHBThemeUpdatable>)view inScene:(id)scene;
 
-- (void)updateThemeForName:(NSString *)name;
+- (void)switchToStyle:(XHBThemeStyle)style;
+
+- (void)cleanForView:(id<XHBThemeUpdatable>)view inScene:(id)scene;
+
+- (void)cleanInScene:(id)scene;
 
 @end
 

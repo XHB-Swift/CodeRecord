@@ -10,9 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UIView (XHBTheme) <XHBThemeObject>
+@interface UIView (XHBTheme) <XHBThemeUpdatable>
 
-- (void)theme_setBackgroundColor:(nullable UIColor *)color forName:(NSString *)name;
+- (void)theme_setBackgroundColor:(UIColor *)color forStyle:(XHBThemeStyle)style inScene:(id)scene;
 
 @end
 

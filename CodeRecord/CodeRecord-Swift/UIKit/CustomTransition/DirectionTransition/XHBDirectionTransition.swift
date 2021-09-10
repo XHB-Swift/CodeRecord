@@ -159,20 +159,6 @@ open class XHBDirectionPresentationController: UIViewCustomPresentationControlle
     }
 }
 
-fileprivate final class XHBCustomTransitioningManager {
-    
-    private var transitionings = Dictionary<String,UIViewControllerCustomTransitioning>()
-    private init() {}
-    public static let shared = XHBCustomTransitioningManager()
-    
-    public func setTransitioning(_ transitioning: UIViewControllerCustomTransitioning, for key: String) {
-        transitionings[key] = transitioning
-    }
-    
-    public func removeTransitioning(for key: String) {
-        _ = transitionings.removeValue(forKey: key)
-    }
-}
 
 extension UIViewController {
     

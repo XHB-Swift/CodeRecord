@@ -19,6 +19,7 @@ public protocol ThemeAttribute {}
 extension UIFont: ThemeAttribute {}
 extension UIImage: ThemeAttribute {}
 extension UIColor: ThemeAttribute {}
+extension Selector: ThemeAttribute {}
 extension NSAttributedString: ThemeAttribute {}
 
 public protocol ThemeStyle {
@@ -36,7 +37,7 @@ extension UIBarStyle: ThemeSimple {}
 extension Dictionary: ThemeSimple {}
 extension UIStatusBarStyle: ThemeSimple {}
 
-public final class ColorStyle: ThemeStyle {
+public struct ColorStyle: ThemeStyle {
     
     public var color: String?
     public var alpha: CGFloat?
@@ -53,7 +54,7 @@ public final class ColorStyle: ThemeStyle {
     }
 }
 
-public final class FontStyle: ThemeStyle {
+public struct FontStyle: ThemeStyle {
     
     public var fontName: String?
     public var fontSize: CGFloat?
@@ -70,7 +71,7 @@ public final class FontStyle: ThemeStyle {
 }
 
 //如果是网络图片，先下载到本地，再将本地资源路径设置，UIImage属于大内存的资源，不应该大量持有
-public final class ImageStyle: ThemeStyle {
+public struct ImageStyle: ThemeStyle {
     
     public var localPath: String?
     
@@ -84,7 +85,7 @@ public final class ImageStyle: ThemeStyle {
     }
 }
 
-public final class RichTextStyle: ThemeStyle {
+public struct RichTextStyle: ThemeStyle {
     
     public typealias RichTextAttributes = [NSAttributedString.Key : Any]
     public var string: String?
@@ -101,6 +102,20 @@ public final class RichTextStyle: ThemeStyle {
     }
 }
 
+public struct StateStyle: ThemeStyle {
+    
+    public var selector: Selector
+    public var params: [UInt:Any]?
+    
+    public init(selector: Selector) {
+        self.selector = selector
+    }
+    
+    public func toAttribute() -> ThemeAttribute? {
+        return selector
+    }
+}
+
 @objc public protocol ThemeUpdatable {
     
     @objc func theme_effect(for style: String, theme: AnyObject?)
@@ -109,9 +124,13 @@ public final class RichTextStyle: ThemeStyle {
 open class Theme {
     
     //表示该主题针对view的哪个属性
-    open var property: AnyKeyPath
+    fileprivate var property: AnyKeyPath?
     
-    open var style: ThemeStyle
+    fileprivate var style: ThemeStyle
+    
+    public init(style: ThemeStyle) {
+        self.style = style
+    }
     
     public init(property: AnyKeyPath, style: ThemeStyle) {
         self.property = property
@@ -222,10 +241,26 @@ extension UIBarItem: ThemeUpdatable {
         ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
+    open func theme_set(titleTextAttributes: RichTextStyle.RichTextAttributes,
+                        state: UIControl.State,
+                        for style: String,
+                        in scene: Any) {
+        
+        var stateStyle = StateStyle(selector: #selector(setTitleTextAttributes(_:for:)))
+        stateStyle.params = [state.rawValue : titleTextAttributes]
+        let theme = Theme(style: stateStyle)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
+    }
+    
     @objc open func theme_effect(for style: String, theme: AnyObject?) {
         guard let theme0 = theme as? Theme else { return }
         if let imageProperty = theme0.property as? ReferenceWritableKeyPath<UIBarItem, UIImage?> {
             self[keyPath: imageProperty] = (theme0.style as? ImageStyle)?.toAttribute() as? UIImage
+        }
+        if let stateStyle = theme0.style as? StateStyle {
+            stateStyle.params?.forEach({ key, value in
+                setTitleTextAttributes(value as? RichTextStyle.RichTextAttributes, for:  UIControl.State(rawValue: key))
+            })
         }
     }
 }

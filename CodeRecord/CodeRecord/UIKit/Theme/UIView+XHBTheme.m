@@ -12,12 +12,12 @@
 
 @implementation UIView (XHBTheme)
 
-- (void)theme_setBackgroundColor:(nullable UIColor *)color forName:(NSString *)name {
+- (void)theme_setBackgroundColor:(UIColor *)color forStyle:(XHBThemeStyle)style inScene:(id)scene {
     NSDictionary<NSString *,id> *theme = [NSDictionary dictionaryWithObjectsAndKeys:color, UIViewThemeBackgroundColor, nil];
-    [[XHBThemeManager sharedManager] setTheme:theme forName:name view:self];
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
 }
 
-- (void)shouldUpdateTheme:(NSDictionary<NSString *,id> *)theme forName:(NSString *)name {
+- (void)updateTheme:(id)theme forStyle:(XHBThemeStyle)style {
     if (![theme isKindOfClass:[NSDictionary class]]) {
         return;
     }

@@ -15,18 +15,18 @@
 
 @implementation UILabel (XHBTheme)
 
-- (void)theme_setFont:(nullable UIFont *)font forName:(NSString *)name {
+- (void)theme_setFont:(UIFont *)font forStyle:(XHBThemeStyle)style inScene:(id)scene {
     NSDictionary<NSString *,id> *theme = [NSDictionary dictionaryWithObjectsAndKeys:font, UILabelThemeFont, nil];
-    [[XHBThemeManager sharedManager] setTheme:theme forName:name view:self];
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
 }
 
-- (void)theme_setTextColor:(nullable UIColor *)textColor forName:(NSString *)name {
+- (void)theme_setTextColor:(UIColor *)textColor forStyle:(XHBThemeStyle)style inScene:(id)scene {
     NSDictionary<NSString *,id> *theme = [NSDictionary dictionaryWithObjectsAndKeys:textColor, UILabelThemeTextColor, nil];
-    [[XHBThemeManager sharedManager] setTheme:theme forName:name view:self];
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
 }
 
-- (void)shouldUpdateTheme:(NSDictionary<NSString *,id> *)theme forName:(NSString *)name {
-    [super shouldUpdateTheme:theme forName:name];
+- (void)updateTheme:(id)theme forStyle:(XHBThemeStyle)style {
+    [super updateTheme:theme forStyle:style];
     if (![theme isKindOfClass:[NSDictionary class]]) {
         return;
     }
