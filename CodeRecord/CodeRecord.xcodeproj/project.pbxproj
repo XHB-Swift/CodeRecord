@@ -45,6 +45,7 @@
 		C651ADC42449E761004E76A8 /* NSArray+XItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C651ADC32449E761004E76A8 /* NSArray+XItem.m */; };
 		C651ADC72449FF5D004E76A8 /* NSPropertyListSerialization+XPropertyLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = C651ADC62449FF5D004E76A8 /* NSPropertyListSerialization+XPropertyLoader.m */; };
 		C651ADCA244C051D004E76A8 /* NSMutableURLRequest+XURLRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = C651ADC9244C051D004E76A8 /* NSMutableURLRequest+XURLRequest.m */; };
+		C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,8 @@
 		C651ADC62449FF5D004E76A8 /* NSPropertyListSerialization+XPropertyLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSPropertyListSerialization+XPropertyLoader.m"; sourceTree = "<group>"; };
 		C651ADC8244C051D004E76A8 /* NSMutableURLRequest+XURLRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableURLRequest+XURLRequest.h"; sourceTree = "<group>"; };
 		C651ADC9244C051D004E76A8 /* NSMutableURLRequest+XURLRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableURLRequest+XURLRequest.m"; sourceTree = "<group>"; };
+		C6A5D8A226EBC36F00420BC1 /* XHBThemeAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBThemeAttribute.h; sourceTree = "<group>"; };
+		C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBThemeAttribute.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +167,8 @@
 				C6368BDA26D03B010099A7D3 /* UILabel+XHBTheme.h */,
 				C6368BDB26D03B010099A7D3 /* UILabel+XHBTheme.m */,
 				C6368BDD26D179E20099A7D3 /* XHBThemeHeaders.h */,
+				C6A5D8A226EBC36F00420BC1 /* XHBThemeAttribute.h */,
+				C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -427,6 +432,7 @@
 				C651ADB52448BEA5004E76A8 /* NSJSONSerialization+XCleanData.m in Sources */,
 				C651ADB82448C7B9004E76A8 /* NSDate+XCompare.m in Sources */,
 				C6368BDC26D03B010099A7D3 /* UILabel+XHBTheme.m in Sources */,
+				C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */,
 				C6368BD326D028B20099A7D3 /* UIView+XHBTheme.m in Sources */,
 				C6368BCF26D022990099A7D3 /* UIView+XHBFitSize.m in Sources */,
 				C651ADA924488CF7004E76A8 /* NSObject+XCoder.m in Sources */,

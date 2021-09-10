@@ -15,29 +15,28 @@
 
 @implementation UILabel (XHBTheme)
 
-- (void)theme_setFont:(UIFont *)font forStyle:(XHBThemeStyle)style inScene:(id)scene {
-    NSDictionary<NSString *,id> *theme = [NSDictionary dictionaryWithObjectsAndKeys:font, UILabelThemeFont, nil];
+- (void)theme_setFont:(XHBThemeAttributeFont *)font forStyle:(XHBThemeStyle)style inScene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"font";
+    theme.themeAttribute = font;
     [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
 }
 
-- (void)theme_setTextColor:(UIColor *)textColor forStyle:(XHBThemeStyle)style inScene:(id)scene {
-    NSDictionary<NSString *,id> *theme = [NSDictionary dictionaryWithObjectsAndKeys:textColor, UILabelThemeTextColor, nil];
+- (void)theme_setTextColor:(XHBThemeAttributeColor *)textColor forStyle:(XHBThemeStyle)style inScene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"textColor";
+    theme.themeAttribute = textColor;
     [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
 }
 
-- (void)updateTheme:(id)theme forStyle:(XHBThemeStyle)style {
-    [super updateTheme:theme forStyle:style];
-    if (![theme isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-    UIFont *font = theme[UILabelThemeFont];
-    if ([font isKindOfClass:[UIFont class]]) {
-        self.font = font;
-    }
-    UIColor *textColor = theme[UILabelThemeTextColor];
-    if ([textColor isKindOfClass:[UIColor class]]) {
-        self.textColor = textColor;
-    }
-}
+//- (void)updateTheme:(XHBTheme *)theme forStyle:(XHBThemeStyle)style {
+//    [super updateTheme:theme forStyle:style];
+//    if ([theme isKindOfClass:[UIFont class]]) {
+//        self.font = theme;
+//    }
+//    if ([theme isKindOfClass:[UIColor class]]) {
+//        self.textColor = theme;
+//    }
+//}
 
 @end

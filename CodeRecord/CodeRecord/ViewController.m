@@ -24,13 +24,24 @@
     [switchCtrl addTarget:self action:@selector(switchCtrlAction:) forControlEvents:(UIControlEventValueChanged)];
     [self.view addSubview:switchCtrl];
     
-    [self.view theme_setBackgroundColor:[UIColor colorWithHexString:@"000000" alpha:1] forStyle:XHBThemeStyleDark inScene:self];
-    [self.view theme_setBackgroundColor:[UIColor colorWithHexString:@"FFFFFF" alpha:1] forStyle:XHBThemeStyleLight inScene:self];
+    [self.view theme_setBackgroundColor:XHBThemeMakeNoAlphaColor(@"000000") forStyle:XHBThemeStyleDark inScene:self];
+    [self.view theme_setBackgroundColor:XHBThemeMakeNoAlphaColor(@"FFFFFF") forStyle:XHBThemeStyleLight inScene:self];
     UIView *testView = [[UIView alloc] initWithFrame:(CGRect){10,90,60,60}];
-    [testView theme_setBackgroundColor:[UIColor colorWithHexString:@"F8F8FF" alpha:1] forStyle:XHBThemeStyleDark inScene:self];
-    [testView theme_setBackgroundColor:[UIColor colorWithHexString:@"668B8B" alpha:1] forStyle:XHBThemeStyleLight inScene:self];
+    testView.backgroundColor = [UIColor colorWithHexString:@"668B8B"];
+    [testView theme_setBackgroundColor:XHBThemeMakeNoAlphaColor(@"F8F8FF") forStyle:XHBThemeStyleDark inScene:self];
+    [testView theme_setBackgroundColor:XHBThemeMakeNoAlphaColor(@"668B8B") forStyle:XHBThemeStyleLight inScene:self];
     [self.view addSubview:testView];
-    [self switchCtrlAction:switchCtrl];
+    
+    UILabel *textLabel = [[UILabel alloc] init];
+    textLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+    textLabel.text = @"123456";
+    textLabel.textColor = [UIColor blackColor];
+    [textLabel sizeToFit];
+    textLabel.x = testView.right + 50;
+    textLabel.y = testView.y + 30;
+    [textLabel theme_setTextColor:XHBThemeMakeNoAlphaColor(@"000000") forStyle:XHBThemeStyleLight inScene:self];
+    [textLabel theme_setTextColor:XHBThemeMakeNoAlphaColor(@"FFFFFF") forStyle:XHBThemeStyleDark inScene:self];
+    [self.view addSubview:textLabel];
 }
 
 - (void)switchCtrlAction:(UISwitch *)sender {

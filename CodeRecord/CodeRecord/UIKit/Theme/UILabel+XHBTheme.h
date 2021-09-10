@@ -12,8 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UILabel (XHBTheme) <XHBThemeUpdatable>
 
-- (void)theme_setFont:(UIFont *)font forStyle:(XHBThemeStyle)style inScene:(id)scene;
-- (void)theme_setTextColor:(UIColor *)textColor forStyle:(XHBThemeStyle)style inScene:(id)scene;
+- (void)theme_setFont:(XHBThemeAttributeFont *)font forStyle:(XHBThemeStyle)style inScene:(id)scene;
+- (void)theme_setTextColor:(XHBThemeAttributeColor *)textColor forStyle:(XHBThemeStyle)style inScene:(id)scene;
 
 @end
 

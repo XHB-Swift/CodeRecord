@@ -8,24 +8,31 @@
 
 #import "UIView+XHBTheme.h"
 
-#define UIViewThemeBackgroundColor @"UIViewThemeBackgroundColor"
-
 @implementation UIView (XHBTheme)
 
-- (void)theme_setBackgroundColor:(UIColor *)color forStyle:(XHBThemeStyle)style inScene:(id)scene {
-    NSDictionary<NSString *,id> *theme = [NSDictionary dictionaryWithObjectsAndKeys:color, UIViewThemeBackgroundColor, nil];
+- (void)theme_setBackgroundColor:(XHBThemeAttributeColor *)color forStyle:(XHBThemeStyle)style inScene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"backgroundColor";
+    theme.themeAttribute = color;
     [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
 }
 
-- (void)updateTheme:(id)theme forStyle:(XHBThemeStyle)style {
-    if (![theme isKindOfClass:[NSDictionary class]]) {
+- (void)updateTheme:(XHBTheme *)theme forStyle:(XHBThemeStyle)style {
+    if (![theme isKindOfClass:[XHBTheme class]]) {
         return;
     }
-    UIColor *bgColor = theme[UIViewThemeBackgroundColor];
-    if (![bgColor isKindOfClass:[UIColor class]]) {
+    id<XHBThemeAttribute> themeAttribute = [theme themeAttribute];
+    if (![themeAttribute respondsToSelector:@selector(themeAttribute)]) {
         return;
     }
-    self.backgroundColor = bgColor;
+    NSString *keyPath = theme.keyPath;
+    if (keyPath.length > 0) {
+        NSString *uKeyPath = [keyPath stringByReplacingCharactersInRange:(NSRange){0,1} withString:[[keyPath substringToIndex:1] uppercaseString]];
+        NSString *keyPathSetter = [NSString stringWithFormat:@"set%@:",uKeyPath];
+        if ([self respondsToSelector:NSSelectorFromString(keyPathSetter)]) {
+            [self setValue:[themeAttribute themeAttribute] forKeyPath:keyPath];
+        }
+    }
 }
 
 @end

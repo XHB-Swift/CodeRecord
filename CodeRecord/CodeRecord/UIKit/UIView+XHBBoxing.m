@@ -57,7 +57,7 @@
 }
 
 - (CGFloat)right {
-    return CGRectGetMaxY(self.frame);
+    return CGRectGetMaxX(self.frame);
 }
 
 - (void)setBottom:(CGFloat)bottom {

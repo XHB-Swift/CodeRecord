@@ -6,7 +6,7 @@
 //  Copyright © 2021 谢鸿标. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XHBThemeAttribute.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,12 +15,20 @@ typedef NSString *XHBThemeStyle;
 UIKIT_EXTERN XHBThemeStyle const XHBThemeStyleDark;
 UIKIT_EXTERN XHBThemeStyle const XHBThemeStyleLight;
 
+@interface XHBTheme: NSObject
+
+@property (nonatomic, nullable, strong) NSString *keyPath;
+@property (nonatomic, nullable, strong) NSString *selector;
+@property (nonatomic, nullable, strong) id<XHBThemeAttribute> themeAttribute;
+
+@end
+
 
 @protocol XHBThemeUpdatable <NSObject>
 
 @optional
 
-- (void)updateTheme:(id)theme forStyle:(XHBThemeStyle)style;
+- (void)updateTheme:(XHBTheme *)theme forStyle:(XHBThemeStyle)style;
 
 @end
 
@@ -28,7 +36,7 @@ UIKIT_EXTERN XHBThemeStyle const XHBThemeStyleLight;
 
 + (instancetype)sharedManager;
 
-- (void)setTheme:(id)theme style:(XHBThemeStyle)style forView:(id<XHBThemeUpdatable>)view inScene:(id)scene;
+- (void)setTheme:(XHBTheme *)theme style:(XHBThemeStyle)style forView:(id<XHBThemeUpdatable>)view inScene:(id)scene;
 
 - (void)switchToStyle:(XHBThemeStyle)style;
 

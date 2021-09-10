@@ -11,11 +11,15 @@
 XHBThemeStyle const XHBThemeStyleDark = @"XHBThemeStyleDark";
 XHBThemeStyle const XHBThemeStyleLight = @"XHBThemeStyleLight";
 
+@implementation XHBTheme
+
+@end
+
 @interface XHBThemeObject: NSObject
 
 @property (nonatomic, weak) id<XHBThemeUpdatable> updatable;
 @property (nonatomic, strong) NSString *updatableId;
-@property (nonatomic, strong) NSMutableDictionary<XHBThemeStyle, id> *themeInfo;
+@property (nonatomic, strong) NSMutableDictionary<XHBThemeStyle, XHBTheme *> *themeInfo;
 
 @end
 
@@ -36,11 +40,11 @@ XHBThemeStyle const XHBThemeStyleLight = @"XHBThemeStyleLight";
     if (![self.updatable respondsToSelector:@selector(updateTheme:forStyle:)]) {
         return;
     }
-    id attribute = self.themeInfo[style];
-    if (!attribute) {
+    XHBTheme *theme = self.themeInfo[style];
+    if (![theme isKindOfClass:[XHBTheme class]]) {
         return;
     }
-    [self.updatable updateTheme:attribute forStyle:style];
+    [self.updatable updateTheme:theme forStyle:style];
 }
 
 @end
@@ -104,7 +108,7 @@ static XHBThemeManager *manager = nil;
     return manager;
 }
 
-- (void)setTheme:(id)theme
+- (void)setTheme:(XHBTheme *)theme
            style:(XHBThemeStyle)style
          forView:(id<XHBThemeUpdatable>)view
          inScene:(id)scene {
