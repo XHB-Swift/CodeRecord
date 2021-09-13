@@ -7,6 +7,7 @@
 //
 
 #import "UIView+XHBTheme.h"
+#import "NSObject+XHBExtension.h"
 
 @implementation UIView (XHBTheme)
 
@@ -26,13 +27,42 @@
         return;
     }
     NSString *keyPath = theme.keyPath;
-    if (keyPath.length > 0) {
-        NSString *uKeyPath = [keyPath stringByReplacingCharactersInRange:(NSRange){0,1} withString:[[keyPath substringToIndex:1] uppercaseString]];
-        NSString *keyPathSetter = [NSString stringWithFormat:@"set%@:",uKeyPath];
-        if ([self respondsToSelector:NSSelectorFromString(keyPathSetter)]) {
-            [self setValue:[themeAttribute themeAttribute] forKeyPath:keyPath];
-        }
+    if ([self hasPropertyWithName:keyPath]) {
+        [self setValue:[themeAttribute themeAttribute] forKeyPath:keyPath];
     }
 }
 
 @end
+
+@implementation UILabel (XHBTheme)
+
+- (void)theme_setFont:(XHBThemeAttributeFont *)font forStyle:(XHBThemeStyle)style inScene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"font";
+    theme.themeAttribute = font;
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
+}
+
+- (void)theme_setTextColor:(XHBThemeAttributeColor *)textColor forStyle:(XHBThemeStyle)style inScene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"textColor";
+    theme.themeAttribute = textColor;
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
+}
+
+- (void)theme_setShadowColor:(XHBThemeAttributeColor *)shadowColor forStyle:(XHBThemeStyle)style inSecene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"shadowColor";
+    theme.themeAttribute = shadowColor;
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
+}
+
+- (void)theme_setAttributedText:(XHBThemeAttributeRictText *)attributedText forStyle:(XHBThemeStyle)style inScene:(id)scene {
+    XHBTheme *theme = [[XHBTheme alloc] init];
+    theme.keyPath = @"attributedText";
+    theme.themeAttribute = attributedText;
+    [[XHBThemeManager sharedManager] setTheme:theme style:style forView:self inScene:scene];
+}
+
+@end
+

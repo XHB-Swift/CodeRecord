@@ -32,6 +32,7 @@ extension ThemeSimple {
 }
 
 extension Int: ThemeSimple {}
+extension String: ThemeSimple {}
 extension CGFloat: ThemeSimple {}
 extension UIBarStyle: ThemeSimple {}
 extension Dictionary: ThemeSimple {}
@@ -227,17 +228,15 @@ open class ThemeManager {
     }
 }
 
-extension String {
-    
-    fileprivate static let backgroundColor = "backgroundColor"
-    fileprivate static let textColor = "textColor"
-    fileprivate static let font = "font"
-}
-
 extension UIBarItem: ThemeUpdatable {
     
     open func theme_set(image: ImageStyle, for style: String, in scene: Any) {
         let theme = Theme(property: \UIBarItem.image, style: image)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
+    }
+    
+    open func theme_set(title: String, for style: String, in scene: Any) {
+        let theme = Theme(property: \UIBarItem.title, style: title)
         ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
@@ -257,9 +256,13 @@ extension UIBarItem: ThemeUpdatable {
         if let imageProperty = theme0.property as? ReferenceWritableKeyPath<UIBarItem, UIImage?> {
             self[keyPath: imageProperty] = (theme0.style as? ImageStyle)?.toAttribute() as? UIImage
         }
-        if let stateStyle = theme0.style as? StateStyle {
+        if let stateStyle = theme0.style as? StateStyle,
+           responds(to: stateStyle.selector),
+           stateStyle.selector == #selector(setTitleTextAttributes(_:for:)) {
             stateStyle.params?.forEach({ key, value in
-                setTitleTextAttributes(value as? RichTextStyle.RichTextAttributes, for:  UIControl.State(rawValue: key))
+                let state = UIControl.State(rawValue: key)
+                let attributes = value as? RichTextStyle.RichTextAttributes
+                setTitleTextAttributes(attributes, for: state)
             })
         }
     }

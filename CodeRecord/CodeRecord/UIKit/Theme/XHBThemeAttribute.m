@@ -42,6 +42,24 @@
 
 @end
 
+@implementation XHBThemeAttributeRictText
+
++ (instancetype)attributeRichTextWithText:(NSString *)text attributes:(NSDictionary<NSAttributedStringKey,id> *)attributes {
+    XHBThemeAttributeRictText *rtx = [[XHBThemeAttributeRictText alloc] init];
+    rtx.text = text;
+    rtx.attributes = attributes;
+    return  rtx;
+}
+
+- (id)themeAttribute {
+    if (![self.text isKindOfClass:[NSString class]]) {
+        return nil;
+    }
+    return [[NSAttributedString alloc] initWithString:self.text attributes:self.attributes];
+}
+
+@end
+
 @implementation NSValue (XHBThemeAttribute)
 
 - (id)themeAttribute {

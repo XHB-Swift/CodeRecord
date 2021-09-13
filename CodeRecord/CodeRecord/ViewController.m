@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "XHBThemeHeaders.h"
 #import "XHBUIKitHeaders.h"
+#import "NSObject+XHBExtension.h"
 
 @interface ViewController ()
 
@@ -34,7 +35,7 @@
     
     UILabel *textLabel = [[UILabel alloc] init];
     textLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-    textLabel.text = @"123456";
+    textLabel.text = [NSString stringWithRoundedNumber:@(192205678) digit:3 unitSymbol:@"万"];
     textLabel.textColor = [UIColor blackColor];
     [textLabel sizeToFit];
     textLabel.x = testView.right + 50;

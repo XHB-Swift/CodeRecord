@@ -32,7 +32,7 @@
 
 - (void)setMidX:(CGFloat)midX {
     CGRect frame = self.frame;
-    frame.origin.x = midX - CGRectGetWidth(frame);
+    frame.origin.x = midX - CGRectGetWidth(frame) / 2;
     self.frame = frame;
 }
 
@@ -42,7 +42,7 @@
 
 - (void)setMidY:(CGFloat)midY {
     CGRect frame = self.frame;
-    frame.origin.y = midY - CGRectGetHeight(frame);
+    frame.origin.y = midY - CGRectGetHeight(frame) / 2;
     self.frame = frame;
 }
 

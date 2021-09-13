@@ -42,6 +42,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface XHBThemeAttributeRictText: NSObject<XHBThemeAttribute>
+
+@property (nonatomic, strong) NSString *text;
+@property (nonatomic, nullable, strong) NSDictionary<NSAttributedStringKey, id> *attributes;
+
++ (instancetype)attributeRichTextWithText:(NSString *)text attributes:(nullable NSDictionary<NSAttributedStringKey,id> *)attributes;
+
+#define XHBThemeMakeRichText(txt,attrs) \
+[XHBThemeAttributeRictText attributeRichTextWithText:(txt) attributes:(attrs)]
+
+@end
+
 @interface NSValue (XHBThemeAttribute) <XHBThemeAttribute>
 @end
 
