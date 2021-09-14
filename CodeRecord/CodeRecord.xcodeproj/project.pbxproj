@@ -18,6 +18,7 @@
 		429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */; };
 		42A15D6D26EF255C009E51FA /* NSObject+XHBExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */; };
 		42A15D7126EF82A6009E51FA /* XHBCustomTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A15D7026EF82A6009E51FA /* XHBCustomTransitioning.m */; };
+		42A15D7426F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A15D7326F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -55,6 +56,8 @@
 		42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XHBExtension.m"; sourceTree = "<group>"; };
 		42A15D6F26EF82A6009E51FA /* XHBCustomTransitioning.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBCustomTransitioning.h; sourceTree = "<group>"; };
 		42A15D7026EF82A6009E51FA /* XHBCustomTransitioning.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBCustomTransitioning.m; sourceTree = "<group>"; };
+		42A15D7226F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBCustomModalDirectionTransitioningConfiguration.h; sourceTree = "<group>"; };
+		42A15D7326F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBCustomModalDirectionTransitioningConfiguration.m; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -141,6 +144,8 @@
 			children = (
 				42A15D6F26EF82A6009E51FA /* XHBCustomTransitioning.h */,
 				42A15D7026EF82A6009E51FA /* XHBCustomTransitioning.m */,
+				42A15D7226F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.h */,
+				42A15D7326F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m */,
 			);
 			path = CustomTransitioning;
 			sourceTree = "<group>";
@@ -410,6 +415,7 @@
 				C6368BCB26D020C50099A7D3 /* UIResponder+XHBRepsonder.m in Sources */,
 				C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */,
 				C651AD9124485767004E76A8 /* ViewController.m in Sources */,
+				42A15D7426F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m in Sources */,
 				C651AD8B24485767004E76A8 /* AppDelegate.m in Sources */,
 				C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */,
 				C651AD9C2448576A004E76A8 /* main.m in Sources */,

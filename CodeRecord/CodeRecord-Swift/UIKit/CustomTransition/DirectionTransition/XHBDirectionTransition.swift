@@ -204,7 +204,8 @@ extension UIViewController {
     }
     
     open func dismissCustomModal(animated: Bool, completion: (()->Void)?) {
-        let key = "\(self)"
+        let vc = self.presentedViewController ?? self
+        let key = "\(vc)"
         dismiss(animated: animated) {
             XHBCustomTransitioningManager.shared.removeTransitioning(for: key)
             completion?()

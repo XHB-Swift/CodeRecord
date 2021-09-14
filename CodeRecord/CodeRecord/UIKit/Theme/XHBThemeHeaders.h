@@ -10,7 +10,6 @@
 #define XHBThemeHeaders_h
 
 #import "UIView+XHBTheme.h"
-#import "UILabel+XHBTheme.h"
 
 #import "XHBThemeManager.h"
 

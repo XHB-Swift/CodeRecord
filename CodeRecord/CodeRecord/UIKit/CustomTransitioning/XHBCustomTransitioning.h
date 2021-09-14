@@ -13,14 +13,26 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XHBCustomTransitioningAnimator: NSObject <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, assign) BOOL forward;
+@property (nonatomic, assign) NSTimeInterval delay;
 @property (nonatomic, assign) NSTimeInterval duration;
-@property (nonatomic, assign) UIViewAnimationOptions option;
 
 - (void)doAnimationFrom:(UIView *)from to:(UIView *)to transitionContext:(id<UIViewControllerContextTransitioning>)context;
+- (void)animationWillBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView;
+- (void)animationDidBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView;
+
+@end
+
+@protocol XHBCustomPresentationControllerDelegate <NSObject>
+
+@optional
+
+- (CGRect)frameOfPresetedViewInContainerView:(nullable UIView *)containerView;
 
 @end
 
 @interface XHBCustomPresentationController: UIPresentationController
+
+@property (nonatomic, weak) id<XHBCustomPresentationControllerDelegate> customPresetationDelegate;
 
 @end
 
@@ -30,15 +42,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface XHBCustomModalTransitioningConfiguration : NSObject <XHBCustomPresentationControllerDelegate>
+
+@property (nonatomic, assign) BOOL effect;
+@property (nonatomic, assign) CGSize displayedSize;
+@property (nonatomic, assign) NSTimeInterval duration;
+
+@property (nonatomic, readonly, nullable, strong) XHBCustomTransitioningAnimator *presentAnimation;
+@property (nonatomic, readonly, nullable, strong) XHBCustomTransitioningAnimator *dismissAnimation;
+
+@end
+
 @interface XHBCustomModalTransitioning : XHBCustomTransitioning <UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, nullable, strong) UIPresentationController *presentationController;
-@property (nonatomic, nullable, strong) XHBCustomTransitioningAnimator *presentAnimation;
-@property (nonatomic, nullable, strong) XHBCustomTransitioningAnimator *dismissAnimation;
+@property (nonatomic, nullable, strong) XHBCustomModalTransitioningConfiguration *configuration;
 
-+ (instancetype)customModalTransitioningWithPresentAnimation:(XHBCustomTransitioningAnimator *)presentAnimation
-                                            dismissAnimation:(XHBCustomTransitioningAnimator *)dismissAnimation
-                                      presentationController:(UIPresentationController *)presentationController;
++ (instancetype)customModalTransitioningWithTransitioningConfiguration:(XHBCustomModalTransitioningConfiguration *)configuration
+                                                presentationController:(UIPresentationController *)presentationController;
 
 @end
 
@@ -49,12 +70,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface XHBCustomTabTransitioning: XHBCustomTransitioning <UITabBarControllerDelegate>
+
+@property (nonatomic, nullable, strong) XHBCustomTransitioningAnimator *tabTransitionAnimation;
+
+@end
+
 @interface XHBCustomTransitioningManager : NSObject
 
 + (instancetype)sharedManager;
 
 - (void)setTransitioning:(XHBCustomTransitioning *)transitioning forKey:(NSString *)key;
 - (void)removeTransitioningForKey:(NSString *)key;
+
+@end
+
+@interface UIViewController (XHBCustomTransitioning)
+
+- (void)customModalPresentViewController:(UIViewController *)vc
+                           configuration:(nullable XHBCustomModalTransitioningConfiguration *)configuration
+                              completion:(void(^_Nullable)(void))completion;
+
+- (void)dismissCustomModalAnimated:(BOOL)animated completion:(void(^_Nullable)(void))completion;
 
 @end
 

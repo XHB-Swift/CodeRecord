@@ -7,6 +7,7 @@
 //
 
 #import "XHBCustomTransitioning.h"
+#import "XHBUIKitHeaders.h"
 
 @implementation XHBCustomTransitioningAnimator
 
@@ -25,8 +26,8 @@
 
 - (void)animateTransition:(nonnull id<UIViewControllerContextTransitioning>)transitionContext {
     UIView *containerView = transitionContext.containerView;
-    UIViewController *dstController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UIViewController *srcController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIViewController *srcController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UIViewController *dstController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *dstView = dstController.view;
     UIView *srcView = srcController.view;
     if (!dstView || !srcView) {
@@ -43,6 +44,8 @@
 }
 
 - (void)doAnimationFrom:(UIView *)from to:(UIView *)to transitionContext:(id<UIViewControllerContextTransitioning>)context {}
+- (void)animationWillBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView {}
+- (void)animationDidBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView {}
 
 @end
 
@@ -115,7 +118,15 @@
 }
 
 - (void)tapDimmingAction:(UITapGestureRecognizer *)sender {
-    
+    [self.presentedViewController dismissCustomModalAnimated:YES completion:nil];
+}
+
+- (CGRect)frameOfPresentedViewInContainerView {
+    if ([self.customPresetationDelegate respondsToSelector:@selector(frameOfPresetedViewInContainerView:)]) {
+        return [self.customPresetationDelegate frameOfPresetedViewInContainerView:self.containerView];
+    }else {
+        return [super frameOfPresentedViewInContainerView];
+    }
 }
 
 #pragma mark - Getter
@@ -138,34 +149,68 @@
 
 @end
 
+@implementation XHBCustomModalTransitioningConfiguration
+
+@synthesize presentAnimation = _presentAnimation,
+            dismissAnimation = _dismissAnimation;
+
+- (XHBCustomTransitioningAnimator *)presentAnimation {
+    
+    if (!_presentAnimation) {
+        _presentAnimation = [[XHBCustomTransitioningAnimator alloc] init];
+        _presentAnimation.forward = YES;
+        _presentAnimation.duration = self.duration;
+    }
+    
+    return _presentAnimation;
+}
+
+- (XHBCustomTransitioningAnimator *)dismissAnimation {
+    
+    if (!_dismissAnimation) {
+        _dismissAnimation = [[XHBCustomTransitioningAnimator alloc] init];
+        _dismissAnimation.forward = NO;
+        _dismissAnimation.duration = self.duration;
+    }
+    
+    return _dismissAnimation;
+}
+
+- (CGRect)frameOfPresetedViewInContainerView:(UIView *)containerView {
+    if (self.displayedSize.width == 0 ||
+        self.displayedSize.height == 0 ||
+        self.displayedSize.height >= containerView.height) {
+        return containerView.bounds;
+    }else {
+        return (CGRect){CGPointZero,self.displayedSize};
+    }
+}
+
+@end
+
 @implementation XHBCustomModalTransitioning
 
-+ (instancetype)customModalTransitioningWithPresentAnimation:(XHBCustomTransitioningAnimator *)presentAnimation
-                                            dismissAnimation:(XHBCustomTransitioningAnimator *)dismissAnimation
-                                      presentationController:(UIPresentationController *)presentationController {
-    
++ (instancetype)customModalTransitioningWithTransitioningConfiguration:(XHBCustomModalTransitioningConfiguration *)configuration
+                                                presentationController:(UIPresentationController *)presentationController {
     XHBCustomModalTransitioning *customModalTransitioning = [[XHBCustomModalTransitioning alloc] init];
-    
-    customModalTransitioning.presentAnimation = presentAnimation;
-    customModalTransitioning.dismissAnimation = dismissAnimation;
+    customModalTransitioning.configuration = configuration;
     customModalTransitioning.presentationController = presentationController;
-    
     return customModalTransitioning;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
                                                                   presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    self.presentAnimation.forward = YES;
-    return self.presentAnimation;
+    self.configuration.presentAnimation.forward = YES;
+    return self.configuration.presentAnimation;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    if (self.dismissAnimation) {
-        self.dismissAnimation.forward = NO;
-        return self.dismissAnimation;
+    if (self.configuration.dismissAnimation) {
+        self.configuration.dismissAnimation.forward = NO;
+        return self.configuration.dismissAnimation;
     }else {
-        self.presentAnimation.forward = NO;
-        return self.presentAnimation;
+        self.configuration.presentAnimation.forward = NO;
+        return self.configuration.presentAnimation;
     }
 }
 
@@ -199,6 +244,22 @@
 }
 
 - (id<UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController interactionControllerForAnimationController:(id<UIViewControllerAnimatedTransitioning>)animationController {
+    return self.interactiveTransitioning;
+}
+
+@end
+
+@interface XHBCustomTabTransitioning ()
+
+@end
+
+@implementation XHBCustomTabTransitioning
+
+- (id<UIViewControllerAnimatedTransitioning>)tabBarController:(UITabBarController *)tabBarController animationControllerForTransitionFromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
+    return self.tabTransitionAnimation;
+}
+
+- (id<UIViewControllerInteractiveTransitioning>)tabBarController:(UITabBarController *)tabBarController interactionControllerForAnimationController:(id<UIViewControllerAnimatedTransitioning>)animationController {
     return self.interactiveTransitioning;
 }
 
@@ -242,6 +303,41 @@
     }
     
     return _transitionings;
+}
+
+@end
+
+@implementation UIViewController (XHBCustomTransitioning)
+
+- (void)customModalPresentViewController:(UIViewController *)vc
+                           configuration:(XHBCustomModalTransitioningConfiguration *)configuration
+                              completion:(void (^)(void))completion {
+    
+    if ([configuration isKindOfClass:[XHBCustomModalTransitioningConfiguration class]] &&
+        configuration.effect) {
+        XHBCustomModalTransitioning *customModalTransitioning = [[XHBCustomModalTransitioning alloc] init];
+        customModalTransitioning.configuration = configuration;
+        XHBCustomPresentationController *presentationController = [[XHBCustomPresentationController alloc] initWithPresentedViewController:vc presentingViewController:self];
+        presentationController.customPresetationDelegate = configuration;
+        customModalTransitioning.presentationController = presentationController;
+        vc.transitioningDelegate = customModalTransitioning;
+        [[XHBCustomTransitioningManager sharedManager] setTransitioning:customModalTransitioning
+                                                                 forKey:[NSString stringWithFormat:@"%@",vc]];
+    }
+    
+    [self presentViewController:vc animated:YES completion:completion];
+    
+}
+
+- (void)dismissCustomModalAnimated:(BOOL)animated completion:(void(^_Nullable)(void))completion {
+    UIViewController *dismissedVC = self.presentedViewController == nil ? self : self.presentedViewController;
+    NSString *key = [NSString stringWithFormat:@"%@", dismissedVC];
+    [self dismissViewControllerAnimated:animated completion:^{
+        [[XHBCustomTransitioningManager sharedManager] removeTransitioningForKey:key];
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
 @end

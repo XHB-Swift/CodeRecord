@@ -10,6 +10,37 @@
 #import "XHBThemeHeaders.h"
 #import "XHBUIKitHeaders.h"
 #import "NSObject+XHBExtension.h"
+#import "XHBCustomModalDirectionTransitioningConfiguration.h"
+
+@interface ViewController1 : UIViewController
+
+@end
+
+@implementation ViewController1
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:({
+        
+        UIButton *back = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        
+        [back setTitle:@"返回" forState:(UIControlStateNormal)];
+        [back setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [back addTarget:self action:@selector(backAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [back sizeToFit];
+        back.origin = (CGPoint){50,50};
+        
+        back;
+    })];
+}
+
+- (void)backAction:(UIButton *)sender {
+    [self dismissCustomModalAnimated:YES completion:nil];
+}
+
+@end
 
 @interface ViewController ()
 
@@ -43,6 +74,31 @@
     [textLabel theme_setTextColor:XHBThemeMakeNoAlphaColor(@"000000") forStyle:XHBThemeStyleLight inScene:self];
     [textLabel theme_setTextColor:XHBThemeMakeNoAlphaColor(@"FFFFFF") forStyle:XHBThemeStyleDark inScene:self];
     [self.view addSubview:textLabel];
+    
+    
+    [self.view addSubview:({
+        
+        UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        
+        [button setTitle:@"自定义模态转场" forState:(UIControlStateNormal)];
+        [button setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [button addTarget:self action:@selector(clickCustomModalAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [button sizeToFit];
+        button.center = (CGPoint){self.view.width / 2, self.view.height / 2};
+        
+        button;
+        
+    })];
+}
+
+- (void)clickCustomModalAction:(UIButton *)sender {
+    ViewController1 *vc = [[ViewController1 alloc] init];
+    XHBCustomModalDirectionTransitioningConfiguration *config = [[XHBCustomModalDirectionTransitioningConfiguration alloc] init];
+    config.effect = YES;
+    config.duration = 0.5;
+    config.displayedSize = (CGSize){300,300};
+    config.direction = XHBTransitionDirectionCenter;
+    [self customModalPresentViewController:vc configuration:config completion:nil];
 }
 
 - (void)switchCtrlAction:(UISwitch *)sender {
