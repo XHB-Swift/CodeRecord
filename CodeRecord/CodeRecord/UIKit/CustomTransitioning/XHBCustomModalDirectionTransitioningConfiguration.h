@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, XHBTransitionDirection) {
 @interface XHBDirectionTransitionAnimator : XHBCustomTransitioningAnimator
 
 @property (nonatomic, assign) XHBTransitionDirection direction;
+@property (nonatomic, assign) UIViewAnimationOptions options;
 
 @end
 

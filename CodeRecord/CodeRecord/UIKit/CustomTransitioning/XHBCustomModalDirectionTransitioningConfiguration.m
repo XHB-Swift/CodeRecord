@@ -15,6 +15,7 @@
     
     if (self = [super init]) {
         _direction = XHBTransitionDirectionLeft;
+        _options = UIViewAnimationOptionCurveEaseInOut;
     }
     return self;
 }
@@ -25,7 +26,7 @@
     __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:[self transitionDuration:context]
                           delay:self.delay
-                        options:UIViewAnimationOptionCurveEaseInOut
+                        options:self.options
                      animations:^{
         [weakSelf animationDidBeginWithSrcView:from dstView:to];
     }
