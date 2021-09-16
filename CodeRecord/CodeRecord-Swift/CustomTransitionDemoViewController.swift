@@ -39,7 +39,8 @@ class ViewController1: UIViewController {
     }
     
     @objc func btnAction(_ sender: UIButton) {
-        dismissCustomModal(animated: true, completion: nil)
+        //dismissCustomModal(animated: true, completion: nil)
+        navigationController?.remove()
     }
     
     @objc func btn1Action(_ sender: UIButton) {
@@ -92,7 +93,8 @@ class ViewController2: UIViewController {
     }
     
     @objc func btnAction(_ sender: UIButton) {
-        dismissCustomModal(animated: true, completion: nil)
+//        dismissCustomModal(animated: true, completion: nil)
+        navigationController?.remove()
     }
     
     @objc func keyboardControl(_ sender: Notification) {
@@ -114,7 +116,9 @@ class ViewController2: UIViewController {
 
 class CustomTransitionDemoViewController: UIViewController {
     
-    private var jumpButton: UIButton?
+    var jumpButton: UIButton?
+    var testView: UIView?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,22 +131,41 @@ class CustomTransitionDemoViewController: UIViewController {
         button.addTarget(self, action: #selector(jumpButtonAction(_:)), for: .touchUpInside)
         view.addSubview(button)
         jumpButton = button
+        
+        let view1 = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 200, height: 200)))
+        view1.backgroundColor = UIColor(hexString: "9d1a8c")
+        view1.isUserInteractionEnabled = true
+        view1.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(clickTestView(_:))))
+        view.addSubview(view1)
+        testView = view1
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         let navigationBarBottom = navigationController?.navigationBar.height ?? 0
-        jumpButton?.centerX = view.width / 2
+        let centerX = view.width / 2
+        jumpButton?.centerX = centerX
         jumpButton?.centerY = 100 + navigationBarBottom
+        testView?.centerX = centerX
+        testView?.y = (jumpButton?.bottom ?? 0) + 10
     }
     
     @objc func jumpButtonAction(_ sender: UIButton) {
-        let halfWindowConfig = UIViewController.CustomTransitioningConfig(direction: .bottom,
-                                                                          displaySize: CGSize(width: view.width,
-                                                                                              height: view.height / 2))
-        present(viewController: UINavigationController(rootViewController: ViewController1()),
-                animated: true,
-                transitionConfig: halfWindowConfig,
-                completion: nil)
+        let halfWindowConfig = CustomModalDirectionTransitioningConfiguration(direction: .bottom,
+                                                                              displayedSize: CGSize(width: view.width,
+                                                                                                    height: view.height / 2))
+        halfWindowConfig.duration = 0.3
+        halfWindowConfig.isTransitioning = false
+//        presentCustomModal(viewController: UINavigationController(rootViewController: ViewController1()),
+//                           configuration: halfWindowConfig,
+//                           completion: nil)
+        let navigationController = UINavigationController(rootViewController: ViewController1())
+        navigationController.navigationBar.barTintColor = UIColor.randomColor
+        add(viewController: navigationController, config: halfWindowConfig)
+    }
+    
+    @objc func clickTestView(_ sender: UITapGestureRecognizer) {
+        print("clickTestView")
+        children.first?.remove()
     }
 }

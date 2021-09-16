@@ -205,13 +205,10 @@
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    if (self.configuration.dismissAnimation) {
-        self.configuration.dismissAnimation.forward = NO;
-        return self.configuration.dismissAnimation;
-    }else {
-        self.configuration.presentAnimation.forward = NO;
-        return self.configuration.presentAnimation;
-    }
+    
+    XHBCustomTransitioningAnimator *dismissAnimate = (self.configuration.dismissAnimation == nil) ? self.configuration.presentAnimation : self.configuration.dismissAnimation;
+    dismissAnimate.forward = NO;
+    return dismissAnimate;
 }
 
 - (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(UIViewController *)presenting sourceViewController:(UIViewController *)source {
@@ -332,7 +329,7 @@
 - (void)dismissCustomModalAnimated:(BOOL)animated completion:(void(^_Nullable)(void))completion {
     UIViewController *dismissedVC = self.presentedViewController == nil ? self : self.presentedViewController;
     NSString *key = [NSString stringWithFormat:@"%@", dismissedVC];
-    [self dismissViewControllerAnimated:animated completion:^{
+    [dismissedVC dismissViewControllerAnimated:animated completion:^{
         [[XHBCustomTransitioningManager sharedManager] removeTransitioningForKey:key];
         if (completion) {
             completion();
