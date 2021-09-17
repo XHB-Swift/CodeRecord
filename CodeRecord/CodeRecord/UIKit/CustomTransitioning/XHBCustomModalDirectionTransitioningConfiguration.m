@@ -20,7 +20,10 @@
     return self;
 }
 
-- (void)doAnimationFrom:(UIView *)from to:(UIView *)to transitionContext:(id<UIViewControllerContextTransitioning>)context {
+- (void)doAnimationFrom:(UIView *)from
+                     to:(UIView *)to
+      transitionContext:(id<UIViewControllerContextTransitioning>)context
+             completion:(void (^ _Nullable)(void))completion {
     
     [self animationWillBeginWithSrcView:from dstView:to];
     __weak typeof(self) weakSelf = self;
@@ -31,6 +34,9 @@
         [weakSelf animationDidBeginWithSrcView:from dstView:to];
     }
                      completion:^(BOOL finished) {
+        if (completion) {
+            completion();
+        }
         [context completeTransition:!context.transitionWasCancelled];
     }];
     
@@ -142,14 +148,28 @@
 
 @synthesize presentAnimation = _presentAnimation, dismissAnimation = _dismissAnimation;
 
+- (instancetype)init {
+    
+    if (self = [super init]) {
+        _direction = XHBTransitionDirectionLeft;
+    }
+    
+    return self;
+}
+
 - (XHBCustomTransitioningAnimator *)presentAnimation {
     if (!_presentAnimation) {
         XHBDirectionTransitionAnimator *directionAnimation = [[XHBDirectionTransitionAnimator alloc] init];
         directionAnimation.duration = self.duration;
         directionAnimation.direction = self.direction;
+        directionAnimation.transitioning = self.isTransitioning;
         _presentAnimation = directionAnimation;
     }
     return _presentAnimation;
+}
+
+- (XHBCustomTransitioningAnimator *)dismissAnimation {
+    return nil;
 }
 
 - (CGRect)frameOfPresetedViewInContainerView:(UIView *)containerView {

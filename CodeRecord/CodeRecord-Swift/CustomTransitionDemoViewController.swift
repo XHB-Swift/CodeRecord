@@ -40,7 +40,7 @@ class ViewController1: UIViewController {
     
     @objc func btnAction(_ sender: UIButton) {
         //dismissCustomModal(animated: true, completion: nil)
-        navigationController?.remove()
+        navigationController?.disappear()
     }
     
     @objc func btn1Action(_ sender: UIButton) {
@@ -94,7 +94,7 @@ class ViewController2: UIViewController {
     
     @objc func btnAction(_ sender: UIButton) {
 //        dismissCustomModal(animated: true, completion: nil)
-        navigationController?.remove()
+        navigationController?.disappear()
     }
     
     @objc func keyboardControl(_ sender: Notification) {
@@ -159,13 +159,14 @@ class CustomTransitionDemoViewController: UIViewController {
 //        presentCustomModal(viewController: UINavigationController(rootViewController: ViewController1()),
 //                           configuration: halfWindowConfig,
 //                           completion: nil)
-        let navigationController = UINavigationController(rootViewController: ViewController1())
-        navigationController.navigationBar.barTintColor = UIColor.randomColor
-        add(viewController: navigationController, config: halfWindowConfig)
+        let navigationCtrl = UINavigationController(rootViewController: ViewController1())
+        navigationCtrl.navigationBar.barTintColor = UIColor.randomColor
+//        add(viewController: navigationController, config: halfWindowConfig)
+        show(viewController: navigationCtrl, config: halfWindowConfig)
     }
     
     @objc func clickTestView(_ sender: UITapGestureRecognizer) {
         print("clickTestView")
-        children.first?.remove()
+        children.first?.disappear()
     }
 }

@@ -15,13 +15,14 @@
     
     if (self = [super init]) {
         _forward = YES;
+        _transitioning = YES;
     }
     
     return self;
 }
 
 - (NSTimeInterval)transitionDuration:(nullable id<UIViewControllerContextTransitioning>)transitionContext {
-    return transitionContext.animated ? self.duration : 0;
+    return self.isTransitioning ? (transitionContext.animated ? self.duration : 0) : self.duration;
 }
 
 - (void)animateTransition:(nonnull id<UIViewControllerContextTransitioning>)transitionContext {
@@ -40,10 +41,13 @@
             [containerView insertSubview:dstView belowSubview:srcView];
         }
     }
-    [self doAnimationFrom:srcView to:dstView transitionContext:transitionContext];
+    [self doAnimationFrom:srcView to:dstView transitionContext:transitionContext completion:nil];
 }
 
-- (void)doAnimationFrom:(UIView *)from to:(UIView *)to transitionContext:(id<UIViewControllerContextTransitioning>)context {}
+- (void)doAnimationFrom:(UIView *)from
+                     to:(UIView *)to
+      transitionContext:(id<UIViewControllerContextTransitioning>)context
+             completion:(void (^ _Nullable)(void))completion {}
 - (void)animationWillBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView {}
 - (void)animationDidBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView {}
 
@@ -154,12 +158,22 @@
 @synthesize presentAnimation = _presentAnimation,
             dismissAnimation = _dismissAnimation;
 
+- (instancetype)init {
+    
+    if (self = [super init]) {
+        _transitioning = YES;
+    }
+    
+    return self;
+}
+
 - (XHBCustomTransitioningAnimator *)presentAnimation {
     
     if (!_presentAnimation) {
         _presentAnimation = [[XHBCustomTransitioningAnimator alloc] init];
         _presentAnimation.forward = YES;
         _presentAnimation.duration = self.duration;
+        _presentAnimation.transitioning = self.isTransitioning;
     }
     
     return _presentAnimation;
@@ -171,6 +185,7 @@
         _dismissAnimation = [[XHBCustomTransitioningAnimator alloc] init];
         _dismissAnimation.forward = NO;
         _dismissAnimation.duration = self.duration;
+        _dismissAnimation.transitioning = self.isTransitioning;
     }
     
     return _dismissAnimation;
@@ -206,7 +221,7 @@
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     
-    XHBCustomTransitioningAnimator *dismissAnimate = (self.configuration.dismissAnimation == nil) ? self.configuration.presentAnimation : self.configuration.dismissAnimation;
+    XHBCustomTransitioningAnimator *dismissAnimate = self.configuration.dismissAnimation ?: self.configuration.presentAnimation;
     dismissAnimate.forward = NO;
     return dismissAnimate;
 }
@@ -262,6 +277,15 @@
 
 @end
 
+@interface XHBCustomTransitioningManager : NSObject
+
++ (instancetype)sharedManager;
+
+- (void)setTransitioning:(XHBCustomTransitioning *)transitioning forKey:(NSString *)key;
+- (void)removeTransitioningForKey:(NSString *)key;
+
+@end
+
 @interface XHBCustomTransitioningManager ()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, XHBCustomTransitioning *> *transitionings;
@@ -304,6 +328,56 @@
 
 @end
 
+@interface XHBCustomModalAnimationManager : NSObject
+
+@property (nonatomic, strong) NSMutableDictionary<NSString *, XHBCustomModalTransitioningConfiguration *> *animations;
+
+@end
+
+@implementation XHBCustomModalAnimationManager
+
++ (instancetype)sharedManager {
+    static XHBCustomModalAnimationManager *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manager = [[XHBCustomModalAnimationManager alloc] init];
+    });
+    return manager;
+}
+
+- (void)setAnimation:(XHBCustomModalTransitioningConfiguration *)animation forKey:(NSString *)key {
+    if (![key isKindOfClass:[NSString class]] ||
+        ![animation isKindOfClass:[XHBCustomModalTransitioningConfiguration class]]) {
+        return;
+    }
+    self.animations[key] = animation;
+}
+
+- (nullable XHBCustomModalTransitioningConfiguration *)animationForKey:(NSString *)key {
+    if (![key isKindOfClass:[NSString class]]) {
+        return nil;
+    }
+    return self.animations[key];
+}
+
+- (void)removeAnimationForKey:(NSString *)key {
+    if (![key isKindOfClass:[NSString class]]) {
+        return;
+    }
+    [self.animations removeObjectForKey:key];
+}
+
+- (NSMutableDictionary<NSString *,XHBCustomModalTransitioningConfiguration *> *)animations {
+    
+    if (!_animations) {
+        _animations = [NSMutableDictionary dictionary];
+    }
+    
+    return _animations;
+}
+
+@end
+
 @implementation UIViewController (XHBCustomTransitioning)
 
 - (void)customModalPresentViewController:(UIViewController *)vc
@@ -335,6 +409,43 @@
             completion();
         }
     }];
+}
+
+@end
+
+@implementation UIViewController (XHBCustomPopup)
+
+- (void)showViewController:(UIViewController *)viewController configuration:(XHBCustomModalTransitioningConfiguration *)configuration {
+    UIView *targetView = viewController.view;
+    if (!targetView || ![configuration isKindOfClass:[XHBCustomModalTransitioningConfiguration class]]) {
+        return;
+    }
+    NSString *key = [NSString stringWithFormat:@"%@", viewController];
+    [[XHBCustomModalAnimationManager sharedManager] setAnimation:configuration forKey:key];
+    [self addChildViewController:viewController];
+    targetView.size = configuration.displayedSize;
+    [self.view addSubview:targetView];
+    XHBCustomTransitioningAnimator *enterAnimate = configuration.presentAnimation;
+    enterAnimate.forward = YES;
+    [enterAnimate doAnimationFrom:self.view to:targetView transitionContext:nil completion:nil];
+}
+
+- (void)disapear {
+    NSString *key = [NSString stringWithFormat:@"%@", self];
+    __weak typeof(self) weakSelf = self;
+    void(^completion)(void) = ^{
+        [weakSelf removeFromParentViewController];
+        [weakSelf.view removeFromSuperview];
+        [[XHBCustomModalAnimationManager sharedManager] removeAnimationForKey:key];
+    };
+    XHBCustomModalTransitioningConfiguration *config = [[XHBCustomModalAnimationManager sharedManager] animationForKey:key];
+    if (!config || !self.parentViewController) {
+        completion();
+        return;
+    }
+    XHBCustomTransitioningAnimator *exitAnimate = config.dismissAnimation ?: config.presentAnimation;
+    exitAnimate.forward = NO;
+    [exitAnimate doAnimationFrom:self.view to:self.parentViewController.view transitionContext:nil completion:completion];
 }
 
 @end

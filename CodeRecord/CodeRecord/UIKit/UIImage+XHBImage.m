@@ -42,42 +42,63 @@
     return image;
 }
 
+- (BOOL)shouldDecode {
+    if (self.images != nil) {
+        return NO;
+    }
+    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(self.CGImage);
+    if (alphaInfo == kCGImageAlphaNone) {
+        return YES;
+    }else {
+        return !(alphaInfo == kCGImageAlphaPremultipliedFirst ||
+                 alphaInfo == kCGImageAlphaPremultipliedLast ||
+                 alphaInfo == kCGImageAlphaLast ||
+                 alphaInfo == kCGImageAlphaFirst);
+    }
+}
+
 - (nullable UIImage *)decodedImage {
-    CGImageRef imageRef = self.CGImage;
-    if (imageRef == NULL) {
-        return nil;
+    if (![self shouldDecode]) {
+        return self;
     }
-    size_t width = CGImageGetWidth(imageRef);
-    size_t height = CGImageGetHeight(imageRef);
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
-    if (colorSpace == NULL) {
-        return nil;
+    @autoreleasepool {
+        UIImage *decodeImage = nil;
+        CGImageRef imageRef = self.CGImage;
+        if (imageRef == NULL) {
+            return nil;
+        }
+        size_t width = CGImageGetWidth(imageRef);
+        size_t height = CGImageGetHeight(imageRef);
+        CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
+        if (colorSpace == NULL) {
+            return nil;
+        }
+        size_t bitsPerComponent = CGImageGetBitsPerComponent(imageRef);
+        size_t bitsPerPixel = CGImageGetBitsPerPixel(imageRef);
+        size_t bytesPerRow = CGImageGetBytesPerRow(imageRef);
+        CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(imageRef);
+        CGDataProviderRef dataProvider = CGImageGetDataProvider(imageRef);
+        if (dataProvider == NULL) {
+            return nil;
+        }
+        CFDataRef data = CGDataProviderCopyData(dataProvider);
+        if (data == NULL) {
+            return nil;
+        }
+        CGDataProviderRef newDataProvider = CGDataProviderCreateWithCFData(data);
+        CFRelease(data);
+        if (newDataProvider == NULL) {
+            return nil;
+        }
+        CGImageRef newImageRef = CGImageCreate(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpace, bitmapInfo, newDataProvider, NULL, false, kCGRenderingIntentDefault);
+        CFRelease(newDataProvider);
+        if (newImageRef == NULL) {
+            return nil;
+        }
+        decodeImage = [[UIImage alloc] initWithCGImage:newImageRef];
+        CGImageRelease(newImageRef);
+        return decodeImage;
     }
-    size_t bitsPerComponent = CGImageGetBitsPerComponent(imageRef);
-    size_t bitsPerPixel = CGImageGetBitsPerPixel(imageRef);
-    size_t bytesPerRow = CGImageGetBytesPerRow(imageRef);
-    CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(imageRef);
-    CGDataProviderRef dataProvider = CGImageGetDataProvider(imageRef);
-    if (dataProvider == NULL) {
-        return nil;
-    }
-    CFDataRef data = CGDataProviderCopyData(dataProvider);
-    if (data == NULL) {
-        return nil;
-    }
-    CGDataProviderRef newDataProvider = CGDataProviderCreateWithCFData(data);
-    CFRelease(data);
-    if (newDataProvider == NULL) {
-        return nil;
-    }
-    CGImageRef newImageRef = CGImageCreate(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpace, bitmapInfo, newDataProvider, NULL, false, kCGRenderingIntentDefault);
-    CFRelease(newDataProvider);
-    if (newImageRef == NULL) {
-        return nil;
-    }
-    UIImage *decodeImage = [[UIImage alloc] initWithCGImage:newImageRef];
-    CGImageRelease(newImageRef);
-    return decodeImage;
 }
 
 - (nullable UIImage *)croppedImageInRect:(CGRect)rect {

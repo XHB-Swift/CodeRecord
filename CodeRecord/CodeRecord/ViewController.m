@@ -7,12 +7,12 @@
 //
 
 #import "ViewController.h"
-#import "XHBThemeHeaders.h"
-#import "XHBUIKitHeaders.h"
-#import "NSObject+XHBExtension.h"
-#import "XHBCustomModalDirectionTransitioningConfiguration.h"
 
-@interface ViewController1 : UIViewController
+
+@interface ViewController1 ()
+
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UIButton *returnButton;
 
 @end
 
@@ -21,23 +21,55 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:({
-        
-        UIButton *back = [UIButton buttonWithType:(UIButtonTypeCustom)];
-        
-        [back setTitle:@"返回" forState:(UIControlStateNormal)];
-        [back setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
-        [back addTarget:self action:@selector(backAction:) forControlEvents:(UIControlEventTouchUpInside)];
-        [back sizeToFit];
-        back.origin = (CGPoint){50,50};
-        
-        back;
-    })];
+    self.title = @"ViewController1";
+    self.view.backgroundColor = [UIColor randomBackgroundColor];
+    [self.view addSubview:self.backButton];
+    [self.view addSubview:self.returnButton];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    self.backButton.x = 50;
+    self.backButton.y = self.navigationController.navigationBar.bottom + 10;
+    
+    self.returnButton.x = self.backButton.x;
+    self.returnButton.y = self.backButton.bottom + 10;
 }
 
 - (void)backAction:(UIButton *)sender {
-    [self dismissCustomModalAnimated:YES completion:nil];
+//    [self dismissCustomModalAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)returnButtonAction:(UIButton *)sender {
+    [self.navigationController disapear];
+}
+
+- (UIButton *)backButton {
+    
+    if (!_backButton) {
+        _backButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        [_backButton setTitle:@"返回" forState:(UIControlStateNormal)];
+        [_backButton setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [_backButton addTarget:self action:@selector(backAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [_backButton sizeToFit];
+    }
+    
+    return _backButton;
+}
+
+- (UIButton *)returnButton {
+    
+    if (!_returnButton) {
+        _returnButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        [_returnButton setTitle:@"退出" forState:(UIControlStateNormal)];
+        [_returnButton setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [_returnButton addTarget:self action:@selector(returnButtonAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [_returnButton sizeToFit];
+    }
+    
+    return _returnButton;
 }
 
 @end
@@ -51,6 +83,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"ViewController";
+    self.view.backgroundColor = [UIColor whiteColor];
     UISwitch *switchCtrl = [[UISwitch alloc] initWithFrame:(CGRect){(self.view.width-60)/2,50,60,30}];
     switchCtrl.on = NO;
     [switchCtrl addTarget:self action:@selector(switchCtrlAction:) forControlEvents:(UIControlEventValueChanged)];
@@ -75,30 +109,26 @@
     [textLabel theme_setTextColor:XHBThemeMakeNoAlphaColor(@"FFFFFF") forStyle:XHBThemeStyleDark inScene:self];
     [self.view addSubview:textLabel];
     
+    if (self.navigationController) {
+        UIButton *navButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        [navButton setTitle:@"导航" forState:(UIControlStateNormal)];
+        [navButton setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [navButton addTarget:self action:@selector(navButtonAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [navButton sizeToFit];
+        navButton.centerX = textLabel.centerX;
+        navButton.y = textLabel.bottom + 10;
+        [self.view addSubview:navButton];
+        
+        UIButton *returnButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        [returnButton setTitle:@"退出" forState:(UIControlStateNormal)];
+        [returnButton setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [returnButton addTarget:self action:@selector(returnButtonAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [returnButton sizeToFit];
+        returnButton.centerX = navButton.centerX;
+        returnButton.y = navButton.bottom + 10;
+        [self.view addSubview:returnButton];
+    }
     
-    [self.view addSubview:({
-        
-        UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
-        
-        [button setTitle:@"自定义模态转场" forState:(UIControlStateNormal)];
-        [button setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
-        [button addTarget:self action:@selector(clickCustomModalAction:) forControlEvents:(UIControlEventTouchUpInside)];
-        [button sizeToFit];
-        button.center = (CGPoint){self.view.width / 2, self.view.height / 2};
-        
-        button;
-        
-    })];
-}
-
-- (void)clickCustomModalAction:(UIButton *)sender {
-    ViewController1 *vc = [[ViewController1 alloc] init];
-    XHBCustomModalDirectionTransitioningConfiguration *config = [[XHBCustomModalDirectionTransitioningConfiguration alloc] init];
-    config.effect = YES;
-    config.duration = 0.5;
-    config.displayedSize = (CGSize){300,300};
-    config.direction = XHBTransitionDirectionCenter;
-    [self customModalPresentViewController:vc configuration:config completion:nil];
 }
 
 - (void)switchCtrlAction:(UISwitch *)sender {
@@ -107,5 +137,13 @@
     [[XHBThemeManager sharedManager] switchToStyle:style];
 }
 
+- (void)navButtonAction:(UIButton *)sender {
+    ViewController1 *vc1 = [[ViewController1 alloc] init];
+    [self.navigationController pushViewController:vc1 animated:YES];
+}
+
+- (void)returnButtonAction:(UIButton *)sender {
+    [self.navigationController disapear];
+}
 
 @end

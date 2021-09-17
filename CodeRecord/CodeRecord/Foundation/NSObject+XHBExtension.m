@@ -7,6 +7,7 @@
 //
 
 #import "NSObject+XHBExtension.h"
+#import <CommonCrypto/CommonCrypto.h>
 
 @implementation NSObject (XHBExtension)
 
@@ -159,6 +160,30 @@
     numberFormatter.positiveSuffix = unitSymbol;
     numberFormatter.roundingMode = NSNumberFormatterRoundHalfUp;
     return [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:roundedNumber]];
+}
+
+- (NSString *)md5String {
+    NSMutableString *md5String = [NSMutableString string];
+    
+    const char *data = [self UTF8String];
+    if (data != NULL) {
+        CC_LONG dataLength = (CC_LONG)strlen(data);
+        if (@available(iOS 13, *)) {
+            unsigned char result[CC_SHA256_DIGEST_LENGTH];
+            CC_SHA256(data, dataLength, result);
+            for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i += 1) {
+                [md5String appendFormat:@"%02x", result[i]];
+            }
+        }else {
+            unsigned char result[CC_MD5_DIGEST_LENGTH];
+            CC_MD5(data, dataLength, result);
+            for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i += 1) {
+                [md5String appendFormat:@"%02x", result[i]];
+            }
+        }
+    }
+    
+    return [md5String copy];
 }
 
 - (NSString *)propertyToSetter {

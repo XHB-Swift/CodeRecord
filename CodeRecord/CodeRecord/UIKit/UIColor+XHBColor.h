@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)randomBackgroundColorStr;
 + (NSArray<NSString *> *)randomBackgroundColorsStrArray;
 
+#define XHBColorMake(color, a) \
+[UIColor colorWithHexString:(color) alpha:(a)]
+
 @end
 
 NS_ASSUME_NONNULL_END

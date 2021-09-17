@@ -62,7 +62,7 @@
 
 - (void)setBottom:(CGFloat)bottom {
     CGRect frame = self.frame;
-    frame.origin.y = bottom - CGRectGetWidth(frame);
+    frame.origin.y = bottom - CGRectGetHeight(frame);
     self.frame = frame;
 }
 

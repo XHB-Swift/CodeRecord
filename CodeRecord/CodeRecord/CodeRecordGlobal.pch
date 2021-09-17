@@ -1,0 +1,18 @@
+//
+//  CodeRecordGlobal.pch
+//  CodeRecord
+//
+//  Created by xiehongbiao on 2021/9/17.
+//  Copyright © 2021 谢鸿标. All rights reserved.
+//
+
+#ifndef CodeRecordGlobal_pch
+#define CodeRecordGlobal_pch
+
+#import "XHBThemeHeaders.h"
+#import "XHBUIKitHeaders.h"
+#import "NSObject+XHBExtension.h"
+#import "XHBCustomModalDirectionTransitioningConfiguration.h"
+
+
+#endif /* CodeRecordGlobal_pch */

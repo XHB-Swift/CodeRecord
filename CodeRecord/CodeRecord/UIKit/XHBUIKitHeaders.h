@@ -13,5 +13,7 @@
 #import "UIImage+XHBImage.h"
 #import "UIResponder+XHBRepsonder.h"
 #import "UIView+XHBBoxing.h"
+#import "UIImage+XHBWebCache.h"
+#import "UIImageView+XHBWebCache.h"
 
 #endif /* XHBUIKitHeaders_h */

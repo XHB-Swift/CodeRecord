@@ -15,8 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL forward;
 @property (nonatomic, assign) NSTimeInterval delay;
 @property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, assign, getter=isTransitioning) BOOL transitioning;
 
-- (void)doAnimationFrom:(UIView *)from to:(UIView *)to transitionContext:(id<UIViewControllerContextTransitioning>)context;
+- (void)doAnimationFrom:(UIView *)from to:(UIView *)to
+      transitionContext:(nullable id<UIViewControllerContextTransitioning>)context
+             completion:(void(^_Nullable)(void))completion;
 - (void)animationWillBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView;
 - (void)animationDidBeginWithSrcView:(UIView *)srcView dstView:(UIView *)dstView;
 
@@ -47,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL effect;
 @property (nonatomic, assign) CGSize displayedSize;
 @property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, assign, getter=isTransitioning) BOOL transitioning;
 
 @property (nonatomic, readonly, nullable, strong) XHBCustomTransitioningAnimator *presentAnimation;
 @property (nonatomic, readonly, nullable, strong) XHBCustomTransitioningAnimator *dismissAnimation;
@@ -76,15 +80,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface XHBCustomTransitioningManager : NSObject
-
-+ (instancetype)sharedManager;
-
-- (void)setTransitioning:(XHBCustomTransitioning *)transitioning forKey:(NSString *)key;
-- (void)removeTransitioningForKey:(NSString *)key;
-
-@end
-
 @interface UIViewController (XHBCustomTransitioning)
 
 - (void)customModalPresentViewController:(UIViewController *)vc
@@ -92,6 +87,14 @@ NS_ASSUME_NONNULL_BEGIN
                               completion:(void(^_Nullable)(void))completion;
 
 - (void)dismissCustomModalAnimated:(BOOL)animated completion:(void(^_Nullable)(void))completion;
+
+@end
+
+@interface UIViewController (XHBCustomPopup)
+
+- (void)showViewController:(UIViewController *)viewController configuration:(XHBCustomModalTransitioningConfiguration *)configuration;
+
+- (void)disapear;
 
 @end
 

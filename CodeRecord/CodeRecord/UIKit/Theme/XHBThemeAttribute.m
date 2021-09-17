@@ -83,3 +83,11 @@
 }
 
 @end
+
+@implementation NSURL (XHBThemeAttribute)
+
+- (id)themeAttribute {
+    return self;
+}
+
+@end

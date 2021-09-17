@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
                                 size:(CGSize)size
                         cornerRadius:(CGFloat)radius
                           rectCorner:(UIRectCorner)corner;
+- (BOOL)shouldDecode;
 
 - (nullable UIImage *)decodedImage;
 

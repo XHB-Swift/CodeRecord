@@ -310,7 +310,7 @@ extension UIViewController {
     }
     
     open func dismissCustomModal(animated: Bool, completion: (()->Void)?) {
-        let vc = self.presentedViewController ?? self
+        let vc = presentedViewController ?? self
         let key = "\(vc)"
         vc.dismiss(animated: animated) {
             CustomTransitioningManager.shared.removeTransitioning(for: key)
@@ -318,7 +318,7 @@ extension UIViewController {
         }
     }
     
-    open func add(viewController: UIViewController, config: CustomModalTransitioningConfiguration) {
+    open func show(viewController: UIViewController, config: CustomModalTransitioningConfiguration) {
         guard let targetView = viewController.view else { return }
         CustomModalAnimationManager.shared.setAnimation(config, for: "\(viewController)")
         addChild(viewController)
@@ -329,21 +329,21 @@ extension UIViewController {
         enterAnimate?.doAnimation(view, targetView, nil)
     }
     
-    open func remove() {
+    open func disappear() {
         let key = "\(self)"
+        let completion = { [weak self] in
+            self?.removeFromParent()
+            self?.view.removeFromSuperview()
+            CustomModalAnimationManager.shared.removeAnimation(for: key)
+        }
         guard let config = CustomModalAnimationManager.shared.animation(for: key),
               let parentVC = parent else {
-            removeFromParent()
-            view.removeFromSuperview()
+            completion()
             return
         }
         let exitAnimate = config.dismissAnimation ?? config.presentAnimation
         exitAnimate?.forward = false
-        exitAnimate?.doAnimation(view, parentVC.view, nil, { [weak self] in
-            self?.removeFromParent()
-            self?.view.removeFromSuperview()
-            CustomModalAnimationManager.shared.removeAnimation(for: key)
-        })
+        exitAnimate?.doAnimation(view, parentVC.view, nil, completion)
     }
     
 }

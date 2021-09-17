@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)stringWithRoundedNumber:(NSNumber *)roundedNumber
                                   digit:(NSUInteger)digit
                              unitSymbol:(nullable NSString *)unitSymbol;
-
+- (NSString *)md5String;
 - (nullable NSString *)propertyToSetter;
 - (nullable NSString *)stringAtIndex:(NSInteger)index;
 
