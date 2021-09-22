@@ -42,23 +42,17 @@
     };
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (![url respondsToSelector:@selector(url)]) {
-            mainBlock(nil, [NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                               code:8
-                                           userInfo:@{NSLocalizedDescriptionKey:@"No url"}]);
+            mainBlock(nil, NSErrorMarkFunc(8,@"No url"));
             return;
         }
         NSURL *url0 = [url url];
         if (!url0) {
-            mainBlock(nil, [NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                               code:8
-                                           userInfo:@{NSLocalizedDescriptionKey:@"No url"}]);
+            mainBlock(nil, NSErrorMarkFunc(8,@"No [url url]"));
             return;
         }
         NSString *cacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         if (!cacheDir) {
-            mainBlock(nil,[NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                              code:9
-                                          userInfo:@{NSLocalizedDescriptionKey:@"No cacheDir"}]);
+            mainBlock(nil, NSErrorMarkFunc(9, @"No cacheDir"));
             return;
         }
         cacheDir = [cacheDir stringByAppendingPathComponent:@"UIImageWebCacheDir"];
@@ -77,9 +71,7 @@
                 mainBlock(image,nil);
             }else {
                 NSString *errorMsg = [NSString stringWithFormat:@"load local image failed, url = %@", url];
-                mainBlock(nil, [NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                                   code:10
-                                               userInfo:@{NSLocalizedDescriptionKey:errorMsg}]);
+                mainBlock(nil, NSErrorMarkFunc(10, errorMsg));
             }
             return;
         }else {
@@ -107,9 +99,7 @@
     };
     
     if (![url isKindOfClass:[NSURL class]]) {
-        handleBlock(nil,[NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                            code:NSURLErrorBadURL
-                                        userInfo:@{NSLocalizedDescriptionKey:@"maybeURL is nil"}]);
+        handleBlock(nil, NSErrorMarkFunc(NSURLErrorBadURL, @"maybeURL is nil"));
         return;
     }
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -128,7 +118,6 @@
             dispatch_once(&onceToken, ^{
                 lock = dispatch_semaphore_create(1);
             });
-            dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
             NSFileManager *fileMgr = [NSFileManager defaultManager];
             if ([response respondsToSelector:@selector(statusCode)] &&
                 [location isKindOfClass:[NSURL class]]) {
@@ -136,6 +125,7 @@
                 
                 if (httpResponse.statusCode == 200) {
                     
+                    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
                     NSError *fileError = nil;
                     if ([fileMgr fileExistsAtPath:cachedFileURL.path]) {
                         [fileMgr removeItemAtURL:cachedFileURL error:&fileError];
@@ -151,23 +141,15 @@
                     if (image) {
                         handleBlock(image, nil);
                     }else {
-                        handleBlock(nil, [NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                                             code:NSURLErrorCannotOpenFile
-                                                         userInfo:@{NSLocalizedDescriptionKey:@"image is nil"}]);
+                        handleBlock(nil, NSErrorMarkFunc(NSURLErrorCannotOpenFile, @"image is nil"));
                     }
                     
                 }else {
-                    dispatch_semaphore_signal(lock);
-                    handleBlock(nil, [NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                                         code:NSURLErrorResourceUnavailable
-                                                     userInfo:@{NSLocalizedDescriptionKey:@"response error"}]);
+                    handleBlock(nil, NSErrorMarkFunc(NSURLErrorResourceUnavailable, @"response error"));
                 }
                 
             }else {
-                dispatch_semaphore_signal(lock);
-                handleBlock(nil,[NSError errorWithDomain:[NSString stringWithFormat:@"%s",__func__]
-                                                    code:NSURLErrorCannotParseResponse
-                                                userInfo:@{NSLocalizedDescriptionKey:@"not http response"}]);
+                handleBlock(nil, NSErrorMarkFunc(NSURLErrorCannotParseResponse, @"not http response"));
             }
         }
         

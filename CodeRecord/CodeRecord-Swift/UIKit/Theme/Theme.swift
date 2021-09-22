@@ -285,6 +285,7 @@ extension UINavigationBar {
         ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
     }
     
+    @available(iOS 11.0, *)
     open func theme_set(largeTitleAttributes: RichTextStyle.RichTextAttributes, for style: String, in scene: Any) {
         let theme = Theme(property: \UINavigationBar.largeTitleTextAttributes, style: largeTitleAttributes)
         ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)

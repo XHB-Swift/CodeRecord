@@ -10,6 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nullable localizedDescription);
+
+#define NSErrorMarkFunc(code, desc) \
+NSErrorMake([NSString stringWithFormat:@"%s",__func__], (code), (desc))
+
 @interface NSObject (XHBExtension)
 
 + (nullable NSData *)archivedDataForObject:(id)object;
@@ -109,6 +114,29 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSMutableArray (XHBExtension)
 
 - (void)reverse;
+
+@end
+
+typedef void(^XHBTimeUpdateAction)(NSTimeInterval timeInterval);
+
+@interface NSTimer (XHBExtension)
+
++ (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)timeInterval
+                                        action:(nullable XHBTimeUpdateAction)action
+                                       repeats:(BOOL)repeats;
+
++ (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)timeInterval
+                                        action:(nullable XHBTimeUpdateAction)action
+                                       repeats:(BOOL)repeats
+                               loopCommonModes:(BOOL)loopCommonModes;
+
+@end
+
+@interface CADisplayLink (XHBExtension)
+
++ (instancetype)displayLinkWithFrameInternal:(NSTimeInterval)timeInterval
+                                      action:(nullable XHBTimeUpdateAction)action
+                             loopCommonModes:(BOOL)loopCommonModes;
 
 @end
 

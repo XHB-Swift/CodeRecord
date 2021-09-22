@@ -417,14 +417,17 @@
 
 - (void)showViewController:(UIViewController *)viewController configuration:(XHBCustomModalTransitioningConfiguration *)configuration {
     UIView *targetView = viewController.view;
-    if (!targetView || ![configuration isKindOfClass:[XHBCustomModalTransitioningConfiguration class]]) {
+    if (!targetView) {
+        return;
+    }
+    [self addChildViewController:viewController];
+    [self.view addSubview:targetView];
+    if (![configuration isKindOfClass:[XHBCustomModalTransitioningConfiguration class]]) {
         return;
     }
     NSString *key = [NSString stringWithFormat:@"%@", viewController];
     [[XHBCustomModalAnimationManager sharedManager] setAnimation:configuration forKey:key];
-    [self addChildViewController:viewController];
     targetView.size = configuration.displayedSize;
-    [self.view addSubview:targetView];
     XHBCustomTransitioningAnimator *enterAnimate = configuration.presentAnimation;
     enterAnimate.forward = YES;
     [enterAnimate doAnimationFrom:self.view to:targetView transitionContext:nil completion:nil];

@@ -12,7 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIBarItem (XHBTheme) <XHBThemeUpdatable>
 
-- (void)theme_setImage:(id)image forStyle:(XHBThemeStyle)style inScene:(id)scene;
+- (void)theme_setImage:(id<XHBURLType, XHBThemeAttribute>)image forStyle:(XHBThemeStyle)style inScene:(id)scene;
+
+@end
+
+@interface UIBarButtonItem (XHBTheme)
+
+- (void)theme_setTintColor:(XHBThemeAttributeColor *)color forStyle:(XHBThemeStyle)style inSecene:(id)scene;
 
 @end
 

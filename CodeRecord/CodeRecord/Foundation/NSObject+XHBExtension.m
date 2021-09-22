@@ -8,6 +8,13 @@
 
 #import "NSObject+XHBExtension.h"
 #import <CommonCrypto/CommonCrypto.h>
+#import <objc/runtime.h>
+
+NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nullable localizedDescription) {
+    NSDictionary<NSErrorUserInfoKey, id> *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                      localizedDescription, NSLocalizedDescriptionKey, nil];
+    return [NSError errorWithDomain:errorDomain code:code userInfo:userInfo];
+}
 
 @implementation NSObject (XHBExtension)
 
@@ -419,6 +426,90 @@ return t;
     for (NSUInteger i = 0; i < mid; i++) {
         [self exchangeObjectAtIndex:i withObjectAtIndex:(count - (i + 1))];
     }
+}
+
+@end
+
+@implementation NSTimer (XHBExtension)
+
++ (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)timeInterval
+                                        action:(void(^_Nullable)(NSTimeInterval))action
+                                       repeats:(BOOL)repeats {
+    return [self scheduledTimerWithTimeInterval:timeInterval
+                                         action:action
+                                        repeats:repeats
+                                loopCommonModes:NO];
+}
+
++ (instancetype)scheduledTimerWithTimeInterval:(NSTimeInterval)timeInterval
+                                        action:(void(^_Nullable)(NSTimeInterval))action
+                                       repeats:(BOOL)repeats
+                               loopCommonModes:(BOOL)loopCommonModes {
+    
+    NSTimer *timer = [self scheduledTimerWithTimeInterval:timeInterval
+                                                   target:self
+                                                 selector:@selector(timerAction:)
+                                                 userInfo:action
+                                                  repeats:repeats];
+    if (loopCommonModes) {
+        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    }
+    return timer;
+}
+
++ (void)timerAction:(NSTimer *)sender {
+    if ([sender isValid]) {
+        void(^action)(NSTimeInterval time) = [sender userInfo];
+        if (action) {
+            action([sender timeInterval]);
+        }
+    }
+}
+
+@end
+
+@interface CADisplayLink ()
+
+@property (nonatomic, nullable, copy) XHBTimeUpdateAction action;
+
+@end
+
+@implementation CADisplayLink (XHBExtension)
+
++ (instancetype)displayLinkWithFrameInternal:(NSTimeInterval)timeInterval
+                                      action:(nullable XHBTimeUpdateAction)action
+                             loopCommonModes:(BOOL)loopCommonModes {
+    
+    CADisplayLink *link = [self displayLinkWithTarget:self selector:@selector(displayLinkAction:)];
+    link.action = action;
+    if (@available(iOS 10, *)) {
+        link.preferredFramesPerSecond = timeInterval;
+    }else {
+        link.frameInterval = timeInterval;
+    }
+    NSRunLoopMode runloopMode = loopCommonModes ? NSRunLoopCommonModes : NSDefaultRunLoopMode;
+    [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:runloopMode];
+    
+    return link;
+}
+
++ (void)displayLinkAction:(CADisplayLink *)sender {
+    XHBTimeUpdateAction action = sender.action;
+    if (action) {
+        if (@available(iOS 10, *)) {
+            action([sender preferredFramesPerSecond]);
+        }else {
+            action([sender frameInterval]);
+        }
+    }
+}
+
+- (void)setAction:(XHBTimeUpdateAction)action {
+    objc_setAssociatedObject(self, @selector(action), action, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (XHBTimeUpdateAction)action {
+    return objc_getAssociatedObject(self, @selector(action));
 }
 
 @end
