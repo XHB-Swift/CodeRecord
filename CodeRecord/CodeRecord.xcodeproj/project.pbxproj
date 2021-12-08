@@ -37,6 +37,7 @@
 		C6368BF126D6B0440099A7D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6368BEF26D6B0440099A7D3 /* LaunchScreen.storyboard */; };
 		C6368BF826D6B0740099A7D3 /* XHBUIExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */; };
 		C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */; };
+		C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C6494D05276116C900B22C4E /* XHBCustomStyleButton.m */; };
 		C651AD8B24485767004E76A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C651AD8A24485767004E76A8 /* AppDelegate.m */; };
 		C651AD9124485767004E76A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C651AD9024485767004E76A8 /* ViewController.m */; };
 		C651AD9424485767004E76A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C651AD9224485767004E76A8 /* Main.storyboard */; };
@@ -96,6 +97,8 @@
 		C6368BF226D6B0440099A7D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XHBUIExtension.swift; sourceTree = "<group>"; };
 		C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XHBFoundationExtension.swift; sourceTree = "<group>"; };
+		C6494D04276116C900B22C4E /* XHBCustomStyleButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBCustomStyleButton.h; sourceTree = "<group>"; };
+		C6494D05276116C900B22C4E /* XHBCustomStyleButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBCustomStyleButton.m; sourceTree = "<group>"; };
 		C651AD8624485767004E76A8 /* CodeRecord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CodeRecord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C651AD8924485767004E76A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C651AD8A24485767004E76A8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -310,6 +313,8 @@
 				C6368BCD26D022990099A7D3 /* UIView+XHBFitSize.h */,
 				C6368BCE26D022990099A7D3 /* UIView+XHBFitSize.m */,
 				C6368BCC26D0219B0099A7D3 /* XHBUIKitHeaders.h */,
+				C6494D04276116C900B22C4E /* XHBCustomStyleButton.h */,
+				C6494D05276116C900B22C4E /* XHBCustomStyleButton.m */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -462,6 +467,7 @@
 				C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */,
 				C651AD9C2448576A004E76A8 /* main.m in Sources */,
 				C6368BD926D0298B0099A7D3 /* XHBThemeManager.m in Sources */,
+				C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */,
 				C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
