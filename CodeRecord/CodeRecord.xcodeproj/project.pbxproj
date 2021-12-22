@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		428F87872761ED4600266DE0 /* CustomStyleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428F87862761ED4600266DE0 /* CustomStyleButton.swift */; };
 		4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */; };
 		4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */; };
 		4294C30626E0AAEA00F2D97D /* scene-speach.png in Resources */ = {isa = PBXBuildFile; fileRef = 4294C30526E0AAEA00F2D97D /* scene-speach.png */; };
@@ -48,6 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		428F87862761ED4600266DE0 /* CustomStyleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyleButton.swift; sourceTree = "<group>"; };
 		4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntranceViewController.swift; sourceTree = "<group>"; };
 		4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionDemoViewController.swift; sourceTree = "<group>"; };
 		4294C30526E0AAEA00F2D97D /* scene-speach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-speach.png"; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				4294C30726E1D17200F2D97D /* ContentBrowser */,
 				C6368BFC26DA7FC40099A7D3 /* CustomTransition */,
 				C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */,
+				428F87862761ED4600266DE0 /* CustomStyleButton.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 			files = (
 				C6368BF826D6B0740099A7D3 /* XHBUIExtension.swift in Sources */,
 				C6368BE526D6B0410099A7D3 /* AppDelegate.swift in Sources */,
+				428F87872761ED4600266DE0 /* CustomStyleButton.swift in Sources */,
 				4294C30C26E5AD6900F2D97D /* UIImageViewWebCache.swift in Sources */,
 				429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */,
 				42C95A3826F3218D004F4B33 /* DirectionTransitioning.swift in Sources */,
