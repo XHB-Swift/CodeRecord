@@ -136,7 +136,8 @@ class MainEntranceViewController: UIViewController {
             MainEntranceModel(title: "自定义模态转场", vcName: "CustomTransitionDemoViewController"),
             MainEntranceModel(title: "缓存网络图片", vcName: "ImageWebCacheDemoViewController"),
             MainEntranceModel(title: "CollectionView轮播", vcName: "ContentBrowserDemoViewController"),
-            MainEntranceModel(title: "主题切换", vcName: "ThemeSwitchDemoViewController")
+            MainEntranceModel(title: "主题切换", vcName: "ThemeSwitchDemoViewController"),
+            MainEntranceModel(title: "富文本插值初始化", vcName: "InterpotaionStringDemoViewController")
         ])
     }
     
