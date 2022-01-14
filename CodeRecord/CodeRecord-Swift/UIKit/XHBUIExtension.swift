@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import ObjectiveC
 
 
 extension UIView {
     
-    var x: CGFloat {
+    open var x: CGFloat {
         
         set {
             self.frame.origin.x = newValue
@@ -22,7 +23,7 @@ extension UIView {
         }
     }
     
-    var y: CGFloat {
+    open var y: CGFloat {
         
         set {
             self.frame.origin.y = newValue
@@ -34,7 +35,7 @@ extension UIView {
         
     }
     
-    var midX: CGFloat {
+    open var midX: CGFloat {
         
         set {
             self.frame.origin.x = newValue - self.frame.width / 2
@@ -45,7 +46,7 @@ extension UIView {
         }
     }
     
-    var midY: CGFloat {
+    open var midY: CGFloat {
         
         set {
             self.frame.origin.y = newValue - self.frame.height / 2
@@ -56,7 +57,7 @@ extension UIView {
         }
     }
     
-    var right: CGFloat {
+    open var right: CGFloat {
         
         set {
             self.frame.origin.x = newValue - self.frame.width
@@ -67,7 +68,7 @@ extension UIView {
         }
     }
     
-    var bottom: CGFloat {
+    open var bottom: CGFloat {
         
         set {
             self.frame.origin.y = newValue - self.frame.height
@@ -78,7 +79,7 @@ extension UIView {
         }
     }
     
-    var width: CGFloat {
+    open var width: CGFloat {
         
         set {
             self.frame.size.width = newValue
@@ -89,7 +90,7 @@ extension UIView {
         }
     }
     
-    var height: CGFloat {
+    open var height: CGFloat {
         
         set {
             self.frame.size.height = newValue
@@ -100,7 +101,7 @@ extension UIView {
         }
     }
     
-    var origin: CGPoint {
+    open var origin: CGPoint {
         
         set {
             self.frame.origin = newValue
@@ -111,7 +112,7 @@ extension UIView {
         }
     }
     
-    var size: CGSize {
+    open var size: CGSize {
         
         set {
             self.frame.size = newValue
@@ -122,7 +123,7 @@ extension UIView {
         }
     }
     
-    var centerX: CGFloat {
+    open var centerX: CGFloat {
         
         set {
             self.center.x = newValue
@@ -133,7 +134,7 @@ extension UIView {
         }
     }
     
-    var centerY: CGFloat {
+    open var centerY: CGFloat {
         
         set {
             self.center.y = newValue
@@ -160,6 +161,40 @@ extension UIView {
         let fitH = min(height + insets.top + insets.bottom, maxSize.height)
         size = CGSize(width: fitW, height: fitH)
     }
+    
+    private(set) var levelWieght: Int? {
+        set {
+            objc_setAssociatedObject(self, "levelWieght", newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        get {
+            return objc_getAssociatedObject(self, "levelWieght") as? Int
+        }
+    }
+    
+    open func add(subview: UIView, for levelWeight: Int) {
+        if subviews.contains(subview) {
+            subview.removeFromSuperview()
+        }
+        subview.levelWieght = levelWeight
+        let reversedSubviews = subviews.reversed()
+        var belowView: UIView?
+        for view in reversedSubviews {
+            guard let view_level_weight = view.levelWieght else { continue }
+            if view_level_weight > levelWeight {
+                belowView = view
+            }else {
+                insertSubview(subview, aboveSubview: view)
+                break
+            }
+        }
+        if subview.superview == nil {
+            if let belowView = belowView {
+                insertSubview(subview, belowSubview: belowView)
+            }else {
+                addSubview(subview)
+            }
+        }
+    }
 }
 
 extension UIButton {
@@ -180,7 +215,18 @@ extension UIWindow {
         
         if #available(iOS 13.0, *) {
             
-            return app.windows.first
+            if #available(iOS 15.0, *) {
+                
+                return app.connectedScenes
+                    .compactMap { $0 as? UIWindowScene }
+                    .first?.keyWindow
+                
+            }else {
+                
+                return app.windows
+                    .filter { $0.isKeyWindow }
+                    .first
+            }
             
         }else {
             

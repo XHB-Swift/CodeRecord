@@ -8,12 +8,12 @@
 
 import UIKit
 
-open class ContentBrowserImageData<C>: ContentBrowserPageData {
+open class ContentBrowserImageData: ContentBrowserPageData {
     
-    open var content: C
+    open var content: URLType
     open var shouldCleanContent: Bool = true
     
-    public init(content: C, shouldCleanContent: Bool = true) {
+    public init(content: URLType, shouldCleanContent: Bool = true) {
         self.content = content
         self.shouldCleanContent = shouldCleanContent
     }
@@ -21,7 +21,7 @@ open class ContentBrowserImageData<C>: ContentBrowserPageData {
 
 class ContentBrowserDemoViewController: UIViewController {
     
-    var contentBrowserViewModel = ContentBrowserImageViewModel<ContentBrowserImageData<String>>()
+    var contentBrowserViewModel = ContentBrowserImageViewModel<ContentBrowserImageData>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,16 +34,16 @@ class ContentBrowserDemoViewController: UIViewController {
     }
     
     @objc func tapShowBrowser(_ sender: UIButton) {
-        let cbview = ContentBrowserView<ContentBrowserImageData<String>>(frame: CGRect(x: 0, y: view.height, width: view.width, height: view.height))
+        let cbview = ContentBrowserView<ContentBrowserImageData>(frame: CGRect(x: 0, y: view.height, width: view.width, height: view.height))
         cbview.delegate = self
-        cbview.collectionView?.flowlayout?.scrollDirection = .vertical
+        cbview.collectionView?.flowlayout?.scrollDirection = .horizontal
         cbview.viewModel = contentBrowserViewModel
         contentBrowserViewModel.append([
-                                        ContentBrowserImageData(content: imageUrl1, shouldCleanContent: false),
+                                        ContentBrowserImageData(content: imageUrl1),
                                         ContentBrowserImageData(content: imageUrl2),
                                         ContentBrowserImageData(content: imageUrl3),
                                         ContentBrowserImageData(content: imageUrl4),
-                                        ContentBrowserImageData(content: imageUrl5, shouldCleanContent: false)
+                                        ContentBrowserImageData(content: imageUrl5)
         ])
         contentBrowserViewModel.shouldInfinitelyCarousel = true
         cbview.scroll(to: 2)
@@ -63,7 +63,7 @@ class ContentBrowserDemoViewController: UIViewController {
 
 extension ContentBrowserDemoViewController: ContentBrowserViewDelegate {
     
-    func didClickEmptyArea<String>(in view: ContentBrowserView<String>) {
+    func didClickEmptyArea<ContentBrowserImageData>(in view: ContentBrowserView<ContentBrowserImageData>) {
         UIView.animate(withDuration: 0.5) {
             view.y = view.superview?.height ?? 0
         } completion: { finished in

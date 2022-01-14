@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "UIView+XHBLevelWeight.h"
 
 //https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7
 
@@ -26,9 +27,36 @@
     [super viewDidLoad];
     
     self.title = @"ViewController1";
-    self.view.backgroundColor = [UIColor randomBackgroundColor];
+//    self.view.backgroundColor = [UIColor randomBackgroundColor];
     [self.view addSubview:self.backButton];
     [self.view addSubview:self.returnButton];
+    
+    [self setupLevelViews];
+}
+
+- (void)setupLevelViews {
+    NSInteger lv1 = 1;
+    NSInteger lv2 = 2;
+    NSInteger lv3 = 3;
+    UILabel *view1 = [[UILabel alloc] initWithFrame:(CGRect){10,10,50,50}];
+    view1.text = @(lv3).stringValue;
+    UILabel *view2 = [[UILabel alloc] initWithFrame:(CGRect){10,10,50,50}];
+    view2.text = @(lv2).stringValue;
+    UILabel *view3 = [[UILabel alloc] initWithFrame:(CGRect){10,10,50,50}];
+    view3.text = @(lv1).stringValue;
+    UILabel *view4 = [[UILabel alloc] initWithFrame:(CGRect){10,10,50,50}];
+    view4.text = @(lv3).stringValue;
+    UILabel *view5 = [[UILabel alloc] initWithFrame:(CGRect){10,10,50,50}];
+    view5.text = @(lv2).stringValue;
+    UILabel *view6 = [[UILabel alloc] initWithFrame:(CGRect){10,10,50,50}];
+    view6.text = @(lv1).stringValue;
+    
+    [self.view addSubview:view1 levelWeight:lv3];
+    [self.view addSubview:view2 levelWeight:lv2];
+    [self.view addSubview:view3 levelWeight:lv1];
+    [self.view addSubview:view4 levelWeight:lv3];
+    [self.view addSubview:view5 levelWeight:lv2];
+    [self.view addSubview:view6 levelWeight:lv1];
 }
 
 - (void)viewWillLayoutSubviews {

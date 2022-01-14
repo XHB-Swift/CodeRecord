@@ -350,7 +350,7 @@ extension String {
 
 open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowserViewCell<P>,
                                                                    UIScrollViewDelegate,
-                                                                   UIGestureRecognizerDelegate {
+                                                                   UIGestureRecognizerDelegate where P.C == URLType {
     
     private var imageView: UIImageView?
     private var scrollView: UIScrollView?
@@ -498,31 +498,15 @@ open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowse
     }
     
     public override func update(_ page: P) {
-        if let url = page.content as? URL {
-            imageView?.setImage(with: url) {[weak self] result in
-                switch result {
-                case .success(let image):
-                    self?.updateImageViewFrame(image)
-                    break
-                case .failure(_):
-                    self?.imageView?.frame = self?.contentView.bounds ?? .zero
-                    break
-                }
+        imageView?.setImage(with: page.content) {[weak self] result in
+            switch result {
+            case .success(let image):
+                self?.updateImageViewFrame(image)
+                break
+            case .failure(_):
+                self?.imageView?.frame = self?.contentView.bounds ?? .zero
+                break
             }
-            return
-        }
-        if let urlString = page.content as? String {
-            imageView?.setImage(with: urlString) {[weak self] result in
-                switch result {
-                case .success(let image):
-                    self?.updateImageViewFrame(image)
-                    break
-                case .failure(_):
-                    self?.imageView?.frame = self?.contentView.bounds ?? .zero
-                    break
-                }
-            }
-            return
         }
     }
     
@@ -599,7 +583,7 @@ open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowse
     }
 }
 
-open class ContentBrowserImageViewModel<P: ContentBrowserPageData>: ContentBrowserViewModel<P> {
+open class ContentBrowserImageViewModel<P: ContentBrowserPageData>: ContentBrowserViewModel<P> where P.C == URLType {
     
     open override var collectionView: ContentBrowserCollectionView? {
         didSet {

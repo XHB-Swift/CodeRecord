@@ -28,6 +28,7 @@
 		42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3E26F47F31004F4B33 /* UIBarItem+XHBTheme.m */; };
 		42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */; };
 		42C95A4626F49DB1004F4B33 /* UIImageView+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */; };
+		42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -80,6 +81,8 @@
 		42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XHBWebCache.m"; sourceTree = "<group>"; };
 		42C95A4426F49DB1004F4B33 /* UIImageView+XHBWebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+XHBWebCache.h"; sourceTree = "<group>"; };
 		42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+XHBWebCache.m"; sourceTree = "<group>"; };
+		42F74733278EC73500DD503C /* UIView+XHBLevelWeight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBLevelWeight.h"; sourceTree = "<group>"; };
+		42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBLevelWeight.m"; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -324,6 +327,8 @@
 				C6368BCC26D0219B0099A7D3 /* XHBUIKitHeaders.h */,
 				C6494D04276116C900B22C4E /* XHBCustomStyleButton.h */,
 				C6494D05276116C900B22C4E /* XHBCustomStyleButton.m */,
+				42F74733278EC73500DD503C /* UIView+XHBLevelWeight.h */,
+				42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -466,6 +471,7 @@
 				42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */,
 				C6368BD326D028B20099A7D3 /* UIView+XHBTheme.m in Sources */,
 				42A15D6D26EF255C009E51FA /* NSObject+XHBExtension.m in Sources */,
+				42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */,
 				C6368BCF26D022990099A7D3 /* UIView+XHBFitSize.m in Sources */,
 				42A15D7126EF82A6009E51FA /* XHBCustomTransitioning.m in Sources */,
 				42C95A3B26F43DD1004F4B33 /* XHBMainEntranceViewController.m in Sources */,
