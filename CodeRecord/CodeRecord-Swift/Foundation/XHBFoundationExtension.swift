@@ -172,3 +172,157 @@ extension KeyPathEditable {
         return newSelf
     }
 }
+
+
+@propertyWrapper
+struct Clamped<T: Comparable> {
+    
+    let wrappedValue: T
+    
+    init(wrappedValue: T, _ range: ClosedRange<T>) {
+        self.wrappedValue = min(max(wrappedValue, range.lowerBound), range.upperBound)
+    }
+    
+}
+
+extension Dictionary where Key == String {
+    
+    public struct StringKeyPath {
+        
+        public var seperator = "."
+        public var keyPathString = ""
+        private(set) var keys = Array<String>()
+        
+        public init(keyPath: String, seperator: String = ".") {
+            
+            self.seperator = seperator
+            self.keyPathString = keyPath
+            self.keys = keyPath.components(separatedBy: seperator)
+        }
+        
+        public init(keys: [String]) {
+            self.keys = keys
+        }
+        
+        public func next() -> (key: String, path: StringKeyPath)? {
+            if keys.isEmpty { return nil }
+            var nextKeys = keys
+            let key = nextKeys.removeFirst()
+            return (key: key, path: StringKeyPath(keys: nextKeys))
+        }
+        
+    }
+    
+    public func value(for keyPath: StringKeyPath) -> Value? {
+        
+        switch keyPath.next() {
+        case nil:
+            return nil
+        case let (key, path)? where path.keys.isEmpty:
+            return self[key]
+        case let (key, path)?:
+            switch self[key] {
+            case let dict as Self:
+                return dict.value(for: path)
+            default:
+                return nil
+            }
+        }
+        
+    }
+    
+    public mutating func set(value: Value?, for keyPath: StringKeyPath) {
+        
+        switch keyPath.next() {
+        case nil:
+            return
+        case let (key, path)? where path.keys.isEmpty:
+            self[key] = value
+        case let (key, path)?:
+            switch self[key] {
+            case var dict as Self:
+                dict.set(value: value, for: path)
+            default:
+                return
+            }
+        }
+    }
+    
+    subscript(keyPath: String, keyPathSeperator: String = ".") -> Value? {
+        
+        get { value(for: StringKeyPath(keyPath: keyPath, seperator: keyPathSeperator)) }
+        set { set(value: newValue, for: StringKeyPath(keyPath: keyPath, seperator: keyPathSeperator)) }
+    }
+}
+
+extension Dictionary {
+    
+    public func filter(with keys: Array<Key>, excepted: Bool = false) -> Self {
+        guard !keys.isEmpty else { return self }
+        let keysSet = Set(keys)
+        return filter { keysSet.contains($0.key) != excepted }
+    }
+    
+    public mutating func concat(dictionary: Self, keysMapping: Dictionary<Key,Key>) {
+        
+        if keysMapping.isEmpty {
+            
+            _ = dictionary.map { self[$0] = $1 }
+            
+        } else {
+            
+            _ = keysMapping.map { self[$0] = dictionary[$1] }
+        }
+        
+    }
+    
+}
+
+@available(iOS 13, *)
+extension URLSession {
+    
+    public func download(for request: URLRequest) async throws -> (URL, URLResponse) {
+        
+        return try await withTaskCancellationHandler(operation: {
+            return try await withUnsafeThrowingContinuation({ continuation in
+                downloadTask(with: request, completionHandler: { url, response, error in
+                    if let _url = url,
+                        let _response = response {
+                        continuation.resume(returning: (_url, _response))
+                    } else if let _error = error {
+                        continuation.resume(throwing: _error)
+                    } else {
+                        continuation.resume(throwing: FoundationError.needToDebugDetails)
+                    }
+                }).resume()
+            })
+            
+        }, onCancel: {
+            
+        })
+        
+    }
+    
+    public func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        
+        return try await withTaskCancellationHandler(operation: {
+            return try await withUnsafeThrowingContinuation({ continuation in
+                dataTask(with: request) { data, response, error in
+                    
+                    if let _data = data,
+                        let _response = response {
+                        continuation.resume(returning: (_data, _response))
+                    } else if let _error = error {
+                        continuation.resume(throwing: _error)
+                    } else {
+                        continuation.resume(throwing: FoundationError.needToDebugDetails)
+                    }
+                    
+                }.resume()
+            })
+        }, onCancel: {
+            
+        })
+    }
+    
+}

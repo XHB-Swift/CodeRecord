@@ -27,8 +27,8 @@ class ImageWebCacheDemoViewController: UIViewController {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
         imageView.contentMode = .scaleAspectFit
         view.addSubview(imageView)
-        imageView.setImage(with: imageUrl1, thumbnail: ThumbnailConfig(pointSize: imageView.size, scale: 1))
         imgView = imageView
+        imgView?.setImage(with: imageUrl1, thumbnail: ThumbnailConfig(pointSize: imageView.size, scale: 1))
         
         let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 300, height: 300), style: .plain)
         tableView.delegate = self
@@ -53,7 +53,9 @@ class ImageWebCacheDemoViewController: UIViewController {
 extension ImageWebCacheDemoViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        imgView?.setImage(with: imgs[indexPath.row], thumbnail: ThumbnailConfig(pointSize: imgView?.size ?? .zero, scale: 1))
+        let url = imgs[indexPath.row]
+        let thumbnail = ThumbnailConfig(pointSize: imgView?.size ?? .zero, scale: 1)
+        imgView?.setImage(with: url, thumbnail: thumbnail)
     }
 }
 

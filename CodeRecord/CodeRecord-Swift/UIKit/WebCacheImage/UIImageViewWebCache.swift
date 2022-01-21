@@ -31,21 +31,19 @@ extension String: URLType {
     public var url: URL? {
         return hasPrefix("file://") ? URL(fileURLWithPath: self) : URL(string: self)
     }
-    
 }
 
 extension URL: URLType {
     
-    public var url: URL? {
-        return self
-    }
+    public var url: URL? { return self }
 }
 
 extension UIImage {
     
-    public convenience init?(url: URL, to size: CGSize, scale: CGFloat) {
+    public convenience init?(url: URLType, to size: CGSize, scale: CGFloat) {
+        guard let realUrl = url.url else { return nil }
         let imageSourceOptions = [kCGImageSourceShouldCache : false] as CFDictionary
-        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, imageSourceOptions) else { return nil }
+        guard let imageSource = CGImageSourceCreateWithURL(realUrl as CFURL, imageSourceOptions) else { return nil }
         let maxDimensionInPixels = max(size.width, size.height) * scale
         let downsampleOptions = [
             kCGImageSourceCreateThumbnailWithTransform : true,
@@ -107,7 +105,9 @@ extension UIImage {
     open class func fetchImage(with url: URLType, thumbnail: ThumbnailConfig = .noThumbnail, completion: ImageLoadCompletion? = nil) {
         DispatchQueue.global().async {
             guard let cacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else {
-                self.completionCallback(.failure(FoundationError.notFoundDir), completion)
+                DispatchQueue.main.async {
+                    completion?(.failure(FoundationError.notFoundDir))
+                }
                 return
             }
             let docDir = cacheDir.appending("/UIImageWebCacheDir")
@@ -117,36 +117,49 @@ extension UIImage {
                 do {
                     try fileManager.createDirectory(atPath: docDir, withIntermediateDirectories: true, attributes: nil)
                 } catch {
-                    self.completionCallback(.failure(error), completion)
+                    DispatchQueue.main.async {
+                        completion?(.failure(error))
+                    }
                     return
                 }
             }
             guard let url = url.url else {
-                self.completionCallback(.failure(FoundationError.nilValue), completion)
+                DispatchQueue.main.async {
+                    completion?(.failure(FoundationError.nilValue))
+                }
                 return
             }
             if url.isFileURL {
                 if thumbnail.pointSize != .zero && thumbnail.scale > 0,
                    let thumbnailImage = UIImage(url: url, to: thumbnail.pointSize, scale: thumbnail.scale)?.decoded {
-                    self.completionCallback(.success(thumbnailImage), completion)
+                    DispatchQueue.main.async {
+                        completion?(.success(thumbnailImage))
+                    }
                    return
                 }
+                let result: Result<UIImage, Error>
                 if let image = UIImage(contentsOfFile: url.absoluteString)?.decoded {
-                    self.completionCallback(.success(image), completion)
-                }else {
-                    self.completionCallback(.failure(FoundationError.nilValue), completion)
+                    result = .success(image)
+                } else {
+                    result = .failure(FoundationError.nilValue)
                 }
-                return
-            }else {
+                DispatchQueue.main.async {
+                    completion?(result)
+                }
+            } else {
                 let filePath = docDir.appending("/\(url.absoluteString.md5String)")
                 let isFileExist = fileManager.fileExists(atPath: filePath, isDirectory: nil)
                 if isFileExist {
                     if let thumbnailImage = UIImage(url: URL(fileURLWithPath: filePath), to: thumbnail.pointSize, scale: thumbnail.scale)?.decoded {
-                        self.completionCallback(.success(thumbnailImage), completion)
+                        DispatchQueue.main.async {
+                            completion?(.success(thumbnailImage))
+                        }
                         return
                     }
                     if let image = UIImage(contentsOfFile: filePath)?.decoded {
-                        self.completionCallback(.success(image), completion)
+                        DispatchQueue.main.async {
+                            completion?(.success(image))
+                        }
                         return
                     }
                 }
@@ -162,8 +175,9 @@ extension UIImage {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         URLSession.shared.downloadTask(with: request) { location, response, error in
+            let result: Result<UIImage, Error>
             if let happenedError = error {
-                self.completionCallback(.failure(happenedError), completion)
+                result = .failure(happenedError)
             }else {
                 lock.wait()
                 let fileManager = FileManager.default
@@ -177,26 +191,41 @@ extension UIImage {
                         try fileManager.moveItem(at: locationUrl, to: cachedFileUrl)
                         lock.signal()
                         if let image = UIImage(contentsOfFile: cachedFileUrl.path) {
-                            self.completionCallback(.success(image), completion)
+                            result = .success(image)
                         } else {
-                            self.completionCallback(.failure(FoundationError.nilValue), completion)
+                            result = .failure(FoundationError.nilValue)
                         }
                     } catch {
                         lock.signal()
-                        self.completionCallback(.failure(error), completion)
+                        result = .failure(error)
                     }
                 }else {
                     lock.signal()
-                    self.completionCallback(.failure(FoundationError.needToDebugDetails), completion)
+                    result = .failure(FoundationError.needToDebugDetails)
                 }
+            }
+            DispatchQueue.main.async {
+                completion?(result)
             }
         }.resume()
     }
     
-    private class func completionCallback(_ result: Result<UIImage, Error>, _ completion: ImageLoadCompletion?) {
-        DispatchQueue.main.async {
-            completion?(result)
-        }
+    @available(iOS 13.0, *)
+    open class func fetchAsyncImage(with url: URLType, thumbnail: ThumbnailConfig = .noThumbnail) async throws -> UIImage {
+        return try await withTaskCancellationHandler(operation: {
+            return try await withUnsafeThrowingContinuation({ continuation in
+                fetchImage(with: url, thumbnail: thumbnail) { result in
+                    switch result {
+                    case .success(let img):
+                        continuation.resume(returning: img)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            })
+        }, onCancel: {
+            
+        })
     }
 }
 
@@ -205,16 +234,29 @@ extension UIImageView {
     open func setImage(with url: URLType,
                        thumbnail: ThumbnailConfig = .noThumbnail,
                        completion: ImageLoadCompletion? = nil) {
-        UIImage.fetchImage(with: url, thumbnail: thumbnail) { [weak self] result in
-            switch result {
-            case .success(let img):
-                self?.image = img
-                break
-            case .failure(let error):
-                print("error = \(error)")
-                break
+        if #available(iOS 13, *) {
+            Task {
+                do {
+                    let img = try await UIImage.fetchAsyncImage(with: url, thumbnail: thumbnail)
+                    self.image = img
+                    completion?(.success(img))
+                } catch {
+                    completion?(.failure(error))
+                    print("error = \(error)")
+                }
             }
-            completion?(result)
+        } else {
+            UIImage.fetchImage(with: url, thumbnail: thumbnail) { [weak self] result in
+                switch result {
+                case .success(let img):
+                    self?.image = img
+                    break
+                case .failure(let error):
+                    print("error = \(error)")
+                    break
+                }
+                completion?(result)
+            }
         }
     }
 }

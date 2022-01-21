@@ -230,21 +230,6 @@ NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nulla
 
 @implementation NSDictionary (XHBExtension)
 
-- (NSDictionary *)valuesForKeysRelation:(NSDictionary *)keysRelation {
-    NSMutableDictionary *result = nil;
-    if ([keysRelation isKindOfClass:[NSDictionary class]] &&
-        (self.count > 0) &&
-        (keysRelation.count > 0)) {
-        result = [NSMutableDictionary dictionary];
-        [keysRelation enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull srcKey,
-                                                          id  _Nonnull dstKey,
-                                                          BOOL * _Nonnull stop) {
-            result[dstKey] = self[srcKey];
-        }];
-    }
-    return [result copy];
-}
-
 - (NSString *)sortedValuesForOrderedKeys:(NSOrderedSet *)orderedKeys joinedByString:(NSString *)string {
     return [self sortedValuesForOrderedKeys:orderedKeys filterNil:YES joinedByString:string];
 }
@@ -269,19 +254,60 @@ NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nulla
     return [result copy];
 }
 
-- (NSDictionary *)valuesForKeys:(NSSet *)keys {
-    NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    if ([keys isKindOfClass:[NSSet class]] &&
-        (keys.count > 0)) {
-        [keys enumerateObjectsUsingBlock:^(id  _Nonnull key,
-                                           BOOL * _Nonnull stop) {
-            id value = self[key];
-            if (value) {
-                values[key] = value;
-            }
-        }];
+- (instancetype)fetchObjectsAndKeysWithExpectedKeys:(NSArray *)expectedKeys {
+    if ([expectedKeys isKindOfClass:[NSArray class]]) {
+        if (expectedKeys.count > 0) {
+            NSSet *keys = [NSSet setWithArray:expectedKeys];
+            NSMutableDictionary *newDictionary = [NSMutableDictionary dictionary];
+            __weak typeof(self) weakSelf = self;
+            [keys enumerateObjectsUsingBlock:^(id  _Nonnull key,
+                                               BOOL * _Nonnull stop) {
+                newDictionary[key] = weakSelf[key];
+            }];
+            return [self initWithDictionary:newDictionary];
+        }else {
+            return self;
+        }
     }
-    return [values copy];
+    return nil;
+}
+
+- (nullable instancetype)fetchObjectsAndKeysWithExpectedKeysMapping:(NSDictionary *)expectedKeysMapping {
+    if ([expectedKeysMapping isKindOfClass:[NSDictionary class]]) {
+        if (expectedKeysMapping.count > 0) {
+            NSMutableDictionary *newDictionary = [NSMutableDictionary dictionary];
+            __weak typeof(self) weakSelf = self;
+            [expectedKeysMapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key1,
+                                                                     id  _Nonnull key2,
+                                                                     BOOL * _Nonnull stop) {
+                newDictionary[key1] = weakSelf[key2];
+            }];
+            return [self initWithDictionary:newDictionary];
+        }else {
+            return self;
+        }
+    }
+    return nil;
+}
+
+- (nullable instancetype)fetchObjectsAndKeysWithExceptedKeys:(NSArray *)exceptedKeys {
+    if ([exceptedKeys isKindOfClass:[NSArray class]]) {
+        if (exceptedKeys.count > 0) {
+            NSSet *exceptedKeysSet = [NSSet setWithArray:exceptedKeys];
+            NSMutableSet *allKeysSet = [NSMutableSet setWithArray:[self allKeys]];
+            [allKeysSet minusSet:exceptedKeysSet];
+            NSMutableDictionary *newDictionary = [NSMutableDictionary dictionary];
+            __weak typeof(self) weakSelf = self;
+            [allKeysSet enumerateObjectsUsingBlock:^(id  _Nonnull key,
+                                                     BOOL * _Nonnull stop) {
+                newDictionary[key] = weakSelf[key];
+            }];
+            return [self initWithDictionary:newDictionary];
+        }else {
+            return self;
+        }
+    }
+    return nil;
 }
 
 - (BOOL)containsValueForKey:(id)key {
@@ -376,6 +402,102 @@ return t;
         return nil;
     }
     XReturnObjectClass(cls)
+}
+
+- (nullable NSArray *)arrayForKeyPath:(NSString *)keyPath {
+    return [self arrayForKeyPath:keyPath keyPathSeperator:@"."];
+}
+
+- (nullable NSArray *)arrayForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator {
+    return [self objectForKeyPath:keyPath keyPathSeperator:keyPathSeperator expectedClass:[NSArray class]];
+}
+
+- (nullable NSString *)stringForKeyPath:(NSString *)keyPath {
+    return [self stringForKeyPath:keyPath keyPathSeperator:@"."];
+}
+
+- (nullable NSString *)stringForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator {
+    return [self objectForKeyPath:keyPath keyPathSeperator:keyPathSeperator expectedClass:[NSString class]];
+}
+
+- (nullable NSNumber *)numberForKeyPath:(NSString *)keyPath {
+    return [self numberForKeyPath:keyPath keyPathSeperator:@"."];
+}
+
+- (nullable NSNumber *)numberForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator {
+    return [self objectForKeyPath:keyPath keyPathSeperator:keyPathSeperator expectedClass:[NSNumber class]];
+}
+
+- (nullable NSDictionary *)dictionaryForKeyPath:(NSString *)keyPath {
+    return [self dictionaryForKeyPath:keyPath keyPathSeperator:@"."];
+}
+
+- (nullable NSDictionary *)dictionaryForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator {
+    return [self objectForKeyPath:keyPath keyPathSeperator:keyPathSeperator expectedClass:[NSDictionary class]];
+}
+
+- (nullable id)objectForKeyPath:(NSString *)keyPath {
+    return [self objectForKeyPath:keyPath keyPathSeperator:@"."];
+}
+
+- (nullable id)objectForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator {
+    return [self objectForKeyPath:keyPath keyPathSeperator:keyPathSeperator expectedClass:nil];
+}
+
+- (nullable id)objectForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator expectedClass:(nullable Class)expectedClass {
+    if (![keyPath isKindOfClass:[NSString class]]) {
+        return nil;
+    }
+    if (![keyPathSeperator isKindOfClass:[NSString class]] || keyPathSeperator.length == 0) {
+        return self[keyPath];
+    }
+    NSArray<NSString *> *keys = [keyPath componentsSeparatedByString:keyPathSeperator];
+    NSEnumerator<NSString *> *keysEnumerator = [keys objectEnumerator];
+    id object = self;
+    NSString *key = [keysEnumerator nextObject];
+    while (key != nil) {
+        object = object[key];
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            key = [keysEnumerator nextObject];
+        }else {
+            break;
+        }
+    }
+    if ([object isKindOfClass:[NSString class]] && [expectedClass isSubclassOfClass:[NSNumber class]]) {
+        //获取到String，但是指定要Number
+        return @([object integerValue]);
+    }else if ([object isKindOfClass:[NSNumber class]] && [expectedClass isSubclassOfClass:[NSString class]]) {
+        //获取到Number，但是指定要String
+        return [object stringValue];
+    }else if ([object isKindOfClass:expectedClass] || !expectedClass) {
+        return object;
+    }
+    return nil;
+}
+
+@end
+
+@implementation NSMutableDictionary (XHBExtension)
+
+- (void)addObjectsAndKeysFromDictionary:(NSDictionary *)dictionary expectedKeys:(NSArray *)expectedKeys {
+    NSDictionary *newDictionary = [dictionary fetchObjectsAndKeysWithExpectedKeys:expectedKeys];
+    if ([newDictionary isKindOfClass:[NSDictionary class]]) {
+        [self addEntriesFromDictionary:newDictionary];
+    }
+}
+
+- (void)addObjectsAndKeysFromDictionary:(NSDictionary *)dictionary expectedKeysMapping:(NSDictionary *)expectedKeysMapping {
+    NSDictionary *newDictionary = [dictionary fetchObjectsAndKeysWithExpectedKeysMapping:expectedKeysMapping];
+    if ([newDictionary isKindOfClass:[NSDictionary class]]) {
+        [self addEntriesFromDictionary:newDictionary];
+    }
+}
+
+- (void)addObjectsAndKeysFromDictionary:(NSDictionary *)dictionary exceptedKeys:(NSArray *)exceptedKeys {
+    NSDictionary *newDictionary = [dictionary fetchObjectsAndKeysWithExceptedKeys:exceptedKeys];
+    if ([newDictionary isKindOfClass:[NSDictionary class]]) {
+        [self addEntriesFromDictionary:newDictionary];
+    }
 }
 
 @end

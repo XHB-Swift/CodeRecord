@@ -50,12 +50,6 @@ NSErrorMake([NSString stringWithFormat:@"%s",__func__], (code), (desc))
 
 @interface NSDictionary (XHBExtension)
 
-/// 利用key的映射关系，从字典获取数据
-/// @param keysRelation key映射关系
-/// data1（数据源）   data2（目标数据）  key关系
-/// {k1:v1}         {k2:v1}          {k1:k2}
-- (nullable NSDictionary *)valuesForKeysRelation:(NSDictionary *)keysRelation;
-
 /// 对字典的values根据orderedKeys进行排序
 /// @param orderedKeys 已排序的key名集合
 /// @param string 所有值按顺序组合之后，可加上分割符，默认""
@@ -70,9 +64,17 @@ NSErrorMake([NSString stringWithFormat:@"%s",__func__], (code), (desc))
                                         filterNil:(BOOL)filterNil
                                    joinedByString:(nullable NSString *)string;
 
-/// 根据键名集合获取值
-/// @param keys 键名
-- (NSDictionary *)valuesForKeys:(NSSet *)keys;
+/// 根据expectedKeys从字典取值
+/// @param expectedKeys 期望获取到的值
+- (nullable instancetype)fetchObjectsAndKeysWithExpectedKeys:(NSArray *)expectedKeys;
+
+/// 根据expectedKeysMapping映射关系，将字典的值提取到新的字典，newDict[key1] = oldDict[key2]，@{key1 : key2}
+/// @param expectedKeysMapping 映射关系
+- (nullable instancetype)fetchObjectsAndKeysWithExpectedKeysMapping:(NSDictionary *)expectedKeysMapping;
+
+/// 根据exceptedKeys从字典中排除key取值
+/// @param exceptedKeys 需要被排除的key集合
+- (nullable instancetype)fetchObjectsAndKeysWithExceptedKeys:(NSArray *)exceptedKeys;
 
 /// 是否包含某个值
 /// @param key 键名
@@ -100,6 +102,45 @@ NSErrorMake([NSString stringWithFormat:@"%s",__func__], (code), (desc))
 - (nullable NSString *)stringValueForKey:(id)key;
 - (nullable NSDictionary *)dictionaryValueForKey:(id)key;
 - (nullable id)modelValueForKey:(id)key className:(NSString *)className;
+
+///=============================================================================
+/// 通过key-path取值
+///=============================================================================
+
+- (nullable NSArray *)arrayForKeyPath:(NSString *)keyPath;
+- (nullable NSArray *)arrayForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator;
+
+- (nullable NSString *)stringForKeyPath:(NSString *)keyPath;
+- (nullable NSString *)stringForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator;
+
+- (nullable NSNumber *)numberForKeyPath:(NSString *)keyPath;
+- (nullable NSNumber *)numberForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator;
+
+- (nullable NSDictionary *)dictionaryForKeyPath:(NSString *)keyPath;
+- (nullable NSDictionary *)dictionaryForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator;
+
+- (nullable id)objectForKeyPath:(NSString *)keyPath;
+- (nullable id)objectForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator;
+- (nullable id)objectForKeyPath:(NSString *)keyPath keyPathSeperator:(nullable NSString *)keyPathSeperator expectedClass:(nullable Class)expectedClass;
+
+@end
+
+@interface NSMutableDictionary (XHBExtension)
+
+/// 根据键快速赋值到新字典
+/// @param dictionary 数据源
+/// @param expectedKeys 需要获取的值的key集合
+- (void)addObjectsAndKeysFromDictionary:(NSDictionary *)dictionary expectedKeys:(NSArray *)expectedKeys;
+
+/// 根据映射关系将值快速赋值到新字典
+/// @param dictionary 数据源
+/// @param expectedKeysMapping 映射关系
+- (void)addObjectsAndKeysFromDictionary:(NSDictionary *)dictionary expectedKeysMapping:(NSDictionary *)expectedKeysMapping;
+
+/// 根据键快速赋值到新字典
+/// @param dictionary 数据源
+/// @param exceptedKeys 需要排除的值的key集合
+- (void)addObjectsAndKeysFromDictionary:(NSDictionary *)dictionary exceptedKeys:(NSArray *)exceptedKeys;
 
 @end
 
