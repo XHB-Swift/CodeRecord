@@ -145,6 +145,14 @@ extension Collection {
             areIncreasingOrder(value1[keyPath: property], value2[keyPath: property])
         }
     }
+    
+    public subscript(safe index: Self.Index) -> Iterator.Element? {
+        return (startIndex..<endIndex).contains(index) ? self[index] : nil
+    }
+    
+    public var isNotEmpty: Bool {
+        return !self.isEmpty
+    }
 }
 
 extension MutableCollection where Self: RandomAccessCollection {
@@ -257,10 +265,10 @@ extension Dictionary where Key == String {
 
 extension Dictionary {
     
-    public func filter(with keys: Array<Key>, excepted: Bool = false) -> Self {
-        guard !keys.isEmpty else { return self }
+    public mutating func filter(with keys: Array<Key>, excepted: Bool = false) {
+        guard !keys.isEmpty else { return }
         let keysSet = Set(keys)
-        return filter { keysSet.contains($0.key) != excepted }
+        self = filter { keysSet.contains($0.key) != excepted }
     }
     
     public mutating func concat(dictionary: Self, keysMapping: Dictionary<Key,Key>) {

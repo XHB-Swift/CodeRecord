@@ -14,11 +14,16 @@ private let kBitsPerComponent = 8
 
 public typealias ImageLoadCompletion = (_ result: Result<UIImage, Error>) -> Void
 
+public enum ImageScale {
+    case auto
+    case scale(s_width: CGFloat, s_height: CGFloat)
+}
+
 public struct ThumbnailConfig {
     let pointSize: CGSize
-    let scale: CGFloat
+    let scale: ImageScale
     
-    public static let noThumbnail = ThumbnailConfig(pointSize: .zero, scale: 0)
+    public static let noThumbnail = ThumbnailConfig(pointSize: .zero, scale: .auto)
 }
 
 public protocol URLType {
@@ -40,11 +45,17 @@ extension URL: URLType {
 
 extension UIImage {
     
-    public convenience init?(url: URLType, to size: CGSize, scale: CGFloat) {
+    public convenience init?(url: URLType, to size: CGSize, scale: ImageScale = .auto) {
         guard let realUrl = url.url else { return nil }
         let imageSourceOptions = [kCGImageSourceShouldCache : false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithURL(realUrl as CFURL, imageSourceOptions) else { return nil }
-        let maxDimensionInPixels = max(size.width, size.height) * scale
+        let maxDimensionInPixels: CGFloat
+        switch scale {
+        case .auto:
+            maxDimensionInPixels = max(size.width, size.height) / (max(size.width, size.height) / min(size.width, size.height))
+        case .scale(let s_width, let s_height):
+            maxDimensionInPixels = max(size.width, size.height) * (s_width / s_height)
+        }
         let downsampleOptions = [
             kCGImageSourceCreateThumbnailWithTransform : true,
             kCGImageSourceShouldCacheImmediately : true,
@@ -130,7 +141,7 @@ extension UIImage {
                 return
             }
             if url.isFileURL {
-                if thumbnail.pointSize != .zero && thumbnail.scale > 0,
+                if thumbnail.pointSize != .zero,
                    let thumbnailImage = UIImage(url: url, to: thumbnail.pointSize, scale: thumbnail.scale)?.decoded {
                     DispatchQueue.main.async {
                         completion?(.success(thumbnailImage))
@@ -238,6 +249,14 @@ extension UIImageView {
             Task {
                 do {
                     let img = try await UIImage.fetchAsyncImage(with: url, thumbnail: thumbnail)
+                    let scale: CGFloat
+                    switch thumbnail.scale {
+                    case .auto:
+                        scale = img.size.width / img.size.height
+                    case .scale(let s_width, let s_hegith):
+                        scale = s_width / s_hegith
+                    }
+                    self.size = CGSize(width: self.width / scale, height: self.height)
                     self.image = img
                     completion?(.success(img))
                 } catch {
@@ -249,6 +268,14 @@ extension UIImageView {
             UIImage.fetchImage(with: url, thumbnail: thumbnail) { [weak self] result in
                 switch result {
                 case .success(let img):
+                    let scale: CGFloat
+                    switch thumbnail.scale {
+                    case .auto:
+                        scale = img.size.width / img.size.height
+                    case .scale(let s_width, let s_hegith):
+                        scale = s_width / s_hegith
+                    }
+                    self?.size = CGSize(width: (self?.width ?? 0) / scale, height: (self?.height ?? 0))
                     self?.image = img
                     break
                 case .failure(let error):

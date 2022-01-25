@@ -223,9 +223,7 @@ extension UIWindow {
                 
             }else {
                 
-                return app.windows
-                    .filter { $0.isKeyWindow }
-                    .first
+                return app.windows.first(where: { $0.isKeyWindow })
             }
             
         }else {
@@ -304,7 +302,7 @@ extension UIColor {
         var argbHex = argbHexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
         if argbHex.hasPrefix("#") {
             guard let fixedHex = argbHex[(1..<argbHex.count-1)] else { return nil }
-            if fixedHex.count != 6 && fixedHex.count != 8 {
+            if fixedHex.count != 6 || fixedHex.count != 8 {
                 return nil
             }
             argbHex = fixedHex
