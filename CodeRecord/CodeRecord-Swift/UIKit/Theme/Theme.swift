@@ -106,7 +106,7 @@ public struct RichTextStyle: ThemeStyle {
 public struct StateStyle: ThemeStyle {
     
     public var selector: Selector
-    public var params: [UInt:Any]?
+    public var params: [UInt : Any]?
     
     public init(selector: Selector) {
         self.selector = selector
@@ -228,6 +228,8 @@ open class ThemeManager {
     }
 }
 
+//MARK: UIKit控件扩展
+
 extension UIBarItem: ThemeUpdatable {
     
     open func theme_set(image: ImageStyle, for style: String, in scene: Any) {
@@ -293,6 +295,17 @@ extension UINavigationBar {
     
     @objc open override func theme_effect(for style: String, theme: AnyObject?) {
         super.theme_effect(for: style, theme: theme)
+        guard let theme0 = theme as? Theme else { return }
+        if let barStyleProperty = theme0.property as? ReferenceWritableKeyPath<UINavigationBar, UIBarStyle>,
+           let barStyle = theme0.style.toAttribute() as? UIBarStyle {
+            self[keyPath: barStyleProperty] = barStyle
+        }
+        if let barTintColorProperty = theme0.property as? ReferenceWritableKeyPath<UINavigationBar, UIColor?> {
+            self[keyPath: barTintColorProperty] = theme0.style.toAttribute() as? UIColor
+        }
+        if let titleTextAttributesProperty = theme0.property as? ReferenceWritableKeyPath<UINavigationBar, Dictionary<NSAttributedString.Key,Any>?> {
+            self[keyPath: titleTextAttributesProperty] = theme0.style.toAttribute() as? Dictionary<NSAttributedString.Key,Any>
+        }
     }
 }
 
@@ -306,9 +319,7 @@ extension UIView: ThemeUpdatable {
     open func theme_clean(includingSubviews: Bool = true, in scene: Any) {
         let manager = ThemeManager.shared
         manager.clean(for: self, in: scene)
-        subviews.forEach { subview in
-            manager.clean(for: subview, in: scene)
-        }
+        subviews.forEach { manager.clean(for: $0, in: scene) }
     }
     
     @objc open func theme_effect(for style: String, theme: AnyObject?) {
@@ -355,5 +366,67 @@ extension UILabel {
         if let fontProperty = theme0.property as? ReferenceWritableKeyPath<UILabel, UIFont?> {
             self[keyPath: fontProperty] = (theme0.style as? FontStyle)?.toAttribute() as? UIFont
         }
+    }
+}
+
+extension UIButton {
+    
+    open func theme_set(titleColor: ColorStyle,
+                        state: UIControl.State,
+                        for style: String,
+                        in scene: Any) {
+        var stateStyle = StateStyle(selector: #selector(setTitleColor(_:for:)))
+        stateStyle.params = [state.rawValue : titleColor]
+        let theme = Theme(style: stateStyle)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
+    }
+    
+    open func theme_set(title: String,
+                        state: UIControl.State,
+                        for style: String,
+                        in scene: Any) {
+        var stateStyle = StateStyle(selector: #selector(setTitle(_:for:)))
+        stateStyle.params = [state.rawValue : title]
+        let theme = Theme(style: stateStyle)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
+    }
+    
+    open func theme_set(attributedTitle: RichTextStyle,
+                        state: UIControl.State,
+                        for style: String,
+                        in scene: Any) {
+        var stateStyle = StateStyle(selector: #selector(setAttributedTitle(_:for:)))
+        stateStyle.params = [state.rawValue : attributedTitle]
+        let theme = Theme(style: stateStyle)
+        ThemeManager.shared.set(theme: theme, style: style, for: self, in: scene)
+    }
+    
+    open override func theme_effect(for style: String, theme: AnyObject?) {
+        super.theme_effect(for: style, theme: theme)
+        guard let theme0 = theme as? Theme else { return }
+        
+        if let stateStyle = theme0.style as? StateStyle,
+           responds(to: stateStyle.selector) {
+            let params = stateStyle.params
+            let selector = stateStyle.selector
+            if selector == #selector(setTitle(_:for:)) {
+                params?.forEach { setTitle($1 as? String, for: UIControl.State(rawValue: $0)) }
+            }
+            if selector == #selector(setTitleColor(_:for:)) {
+                params?.forEach {
+                    let colorStyle = $1 as? ColorStyle
+                    let color = colorStyle?.toAttribute() as? UIColor
+                    setTitleColor(color, for: UIControl.State(rawValue: $0))
+                }
+            }
+            if selector == #selector(setAttributedTitle(_:for:)) {
+                params?.forEach {
+                    let richTextStyle = $1 as? RichTextStyle
+                    let attributedText = richTextStyle?.toAttribute() as? NSAttributedString
+                    setAttributedTitle(attributedText, for: UIControl.State(rawValue: $0))
+                }
+            }
+        }
+        
     }
 }

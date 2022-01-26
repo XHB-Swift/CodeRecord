@@ -8,6 +8,11 @@
 
 import UIKit
 
+struct Request {
+    
+    @Path(root: "https://github.com") var urlStringComponent: String
+}
+
 class InterpotaionStringDemoViewController: UIViewController {
     
     let label = UILabel()
@@ -22,11 +27,15 @@ class InterpotaionStringDemoViewController: UIViewController {
               Hello \("Jack", .color(.red))!
               Go here \("learn more about String Interpolation", .link("https://github.com/apple/swift-evolution/blob/master/proposals/0228-fix-expressiblebystringinterpolation.md"),
                   .color(.blue),
-                  .bgColor(.init(hexString: "f98ad0")!))
+                  .bgColor("f98ad0"))
         """
         label.attributedText = attrString.attributedString
         label.numberOfLines = 0
         label.sizeToFit()
+        
+        var request = Request()
+        request.urlStringComponent = "XHB-Swift/CodeRecord"
+        print("request.url = \(request.urlStringComponent)")
     }
     
     override func viewWillLayoutSubviews() {
