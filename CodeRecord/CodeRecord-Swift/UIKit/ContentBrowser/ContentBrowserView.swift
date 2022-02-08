@@ -217,16 +217,15 @@ open class ContentBrowserViewModel<P: ContentBrowserPageData>: NSObject, UIColle
     }
     
     open func append(_ content: P) {
-        contents.append(content)
-        realContentCount = contents.count
-        collectionView?.reloadData()
+        append([content])
     }
     
     open func append(_ contentArr: [P]) {
         if contentArr.isEmpty { return }
+        let items = (realContentCount..<realContentCount + contentArr.count).map { IndexPath(item: $0, section: 0) }
         contents.append(contentsOf: contentArr)
         realContentCount = contents.count
-        collectionView?.reloadData()
+        collectionView?.insertItems(at: items)
     }
     
     open func scroll(to page: Int) {
@@ -340,13 +339,13 @@ open class ContentBrowserView<P: ContentBrowserPageData>: UIView, UICollectionVi
     }
 }
 
-//MARK: 按通用封装
-
 extension String {
     
-    public static let clickEmptyArea = "ContentBrowserViewImageCell.click.empty"
-    public static let clickContentArea = "ContentBrowserViewImageCell.click.content"
+    public static let clickEmptyArea = "ContentBrowserViewCell.click.empty"
+    public static let clickContentArea = "ContentBrowserViewCell.click.content"
 }
+
+//MARK: 按通用封装
 
 open class ContentBrowserViewImageCell<P: ContentBrowserPageData>: ContentBrowserViewCell<P>,
                                                                    UIScrollViewDelegate,
