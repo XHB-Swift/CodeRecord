@@ -254,7 +254,7 @@ extension UIImageView {
                     case .auto:
                         scale = img.size.width / img.size.height
                     case .scale(let s_width, let s_hegith):
-                        scale = s_width / s_hegith
+                        scale = s_hegith > 0 ? s_width / s_hegith : 1
                     }
                     self.size = CGSize(width: self.width / scale, height: self.height)
                     self.image = img
@@ -273,7 +273,7 @@ extension UIImageView {
                     case .auto:
                         scale = img.size.width / img.size.height
                     case .scale(let s_width, let s_hegith):
-                        scale = s_width / s_hegith
+                        scale = s_hegith > 0 ? s_width / s_hegith : 1
                     }
                     self?.size = CGSize(width: (self?.width ?? 0) / scale, height: (self?.height ?? 0))
                     self?.image = img

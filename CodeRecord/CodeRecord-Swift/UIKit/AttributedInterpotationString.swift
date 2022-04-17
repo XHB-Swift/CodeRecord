@@ -70,8 +70,14 @@ extension AttributedInterpotationString {
         public static func color(_ color: UIColor) -> Style {
             return Style(attributes: [.foregroundColor : color])
         }
+        public static func color(_ colorString: String, _ defaultColor: UIColor = .black) -> Style {
+            return .color(UIColor(argbHexString: colorString) ?? defaultColor)
+        }
         public static func bgColor(_ color: UIColor) -> Style {
             return Style(attributes: [.backgroundColor : color])
+        }
+        public static func bgColor(_ colorString: String, _ defaultColor: UIColor = .black) -> Style {
+            return .bgColor(UIColor(argbHexString: colorString) ?? defaultColor)
         }
         public static func link(_ link: URL) -> Style {
             return Style(attributes: [.link : link])
@@ -85,6 +91,9 @@ extension AttributedInterpotationString {
                 .underlineStyle : style.rawValue,
                 .underlineColor : color,
             ])
+        }
+        public static func underline(_ colorString: String, _ defaultColor: UIColor = .black, _ style: NSUnderlineStyle) -> Style {
+            return .underline(UIColor(argbHexString: colorString) ?? defaultColor, style)
         }
         public static func alignment(_ alignment: NSTextAlignment) -> Style {
             let ps  = NSMutableParagraphStyle()

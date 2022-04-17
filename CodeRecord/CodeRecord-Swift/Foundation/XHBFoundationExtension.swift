@@ -334,3 +334,23 @@ extension URLSession {
     }
     
 }
+
+@propertyWrapper
+struct Path {
+    
+    let root: String
+    private var absolutePath = ""
+    var wrappedValue: String {
+        get {
+            return absolutePath
+        }
+        set {
+            absolutePath = "\(root)/\(newValue)"
+        }
+    }
+    
+    init(root: String) {
+        self.root = root
+    }
+    
+}
