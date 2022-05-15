@@ -6,7 +6,7 @@
 //  Copyright © 2021 谢鸿标. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CryptoKit
 import CommonCrypto
 
@@ -100,11 +100,36 @@ extension Double {
     public static let pi_4 = pi / 4
     public static let pi_6 = pi / 6
     public static let m_2_pi = pi * 2
+    
+    public var degree: Self {
+        return self * 180.0 / Self.pi
+    }
+    
+    public var radian: Self {
+        return self * Self.pi / 180.0
+    }
 }
 
-extension Timer {
+extension Float {
     
-    public typealias TimerUpdateAction = (TimeInterval)->Void
+    public static let pi_2 = pi / 2
+    public static let pi_3 = pi / 3
+    public static let pi_4 = pi / 4
+    public static let pi_6 = pi / 6
+    public static let m_2_pi = pi * 2
+    
+    public var degree: Self {
+        return self * 180.0 / Self.pi
+    }
+    
+    public var radian: Self {
+        return self * Self.pi / 180.0
+    }
+}
+
+public typealias TimerUpdateAction = (TimeInterval)->Void
+
+extension Timer {
     
     public class func scheduled(interval: TimeInterval,
                                 loopInCommonModes: Bool,
@@ -127,6 +152,39 @@ extension Timer {
     @objc private class func timerAction(_ sender: Timer) {
         guard let action = sender.userInfo as? TimerUpdateAction else { return }
         action(sender.timeInterval)
+    }
+}
+
+extension CADisplayLink {
+    
+    private static var UpdatedActionKey: Void?
+    
+    private var updateAction: TimerUpdateAction? {
+        set {
+            if newValue == nil {
+                print("Set CADisplayLink updateAction is nil")
+            }
+            objc_setAssociatedObject(self, &CADisplayLink.UpdatedActionKey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+        get {
+            let action = objc_getAssociatedObject(self, &CADisplayLink.UpdatedActionKey) as? TimerUpdateAction
+            if action == nil {
+                print("Get CADisplayLink updateAction is nil")
+            }
+            return action
+        }
+    }
+    
+    public class func scheduled(loopInCommonModes: Bool,
+                               action: @escaping TimerUpdateAction) -> CADisplayLink {
+        let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkAction(_:)))
+        displayLink.updateAction = action
+        displayLink.add(to: .current, forMode: loopInCommonModes ? .common : .default)
+        return displayLink
+    }
+    
+    @objc private class func displayLinkAction(_ sender: CADisplayLink) {
+        sender.updateAction?(sender.duration)
     }
 }
 
@@ -195,71 +253,31 @@ struct Clamped<T: Comparable> {
 
 extension Dictionary where Key == String {
     
-    public struct StringKeyPath {
+    public func value(for keyPath: String, seperator: String = ".") -> Value? {
         
-        public var seperator = "."
-        public var keyPathString = ""
-        private(set) var keys = Array<String>()
+        let keyArray = keyPath.components(separatedBy: seperator)
         
-        public init(keyPath: String, seperator: String = ".") {
+        var arrayIterator = keyArray.makeIterator()
+        var currentKey = arrayIterator.next()
+        var nextDict: Self? = self
+        var targetValue: Value? = nil
+        while currentKey != nil {
             
-            self.seperator = seperator
-            self.keyPathString = keyPath
-            self.keys = keyPath.components(separatedBy: seperator)
-        }
-        
-        public init(keys: [String]) {
-            self.keys = keys
-        }
-        
-        public func next() -> (key: String, path: StringKeyPath)? {
-            if keys.isEmpty { return nil }
-            var nextKeys = keys
-            let key = nextKeys.removeFirst()
-            return (key: key, path: StringKeyPath(keys: nextKeys))
-        }
-        
-    }
-    
-    public func value(for keyPath: StringKeyPath) -> Value? {
-        
-        switch keyPath.next() {
-        case nil:
-            return nil
-        case let (key, path)? where path.keys.isEmpty:
-            return self[key]
-        case let (key, path)?:
-            switch self[key] {
-            case let dict as Self:
-                return dict.value(for: path)
-            default:
-                return nil
+            if let k = currentKey {
+                targetValue = nextDict?[k]
+                if targetValue is Self {
+                    nextDict = targetValue as? Self
+                }
             }
+            currentKey = arrayIterator.next()
         }
         
+        return targetValue
     }
     
-    public mutating func set(value: Value?, for keyPath: StringKeyPath) {
+    subscript(keyPath: String, seperator: String = ".") -> Value? {
         
-        switch keyPath.next() {
-        case nil:
-            return
-        case let (key, path)? where path.keys.isEmpty:
-            self[key] = value
-        case let (key, path)?:
-            switch self[key] {
-            case var dict as Self:
-                dict.set(value: value, for: path)
-            default:
-                return
-            }
-        }
-    }
-    
-    subscript(keyPath: String, keyPathSeperator: String = ".") -> Value? {
-        
-        get { value(for: StringKeyPath(keyPath: keyPath, seperator: keyPathSeperator)) }
-        set { set(value: newValue, for: StringKeyPath(keyPath: keyPath, seperator: keyPathSeperator)) }
+        get { value(for: keyPath, seperator: seperator) }
     }
 }
 

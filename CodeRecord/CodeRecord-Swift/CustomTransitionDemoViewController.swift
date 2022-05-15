@@ -11,6 +11,7 @@ import UIKit
 class ViewController1: UIViewController {
     
     var btn: UIButton?
+    var testView: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,19 @@ class ViewController1: UIViewController {
             button1.origin = CGPoint(x: button.right + 30, y: button.y)
             view.addSubview(button1)
         }
+        
+        let testButton = UIButton(type: .custom)
+        testButton.setTitle("开启动画", for: .normal)
+        testButton.setTitleColor(.black, for: .normal)
+        testButton.addTarget(self, action: #selector(testButtonAction(_:)), for: .touchUpInside)
+        testButton.sizeToFit()
+        testButton.origin = CGPoint(x: 50, y: 200)
+        view.addSubview(testButton)
+        
+        let testView = UIView(frame: CGRect(x: 150, y: 200, width: 100, height: 100))
+        testView.backgroundColor = .orange
+        view.addSubview(testView)
+        self.testView = testView
     }
     
     @objc func btnAction(_ sender: UIButton) {
@@ -45,6 +59,13 @@ class ViewController1: UIViewController {
     
     @objc func btn1Action(_ sender: UIButton) {
         navigationController?.pushViewController(ViewController2(), animated: true)
+    }
+    
+    @objc func testButtonAction(_ sender: UIButton) {
+        self.testView?.tweenAnimation(for: \UIView.backgroundColor,
+                                      duration: 1.5,
+                                      easing: .InOut.bounce,
+                                      to: UIColor(hexString: "9B30FF")!)
     }
 }
 
@@ -153,7 +174,7 @@ class CustomTransitionDemoViewController: UIViewController {
     @objc func jumpButtonAction(_ sender: UIButton) {
         let halfWindowConfig = CustomModalDirectionTransitioningConfiguration(direction: .bottom,
                                                                               displayedSize: CGSize(width: view.width,
-                                                                                                    height: view.height / 2))
+                                                                                                    height: view.height))
         halfWindowConfig.duration = 0.3
         halfWindowConfig.isTransitioning = false
 //        presentCustomModal(viewController: UINavigationController(rootViewController: ViewController1()),

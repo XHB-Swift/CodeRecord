@@ -9,6 +9,9 @@
 #import "ViewController.h"
 #import "UIView+XHBLevelWeight.h"
 
+#import "XHBTweenEasing.h"
+#import "UIView+XHBTweenAnimation.h"
+
 //https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7
 
 #define TestImageUrl1 (@"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7")
@@ -108,6 +111,8 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) UIView *testView;
+
 @end
 
 @implementation ViewController
@@ -117,6 +122,10 @@
     
     self.title = @"ViewController";
     self.view.backgroundColor = [UIColor whiteColor];
+    [self test2Code];
+}
+
+- (void)test1Code {
     UISwitch *switchCtrl = [[UISwitch alloc] initWithFrame:(CGRect){(self.view.width-60)/2,50,60,30}];
     switchCtrl.on = NO;
     [switchCtrl addTarget:self action:@selector(switchCtrlAction:) forControlEvents:(UIControlEventValueChanged)];
@@ -160,7 +169,42 @@
         returnButton.y = navButton.bottom + 10;
         [self.view addSubview:returnButton];
     }
+}
+
+- (void)test2Code {
     
+    [self.view addSubview:({
+        
+        UIButton *button = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        
+        [button setTitle:@"开启动画" forState:(UIControlStateNormal)];
+        [button setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [button addTarget:self action:@selector(openAnimationAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [button sizeToFit];
+        button.origin = (CGPoint){50, 100};
+        
+        button;
+    })];
+    
+    [self.view addSubview:({
+        
+        UIView *view = [[UIView alloc] initWithFrame:(CGRect){150,100,100,100}];
+        view.backgroundColor = [UIColor orangeColor];
+        self.testView = view;
+        
+        view;
+    })];
+}
+
+- (void)openAnimationAction:(UIButton *)sender {
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.testView xhb_tweenAnimationForKey:@"alpha"
+                                       duration:5
+                                         easing:[XHBTweenEasing bounceInOut]
+                                       reversed:YES
+                                             to:@(0)];
+    });
 }
 
 - (void)switchCtrlAction:(UISwitch *)sender {

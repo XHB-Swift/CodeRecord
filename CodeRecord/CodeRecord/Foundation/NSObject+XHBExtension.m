@@ -598,6 +598,16 @@ return t;
 
 @implementation CADisplayLink (XHBExtension)
 
++ (instancetype)displayLinkWithAction:(nullable XHBTimeUpdateAction)action
+                      loopCommonModes:(BOOL)loopCommonModes {
+    CADisplayLink *link = [self displayLinkWithTarget:self selector:@selector(displayLinkAction:)];
+    link.action = action;
+    NSRunLoopMode runloopMode = loopCommonModes ? NSRunLoopCommonModes : NSDefaultRunLoopMode;
+    [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:runloopMode];
+    
+    return link;
+}
+
 + (instancetype)displayLinkWithFrameInternal:(NSTimeInterval)timeInterval
                                       action:(nullable XHBTimeUpdateAction)action
                              loopCommonModes:(BOOL)loopCommonModes {
@@ -632,6 +642,67 @@ return t;
 
 - (XHBTimeUpdateAction)action {
     return objc_getAssociatedObject(self, @selector(action));
+}
+
+@end
+
+@implementation NSValue (XHBExtension)
+
+/*
+ 
+ const char *v0_objc_type = v0.objCType;
+ const char *v1_objc_type = v1.objCType;
+ 
+ const char *ch_rect = @encode(CGRect);
+ const char *ch_size = @encode(CGSize);
+ const char *ch_float = @encode(CGFloat);
+ const char *ch_point = @encode(CGPoint);
+ const char *ch_vector = @encode(CGVector);
+ const char *ch_uioffset = @encode(UIOffset);
+ const char *ch_edgeInset = @encode(UIEdgeInsets);
+ const char *ch_transform = @encode(CGAffineTransform);
+ 
+ */
+
+#define XHBValueIsType(t) \
+const char *ch_base = @encode(t);\
+const char *ch_objc = self.objCType;\
+return strcmp(ch_objc, ch_base) == 0;
+
+- (BOOL)isCGRectValue {
+    XHBValueIsType(CGRect)
+}
+
+- (BOOL)isCGSizeValue {
+    XHBValueIsType(CGSize)
+}
+
+- (BOOL)isCGPointValue {
+    XHBValueIsType(CGPoint)
+}
+
+- (BOOL)isCGFloatValue {
+    XHBValueIsType(CGFloat)
+}
+
+- (BOOL)isUIOffsetValue {
+    XHBValueIsType(UIOffset)
+}
+
+- (BOOL)isCGVectorValue {
+    XHBValueIsType(CGVector)
+}
+
+- (BOOL)isUIEdgeInsetsValue {
+    XHBValueIsType(UIEdgeInsets)
+}
+
+- (BOOL)isCATransform3DValue {
+    XHBValueIsType(CATransform3D)
+}
+
+- (BOOL)isCGAffineTransformValue {
+    XHBValueIsType(CGAffineTransform)
 }
 
 @end

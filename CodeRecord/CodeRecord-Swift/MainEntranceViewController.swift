@@ -118,6 +118,23 @@ class MainEntranceViewController: UIViewController {
         view.backgroundColor = .white
         setupSubviews()
         setupEntrances()
+        
+        let testDict = [
+            
+            "key1" : [
+                
+                "key2" : [
+                    
+                    "key3" : "value3"
+                    
+                ]
+                
+            ]
+            
+        ]
+
+        let value = testDict["key1.key2.key3", "."]
+        print("value = \(String(describing: value))")
     }
     
     func setupSubviews() {

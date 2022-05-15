@@ -46,7 +46,7 @@
     config.duration = 0.5;
     config.displayedSize = (CGSize){300,300};
     config.direction = XHBTransitionDirectionCenter;
-    [self customModalPresentViewController:navCtrl configuration:config completion:nil];
+    [self customModalPresentViewController:navCtrl configuration:nil completion:nil];
 }
 
 - (void)clickCustomPopupAction:(UIButton *)sender {

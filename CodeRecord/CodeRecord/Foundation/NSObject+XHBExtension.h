@@ -6,11 +6,14 @@
 //  Copyright © 2021 谢鸿标. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXPORT NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nullable localizedDescription);
+
+#define XHB_WEAK_SELF_DECLARED \
+__weak typeof(self) weakSelf = self;
 
 #define NSErrorMarkFunc(code, desc) \
 NSErrorMake([NSString stringWithFormat:@"%s",__func__], (code), (desc))
@@ -202,9 +205,26 @@ typedef void(^XHBTimeUpdateAction)(NSTimeInterval timeInterval);
 
 @interface CADisplayLink (XHBExtension)
 
++ (instancetype)displayLinkWithAction:(nullable XHBTimeUpdateAction)action
+                      loopCommonModes:(BOOL)loopCommonModes;
+
 + (instancetype)displayLinkWithFrameInternal:(NSTimeInterval)timeInterval
                                       action:(nullable XHBTimeUpdateAction)action
                              loopCommonModes:(BOOL)loopCommonModes;
+
+@end
+
+@interface NSValue (XHBExtension)
+
+- (BOOL)isCGRectValue;
+- (BOOL)isCGSizeValue;
+- (BOOL)isCGFloatValue;
+- (BOOL)isCGPointValue;
+- (BOOL)isUIOffsetValue;
+- (BOOL)isCGVectorValue;
+- (BOOL)isUIEdgeInsetsValue;
+- (BOOL)isCATransform3DValue;
+- (BOOL)isCGAffineTransformValue;
 
 @end
 
