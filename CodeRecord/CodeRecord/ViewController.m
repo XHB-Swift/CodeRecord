@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "UIView+XHBLevelWeight.h"
+#import "NSObject+XHBExtension.h"
 
 #import "XHBTweenEasing.h"
 #import "UIView+XHBTweenAnimation.h"
@@ -16,6 +17,20 @@
 
 #define TestImageUrl1 (@"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7")
 
+@interface Model : NSObject
+
+@property (nonatomic, strong) NSString *str;
+@property (nonatomic, strong) NSNumber *num;
+
+@end
+
+@implementation Model
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"str = %@, num = %@", self.str, self.num];
+}
+
+@end
 
 @interface ViewController1 ()
 
@@ -122,6 +137,44 @@
     
     self.title = @"ViewController";
     self.view.backgroundColor = [UIColor whiteColor];
+    NSArray<Model *> *models = @[
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"a";
+            model.num = @1;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"b";
+            model.num = @2;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"c";
+            model.num = @3;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"d";
+            model.num = @4;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"e";
+            model.num = @5;
+            model;
+        })
+    ];
+    NSArray<NSNumber *> *numbers = [models mapUsingBlock:^id _Nonnull(Model * _Nonnull element) { return element.num; }];
+    NSLog(@"numbers = %@", numbers);
+    NSArray<Model *> *filterModels = [models filterUsingBlock:^BOOL(Model * _Nonnull element) {
+        return [element.num compare:@3] == NSOrderedAscending;
+    }];
+    NSLog(@"filterModels = %@", filterModels);
     [self test2Code];
 }
 

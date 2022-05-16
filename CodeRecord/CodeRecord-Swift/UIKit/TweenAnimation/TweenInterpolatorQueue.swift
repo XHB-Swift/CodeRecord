@@ -106,7 +106,7 @@ extension TweenInterpolatorQueue : TweenSchedulerDelegate {
     
     public func scheduler(_ scheduler: TweenScheduler, didUpdateFor duration: TimeInterval) {
         if self.actions.isEmpty {
-            print("Empty Action")
+            self.stopAnimation()
             return
         }
         self.actions.first?.interpolator.moveTo(time: duration)
@@ -152,7 +152,6 @@ extension UIView {
     }
     
     private func update(value: TweenValue, for keyPath: AnyKeyPath) {
-        print("value = \(value)")
         //背景色
         if let _ = keyPath as? ReferenceWritableKeyPath<UIView, UIColor?> {
             self.backgroundColor = value as? UIColor

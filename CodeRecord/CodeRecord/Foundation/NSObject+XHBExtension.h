@@ -45,6 +45,9 @@ XHB_PROPERTY_DEFINED_READONLY(assign, TYPE, NAME)
 #define XHB_PROPERTY_DEFINED_READONLY_STRONG(TYPE, NAME)\
 XHB_PROPERTY_DEFINED_READONLY(strong, TYPE *, NAME)
 
+typedef id _Nonnull (^NSObjectMapBlock)(id _Nonnull element);
+typedef BOOL(^NSObjectFilterBlock)(id _Nonnull element);
+
 @interface NSObject (XHBExtension)
 
 + (nullable NSData *)archivedDataForObject:(id)object;
@@ -56,6 +59,9 @@ XHB_PROPERTY_DEFINED_READONLY(strong, TYPE *, NAME)
 
 //判断对象是否包含该属性
 - (BOOL)hasPropertyWithName:(NSString *)propertyName;
+
+- (NSArray *)mapUsingBlock:(NSObjectMapBlock)block;
+- (NSArray *)filterUsingBlock:(NSObjectFilterBlock)block;
 
 @end
 

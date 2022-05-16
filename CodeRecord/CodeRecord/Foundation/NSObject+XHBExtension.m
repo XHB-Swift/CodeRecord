@@ -113,6 +113,9 @@ NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nulla
     return [self respondsToSelector:NSSelectorFromString(setterName)];
 }
 
+- (NSArray *)mapUsingBlock:(NSObjectMapBlock)block { return @[]; }
+- (NSArray *)filterUsingBlock:(NSObjectFilterBlock)block { return @[]; }
+
 @end
 
 @implementation NSDate (XHBExtension)
@@ -224,6 +227,46 @@ NSError *NSErrorMake(NSErrorDomain errorDomain, NSInteger code, NSString *_Nulla
         unichar c = [self characterAtIndex:absIdx];
         return [NSString stringWithFormat:@"%c", c];
     }
+}
+
+- (NSArray *)mapUsingBlock:(NSObjectMapBlock)block {
+    NSUInteger length = [self length];
+    if (!block || length == 0) {
+        return @[];
+    }
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:length];
+    NSInteger i = 0;
+    while (i < length) {
+        NSString *s = [self stringAtIndex:i];
+        if (s) {
+            id object = block(s);
+            if (object) {
+                [array addObject:object];
+            }
+        }
+        i += 1;
+    }
+    return [array copy];
+}
+
+- (NSArray *)filterUsingBlock:(NSObjectFilterBlock)block {
+    NSUInteger length = [self length];
+    if (!block || length == 0) {
+        return @[];
+    }
+    NSMutableArray *array = [NSMutableArray array];
+    NSInteger i = 0;
+    while (i < length) {
+        NSString *s = [self stringAtIndex:i];
+        if (s) {
+            BOOL isIncluded = block(s);
+            if (isIncluded) {
+                [array addObject:s];
+            }
+        }
+        i += 1;
+    }
+    return [array copy];
 }
 
 @end
@@ -475,6 +518,35 @@ return t;
     return nil;
 }
 
+- (NSArray *)mapUsingBlock:(NSObjectMapBlock)block {
+    NSUInteger count = [self count];
+    if (!block || count == 0) {
+        return @[];
+    }
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:count];
+    [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        id value = block(@{key:obj});
+        if (!value) { return; }
+        [array addObject:value];
+    }];
+    return [array copy];
+}
+
+- (NSArray *)filterUsingBlock:(NSObjectFilterBlock)block {
+    NSUInteger count = [self count];
+    if (!block || count == 0) {
+        return @[];
+    }
+    NSMutableArray *array = [NSMutableArray array];
+    [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSDictionary *dict = @{key:obj};
+        BOOL isIncluded = block(dict);
+        if (!isIncluded) { return; }
+        [array addObject:dict];
+    }];
+    return [array copy];
+}
+
 @end
 
 @implementation NSMutableDictionary (XHBExtension)
@@ -536,6 +608,35 @@ return t;
 - (nullable id)safeObjectAtRemindedIndex:(NSUInteger)remindedIndex {
     NSUInteger count = [self count];
     return self[remindedIndex % count];
+}
+
+- (NSArray *)mapUsingBlock:(NSObjectMapBlock)block {
+    NSInteger count = [self count];
+    if (!block || count == 0) {
+        return @[];
+    }
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:count];
+    [self enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        id value = block(obj);
+        if (!value) { return; }
+        [array addObject:value];
+    }];
+    
+    return [array copy];
+}
+
+- (NSArray *)filterUsingBlock:(NSObjectFilterBlock)block {
+    NSInteger count = [self count];
+    if (!block || count == 0) {
+        return @[];
+    }
+    NSMutableArray *array = [NSMutableArray array];
+    [self enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        BOOL isIncluded = block(obj);
+        if (!isIncluded) { return; }
+        [array addObject:obj];
+    }];
+    return [array copy];
 }
 
 @end
