@@ -28,6 +28,8 @@
 		42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3E26F47F31004F4B33 /* UIBarItem+XHBTheme.m */; };
 		42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */; };
 		42C95A4626F49DB1004F4B33 /* UIImageView+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */; };
+		42E77C442834972A00045F3D /* XHBStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C432834972A00045F3D /* XHBStateMachine.m */; };
+		42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C4C2834A48700045F3D /* XHBTransition.m */; };
 		42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
@@ -96,6 +98,10 @@
 		42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XHBWebCache.m"; sourceTree = "<group>"; };
 		42C95A4426F49DB1004F4B33 /* UIImageView+XHBWebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+XHBWebCache.h"; sourceTree = "<group>"; };
 		42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+XHBWebCache.m"; sourceTree = "<group>"; };
+		42E77C422834972A00045F3D /* XHBStateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBStateMachine.h; sourceTree = "<group>"; };
+		42E77C432834972A00045F3D /* XHBStateMachine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBStateMachine.m; sourceTree = "<group>"; };
+		42E77C4B2834A48700045F3D /* XHBTransition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTransition.h; sourceTree = "<group>"; };
+		42E77C4C2834A48700045F3D /* XHBTransition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBTransition.m; sourceTree = "<group>"; };
 		42F74733278EC73500DD503C /* UIView+XHBLevelWeight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBLevelWeight.h"; sourceTree = "<group>"; };
 		42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBLevelWeight.m"; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
@@ -228,6 +234,17 @@
 			children = (
 			);
 			path = Form;
+			sourceTree = "<group>";
+		};
+		42E77C412834970E00045F3D /* StateMachine */ = {
+			isa = PBXGroup;
+			children = (
+				42E77C422834972A00045F3D /* XHBStateMachine.h */,
+				42E77C432834972A00045F3D /* XHBStateMachine.m */,
+				42E77C4B2834A48700045F3D /* XHBTransition.h */,
+				42E77C4C2834A48700045F3D /* XHBTransition.m */,
+			);
+			path = StateMachine;
 			sourceTree = "<group>";
 		};
 		C6368BD026D028A00099A7D3 /* Theme */ = {
@@ -378,6 +395,7 @@
 		C651ADA324485954004E76A8 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				42E77C412834970E00045F3D /* StateMachine */,
 				42A15D6B26EF255C009E51FA /* NSObject+XHBExtension.h */,
 				42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */,
 			);
@@ -582,6 +600,7 @@
 				C651AD9124485767004E76A8 /* ViewController.m in Sources */,
 				42A15D7426F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m in Sources */,
 				C651AD8B24485767004E76A8 /* AppDelegate.m in Sources */,
+				42E77C442834972A00045F3D /* XHBStateMachine.m in Sources */,
 				42C95A4626F49DB1004F4B33 /* UIImageView+XHBWebCache.m in Sources */,
 				C6C7726A2809E7BB009FEEB4 /* HBLineGradientProgressView.m in Sources */,
 				C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */,
@@ -593,6 +612,7 @@
 				C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */,
 				C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */,
 				C66F6A0A282ED85A00D80CF9 /* XHBTweenInterpolatorQueue.m in Sources */,
+				42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

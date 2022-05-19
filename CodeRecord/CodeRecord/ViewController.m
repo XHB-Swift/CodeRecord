@@ -13,6 +13,8 @@
 #import "XHBTweenEasing.h"
 #import "UIView+XHBTweenAnimation.h"
 
+#import "XHBStateMachine.h"
+
 //https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7
 
 #define TestImageUrl1 (@"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7")
@@ -127,6 +129,7 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) UIView *testView;
+@property (nonatomic, strong) XHBStateMachine *stateMachine;
 
 @end
 
@@ -137,45 +140,7 @@
     
     self.title = @"ViewController";
     self.view.backgroundColor = [UIColor whiteColor];
-    NSArray<Model *> *models = @[
-        ({
-            Model *model = [[Model alloc] init];
-            model.str = @"a";
-            model.num = @1;
-            model;
-        }),
-        ({
-            Model *model = [[Model alloc] init];
-            model.str = @"b";
-            model.num = @2;
-            model;
-        }),
-        ({
-            Model *model = [[Model alloc] init];
-            model.str = @"c";
-            model.num = @3;
-            model;
-        }),
-        ({
-            Model *model = [[Model alloc] init];
-            model.str = @"d";
-            model.num = @4;
-            model;
-        }),
-        ({
-            Model *model = [[Model alloc] init];
-            model.str = @"e";
-            model.num = @5;
-            model;
-        })
-    ];
-    NSArray<NSNumber *> *numbers = [models mapUsingBlock:^id _Nonnull(Model * _Nonnull element) { return element.num; }];
-    NSLog(@"numbers = %@", numbers);
-    NSArray<Model *> *filterModels = [models filterUsingBlock:^BOOL(Model * _Nonnull element) {
-        return [element.num compare:@3] == NSOrderedAscending;
-    }];
-    NSLog(@"filterModels = %@", filterModels);
-    [self test2Code];
+    [self test4Code];
 }
 
 - (void)test1Code {
@@ -249,6 +214,78 @@
     })];
 }
 
+- (void)test3Code {
+    NSArray<Model *> *models = @[
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"a";
+            model.num = @1;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"b";
+            model.num = @2;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"c";
+            model.num = @3;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"d";
+            model.num = @4;
+            model;
+        }),
+        ({
+            Model *model = [[Model alloc] init];
+            model.str = @"e";
+            model.num = @5;
+            model;
+        })
+    ];
+    NSArray<NSNumber *> *numbers = [models mapUsingBlock:^id _Nonnull(Model * _Nonnull element) { return element.num; }];
+    NSLog(@"numbers = %@", numbers);
+    NSArray<Model *> *filterModels = [models filterUsingBlock:^BOOL(Model * _Nonnull element) {
+        return [element.num compare:@3] == NSOrderedAscending;
+    }];
+    NSLog(@"filterModels = %@", filterModels);
+}
+
+- (void)test4Code {
+    
+    [self.view addSubview:({
+        
+        UIButton *testMachineButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
+        
+        [testMachineButton setTitle:@"Normal和Selected互相切换" forState:(UIControlStateNormal)];
+        [testMachineButton setTitleColor:[UIColor blackColor] forState:(UIControlStateNormal)];
+        [testMachineButton addTarget:self action:@selector(switchNormalSelectedAction:) forControlEvents:(UIControlEventTouchUpInside)];
+        [testMachineButton sizeToFit];
+        testMachineButton.origin = (CGPoint){50,100};
+        
+        testMachineButton;
+    })];
+    
+    [self.stateMachine registerEvent:@"UIButtonStateMachine"
+                                from:@0
+                                  to:@1
+                          completion:^(id state) {
+        NSLog(@"state = %@", state);
+    }];
+    [self.stateMachine registerEvent:@"UIButtonStateMachine"
+                                from:@1
+                                  to:@0
+                          completion:^(id state) {
+        NSLog(@"state = %@", state);
+    }];
+}
+
+#pragma mark - Button Actions
+
 - (void)openAnimationAction:(UIButton *)sender {
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -273,6 +310,21 @@
 
 - (void)returnButtonAction:(UIButton *)sender {
     [self.navigationController disapear];
+}
+
+- (void)switchNormalSelectedAction:(UIButton *)sender {
+    [self.stateMachine triggerByEvent:@"UIButtonStateMachine"];
+}
+
+#pragma mark - Getter
+
+- (XHBStateMachine *)stateMachine {
+    
+    if (!_stateMachine) {
+        _stateMachine = [XHBStateMachine stateMachineWithState:@0];
+    }
+    
+    return _stateMachine;
 }
 
 @end
