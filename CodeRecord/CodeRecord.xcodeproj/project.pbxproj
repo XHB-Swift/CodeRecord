@@ -31,6 +31,8 @@
 		42E77C442834972A00045F3D /* XHBStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C432834972A00045F3D /* XHBStateMachine.m */; };
 		42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C4C2834A48700045F3D /* XHBTransition.m */; };
 		42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */; };
+		8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */; };
+		C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635B9B6283540CF00F77F1E /* StateMachine.swift */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -104,6 +106,8 @@
 		42E77C4C2834A48700045F3D /* XHBTransition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBTransition.m; sourceTree = "<group>"; };
 		42F74733278EC73500DD503C /* UIView+XHBLevelWeight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBLevelWeight.h"; sourceTree = "<group>"; };
 		42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBLevelWeight.m"; sourceTree = "<group>"; };
+		8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachineViewController.swift; sourceTree = "<group>"; };
+		C635B9B6283540CF00F77F1E /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 				429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */,
 				42AA9859277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift */,
 				C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */,
+				8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */,
 			);
 			path = "CodeRecord-Swift";
 			sourceTree = "<group>";
@@ -305,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */,
+				C635B9B6283540CF00F77F1E /* StateMachine.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -571,11 +577,13 @@
 				42C95A3626F31B7F004F4B33 /* CustomTransitioning.swift in Sources */,
 				4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */,
 				C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */,
+				8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */,
 				429BB2E426E8BAC300D3667C /* Theme.swift in Sources */,
 				42AA985A277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift in Sources */,
 				42AA9858277465D500C5DF89 /* AttributedInterpotationString.swift in Sources */,
 				4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */,
 				C66F6A1A2830F78700D80CF9 /* TweenInterpolator.swift in Sources */,
+				C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */,
 				4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
