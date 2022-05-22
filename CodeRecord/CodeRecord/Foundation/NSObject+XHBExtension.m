@@ -715,11 +715,7 @@ return t;
     
     CADisplayLink *link = [self displayLinkWithTarget:self selector:@selector(displayLinkAction:)];
     link.action = action;
-    if (@available(iOS 10, *)) {
-        link.preferredFramesPerSecond = timeInterval;
-    }else {
-        link.frameInterval = timeInterval;
-    }
+    link.preferredFramesPerSecond = timeInterval;
     NSRunLoopMode runloopMode = loopCommonModes ? NSRunLoopCommonModes : NSDefaultRunLoopMode;
     [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:runloopMode];
     
@@ -729,11 +725,7 @@ return t;
 + (void)displayLinkAction:(CADisplayLink *)sender {
     XHBTimeUpdateAction action = sender.action;
     if (action) {
-        if (@available(iOS 10, *)) {
-            action([sender preferredFramesPerSecond]);
-        }else {
-            action([sender frameInterval]);
-        }
+        action([sender preferredFramesPerSecond]);
     }
 }
 

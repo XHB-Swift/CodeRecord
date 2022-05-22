@@ -821,7 +821,7 @@
 				DEVELOPMENT_TEAM = Y4K7BN45NN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CodeRecord/CodeRecordGlobal.pch";
 				INFOPLIST_FILE = CodeRecord/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -840,7 +840,7 @@
 				DEVELOPMENT_TEAM = Y4K7BN45NN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CodeRecord/CodeRecordGlobal.pch";
 				INFOPLIST_FILE = CodeRecord/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
