@@ -11,7 +11,10 @@ import UIKit
 class StateMachineViewController : UIViewController {
     
     var button: UIButton?
+    var textField: UITextField?
     let stateMachine = StateMachine<String,Int>(state: 0)
+    
+    var inputText = Trimmed("")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,12 @@ class StateMachineViewController : UIViewController {
         btn.addTarget(self, action: #selector(switchStateAction(_:)), for: .touchUpInside);
         view.addSubview(btn)
         self.button = btn
+        
+        let txf = UITextField(frame: CGRect(x: 50, y: 250, width: 100, height: 30))
+        txf.delegate = self
+        txf.borderStyle = .roundedRect
+        view.addSubview(txf)
+        self.textField = txf
         
         stateMachine.register(event: "SwitchStateEvent",
                               from: Int(UIButton.State.normal.rawValue),
@@ -45,4 +54,13 @@ class StateMachineViewController : UIViewController {
     @objc func switchStateAction(_ sender: UIButton) {
         stateMachine.trigger(event: "SwitchStateEvent")
     }
+}
+
+extension StateMachineViewController : UITextFieldDelegate {
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.inputText.wrappedValue = textField.text ?? ""
+        print("self.inputText = \(String(describing: self.inputText))")
+    }
+    
 }

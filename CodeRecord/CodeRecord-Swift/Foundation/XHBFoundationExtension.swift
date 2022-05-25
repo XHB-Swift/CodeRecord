@@ -239,18 +239,6 @@ extension KeyPathEditable {
     }
 }
 
-
-@propertyWrapper
-struct Clamped<T: Comparable> {
-    
-    let wrappedValue: T
-    
-    init(wrappedValue: T, _ range: ClosedRange<T>) {
-        self.wrappedValue = min(max(wrappedValue, range.lowerBound), range.upperBound)
-    }
-    
-}
-
 extension Dictionary where Key == String {
     
     public func value(for keyPath: String, seperator: String = ".") -> Value? {
@@ -349,6 +337,46 @@ extension URLSession {
         }, onCancel: {
             
         })
+    }
+    
+}
+
+//MARK: 属性包装器
+
+@propertyWrapper
+struct Clamped<T: Comparable> {
+    
+    private var value: T
+    private var validRange: ClosedRange<T>
+    
+    public var wrappedValue: T {
+        set {
+            value = min(max(newValue, validRange.lowerBound), validRange.upperBound)
+        }
+        get { return value }
+    }
+    
+    init(wrappedValue: T, range: ClosedRange<T>) {
+        self.value = wrappedValue
+        self.validRange = range
+    }
+    
+}
+
+@propertyWrapper
+struct Trimmed {
+    
+    private var value = ""
+    
+    var wrappedValue: String {
+        get { return value }
+        set {
+            value = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+    
+    init(_ value: String) {
+        self.value = value
     }
     
 }
