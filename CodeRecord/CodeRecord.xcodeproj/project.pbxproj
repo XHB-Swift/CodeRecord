@@ -63,6 +63,8 @@
 		C66F6A1C2831091F00D80CF9 /* TweenScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A1B2831091F00D80CF9 /* TweenScheduler.swift */; };
 		C66F6A1E2831100200D80CF9 /* TweenInterpolatorQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */; };
 		C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */; };
+		C6AA556B283FC8A800829B52 /* NSObject+XHBFileDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */; };
+		C6AA556D28411EFC00829B52 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556C28411EFC00829B52 /* FileDownloader.swift */; };
 		C6C772672809DFEA009FEEB4 /* HBGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */; };
 		C6C7726A2809E7BB009FEEB4 /* HBLineGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */; };
 		C6C7726D280AA53C009FEEB4 /* GradientProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7726C280AA53C009FEEB4 /* GradientProgressView.swift */; };
@@ -160,6 +162,9 @@
 		C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenInterpolatorQueue.swift; sourceTree = "<group>"; };
 		C6A5D8A226EBC36F00420BC1 /* XHBThemeAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBThemeAttribute.h; sourceTree = "<group>"; };
 		C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBThemeAttribute.m; sourceTree = "<group>"; };
+		C6AA5569283FC8A800829B52 /* NSObject+XHBFileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+XHBFileDownloader.h"; sourceTree = "<group>"; };
+		C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XHBFileDownloader.m"; sourceTree = "<group>"; };
+		C6AA556C28411EFC00829B52 /* FileDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		C6C772652809DFEA009FEEB4 /* HBGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBGradientProgressView.h; sourceTree = "<group>"; };
 		C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBGradientProgressView.m; sourceTree = "<group>"; };
 		C6C772682809E7BB009FEEB4 /* HBLineGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBLineGradientProgressView.h; sourceTree = "<group>"; };
@@ -311,6 +316,7 @@
 			children = (
 				C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */,
 				C635B9B6283540CF00F77F1E /* StateMachine.swift */,
+				C6AA556C28411EFC00829B52 /* FileDownloader.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -401,6 +407,7 @@
 		C651ADA324485954004E76A8 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				C6AA5568283FC84800829B52 /* FileDownloader */,
 				42E77C412834970E00045F3D /* StateMachine */,
 				42A15D6B26EF255C009E51FA /* NSObject+XHBExtension.h */,
 				42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */,
@@ -435,6 +442,15 @@
 				C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */,
 			);
 			path = TweenAnimation;
+			sourceTree = "<group>";
+		};
+		C6AA5568283FC84800829B52 /* FileDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				C6AA5569283FC8A800829B52 /* NSObject+XHBFileDownloader.h */,
+				C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */,
+			);
+			path = FileDownloader;
 			sourceTree = "<group>";
 		};
 		C6C772642809DFCA009FEEB4 /* GradientProgressView */ = {
@@ -583,6 +599,7 @@
 				42AA9858277465D500C5DF89 /* AttributedInterpotationString.swift in Sources */,
 				4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */,
 				C66F6A1A2830F78700D80CF9 /* TweenInterpolator.swift in Sources */,
+				C6AA556D28411EFC00829B52 /* FileDownloader.swift in Sources */,
 				C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */,
 				4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */,
 			);
@@ -601,6 +618,7 @@
 				C6368BCF26D022990099A7D3 /* UIView+XHBFitSize.m in Sources */,
 				42A15D7126EF82A6009E51FA /* XHBCustomTransitioning.m in Sources */,
 				42C95A3B26F43DD1004F4B33 /* XHBMainEntranceViewController.m in Sources */,
+				C6AA556B283FC8A800829B52 /* NSObject+XHBFileDownloader.m in Sources */,
 				42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */,
 				C6368BCB26D020C50099A7D3 /* UIResponder+XHBRepsonder.m in Sources */,
 				C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */,
