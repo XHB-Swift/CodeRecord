@@ -14,6 +14,7 @@
 #import "UIView+XHBTweenAnimation.h"
 
 #import "XHBStateMachine.h"
+#import "XHBUIBlockObserver.h"
 
 //https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8d8e817580a3bb029b50a4f9bb75e079718534222b4af-RM27w3_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1634462884&t=1668514c3955e3532b6a31f24d83d7a7
 
@@ -130,6 +131,7 @@
 
 @property (nonatomic, strong) UIView *testView;
 @property (nonatomic, strong) XHBStateMachine *stateMachine;
+@property (nonatomic, strong) XHBUIBlockObserver *uiBlockObserver;
 
 @end
 
@@ -141,6 +143,7 @@
     self.title = @"ViewController";
     self.view.backgroundColor = [UIColor whiteColor];
     [self test4Code];
+    [self.uiBlockObserver startMonitoring];
 }
 
 - (void)test1Code {
@@ -325,6 +328,15 @@
     }
     
     return _stateMachine;
+}
+
+- (XHBUIBlockObserver *)uiBlockObserver {
+    
+    if (!_uiBlockObserver) {
+        _uiBlockObserver = [[XHBUIBlockObserver alloc] init];
+    }
+    
+    return _uiBlockObserver;
 }
 
 @end

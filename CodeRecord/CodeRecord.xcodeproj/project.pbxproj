@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		422C615F284DA787004BBA52 /* XHBUIBlockObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C615E284DA787004BBA52 /* XHBUIBlockObserver.m */; };
 		428F87872761ED4600266DE0 /* CustomStyleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428F87862761ED4600266DE0 /* CustomStyleButton.swift */; };
 		4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */; };
 		4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */; };
@@ -28,6 +29,7 @@
 		42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3E26F47F31004F4B33 /* UIBarItem+XHBTheme.m */; };
 		42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */; };
 		42C95A4626F49DB1004F4B33 /* UIImageView+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */; };
+		42DBCD70284EF87E004AA9CC /* XHBBacktraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DBCD6F284EF87E004AA9CC /* XHBBacktraceLogger.m */; };
 		42E77C442834972A00045F3D /* XHBStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C432834972A00045F3D /* XHBStateMachine.m */; };
 		42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C4C2834A48700045F3D /* XHBTransition.m */; };
 		42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */; };
@@ -69,6 +71,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		422C615D284DA787004BBA52 /* XHBUIBlockObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBUIBlockObserver.h; sourceTree = "<group>"; };
+		422C615E284DA787004BBA52 /* XHBUIBlockObserver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBUIBlockObserver.m; sourceTree = "<group>"; };
 		428F87862761ED4600266DE0 /* CustomStyleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyleButton.swift; sourceTree = "<group>"; };
 		4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntranceViewController.swift; sourceTree = "<group>"; };
 		4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionDemoViewController.swift; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 		42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XHBWebCache.m"; sourceTree = "<group>"; };
 		42C95A4426F49DB1004F4B33 /* UIImageView+XHBWebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+XHBWebCache.h"; sourceTree = "<group>"; };
 		42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+XHBWebCache.m"; sourceTree = "<group>"; };
+		42DBCD6E284EF87E004AA9CC /* XHBBacktraceLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBBacktraceLogger.h; sourceTree = "<group>"; };
+		42DBCD6F284EF87E004AA9CC /* XHBBacktraceLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBBacktraceLogger.m; sourceTree = "<group>"; };
 		42E77C422834972A00045F3D /* XHBStateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBStateMachine.h; sourceTree = "<group>"; };
 		42E77C432834972A00045F3D /* XHBStateMachine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBStateMachine.m; sourceTree = "<group>"; };
 		42E77C4B2834A48700045F3D /* XHBTransition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTransition.h; sourceTree = "<group>"; };
@@ -183,6 +189,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		422C615C284DA659004BBA52 /* UIBlockObserver */ = {
+			isa = PBXGroup;
+			children = (
+				422C615D284DA787004BBA52 /* XHBUIBlockObserver.h */,
+				422C615E284DA787004BBA52 /* XHBUIBlockObserver.m */,
+			);
+			path = UIBlockObserver;
+			sourceTree = "<group>";
+		};
 		4294C30726E1D17200F2D97D /* ContentBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,6 +249,15 @@
 			children = (
 			);
 			path = Form;
+			sourceTree = "<group>";
+		};
+		42DBCD6D284EF863004AA9CC /* BacktraceLogger */ = {
+			isa = PBXGroup;
+			children = (
+				42DBCD6E284EF87E004AA9CC /* XHBBacktraceLogger.h */,
+				42DBCD6F284EF87E004AA9CC /* XHBBacktraceLogger.m */,
+			);
+			path = BacktraceLogger;
 			sourceTree = "<group>";
 		};
 		42E77C412834970E00045F3D /* StateMachine */ = {
@@ -369,6 +393,7 @@
 		C651ADA224485884004E76A8 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				422C615C284DA659004BBA52 /* UIBlockObserver */,
 				C66F69FB282EBD2E00D80CF9 /* XHBTweenAnimation */,
 				42C95A4026F480EF004F4B33 /* WebCacheImage */,
 				42A15D6E26EF824D009E51FA /* CustomTransitioning */,
@@ -395,6 +420,7 @@
 		C651ADA324485954004E76A8 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				42DBCD6D284EF863004AA9CC /* BacktraceLogger */,
 				42E77C412834970E00045F3D /* StateMachine */,
 				42A15D6B26EF255C009E51FA /* NSObject+XHBExtension.h */,
 				42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */,
@@ -584,6 +610,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				422C615F284DA787004BBA52 /* XHBUIBlockObserver.m in Sources */,
 				C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */,
 				42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */,
 				C6368BD326D028B20099A7D3 /* UIView+XHBTheme.m in Sources */,
@@ -611,6 +638,7 @@
 				C6368BD926D0298B0099A7D3 /* XHBThemeManager.m in Sources */,
 				C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */,
 				C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */,
+				42DBCD70284EF87E004AA9CC /* XHBBacktraceLogger.m in Sources */,
 				C66F6A0A282ED85A00D80CF9 /* XHBTweenInterpolatorQueue.m in Sources */,
 				42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */,
 			);
