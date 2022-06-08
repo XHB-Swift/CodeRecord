@@ -505,5 +505,9 @@ extension Double {
 extension Default {
     typealias True = Default<Bool.True>
     typealias False = Default<Bool.False>
+    typealias IntZero = Default<Int.Zero>
+    typealias FloatZero = Default<Float.Zero>
+    typealias DoubleZero = Default<Double.Zero>
+    typealias CGFloatZero = Default<CGFloat.Zero>
     typealias EmptyString = Default<String.Empty>
 }

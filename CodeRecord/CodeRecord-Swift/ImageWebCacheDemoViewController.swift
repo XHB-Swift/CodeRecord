@@ -73,8 +73,8 @@ extension UnsplashImageUrl {
 
 fileprivate struct UnsplashImage: Codable {
     
-    @Default<CGFloat.Zero> public var width: CGFloat
-    @Default<CGFloat.Zero> public var height: CGFloat
+    @Default.CGFloatZero public var width: CGFloat
+    @Default.CGFloatZero public var height: CGFloat
     @Default<UnsplashImageUrl.Empty> public var urls: UnsplashImageUrl
 }
 
