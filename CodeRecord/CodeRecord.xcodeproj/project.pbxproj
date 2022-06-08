@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		422C615F284DA787004BBA52 /* XHBUIBlockObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C615E284DA787004BBA52 /* XHBUIBlockObserver.m */; };
 		428F87872761ED4600266DE0 /* CustomStyleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428F87862761ED4600266DE0 /* CustomStyleButton.swift */; };
 		4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */; };
 		4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */; };
@@ -29,10 +28,13 @@
 		42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3E26F47F31004F4B33 /* UIBarItem+XHBTheme.m */; };
 		42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */; };
 		42C95A4626F49DB1004F4B33 /* UIImageView+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */; };
-		42DBCD70284EF87E004AA9CC /* XHBBacktraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DBCD6F284EF87E004AA9CC /* XHBBacktraceLogger.m */; };
+		42DBCD7428503CBE004AA9CC /* XHBBacktraceLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DBCD7228503CBE004AA9CC /* XHBBacktraceLogger.m */; };
+		42DBCD7828503CC8004AA9CC /* XHBUIBlockObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DBCD7628503CC8004AA9CC /* XHBUIBlockObserver.m */; };
 		42E77C442834972A00045F3D /* XHBStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C432834972A00045F3D /* XHBStateMachine.m */; };
 		42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C4C2834A48700045F3D /* XHBTransition.m */; };
 		42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */; };
+		8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */; };
+		C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635B9B6283540CF00F77F1E /* StateMachine.swift */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -63,6 +65,8 @@
 		C66F6A1C2831091F00D80CF9 /* TweenScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A1B2831091F00D80CF9 /* TweenScheduler.swift */; };
 		C66F6A1E2831100200D80CF9 /* TweenInterpolatorQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */; };
 		C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */; };
+		C6AA556B283FC8A800829B52 /* NSObject+XHBFileDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */; };
+		C6AA556D28411EFC00829B52 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556C28411EFC00829B52 /* FileDownloader.swift */; };
 		C6C772672809DFEA009FEEB4 /* HBGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */; };
 		C6C7726A2809E7BB009FEEB4 /* HBLineGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */; };
 		C6C7726D280AA53C009FEEB4 /* GradientProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7726C280AA53C009FEEB4 /* GradientProgressView.swift */; };
@@ -71,8 +75,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		422C615D284DA787004BBA52 /* XHBUIBlockObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBUIBlockObserver.h; sourceTree = "<group>"; };
-		422C615E284DA787004BBA52 /* XHBUIBlockObserver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBUIBlockObserver.m; sourceTree = "<group>"; };
 		428F87862761ED4600266DE0 /* CustomStyleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyleButton.swift; sourceTree = "<group>"; };
 		4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntranceViewController.swift; sourceTree = "<group>"; };
 		4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionDemoViewController.swift; sourceTree = "<group>"; };
@@ -102,14 +104,18 @@
 		42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XHBWebCache.m"; sourceTree = "<group>"; };
 		42C95A4426F49DB1004F4B33 /* UIImageView+XHBWebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+XHBWebCache.h"; sourceTree = "<group>"; };
 		42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+XHBWebCache.m"; sourceTree = "<group>"; };
-		42DBCD6E284EF87E004AA9CC /* XHBBacktraceLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBBacktraceLogger.h; sourceTree = "<group>"; };
-		42DBCD6F284EF87E004AA9CC /* XHBBacktraceLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBBacktraceLogger.m; sourceTree = "<group>"; };
+		42DBCD7228503CBE004AA9CC /* XHBBacktraceLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHBBacktraceLogger.m; sourceTree = "<group>"; };
+		42DBCD7328503CBE004AA9CC /* XHBBacktraceLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHBBacktraceLogger.h; sourceTree = "<group>"; };
+		42DBCD7628503CC8004AA9CC /* XHBUIBlockObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHBUIBlockObserver.m; sourceTree = "<group>"; };
+		42DBCD7728503CC8004AA9CC /* XHBUIBlockObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHBUIBlockObserver.h; sourceTree = "<group>"; };
 		42E77C422834972A00045F3D /* XHBStateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBStateMachine.h; sourceTree = "<group>"; };
 		42E77C432834972A00045F3D /* XHBStateMachine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBStateMachine.m; sourceTree = "<group>"; };
 		42E77C4B2834A48700045F3D /* XHBTransition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTransition.h; sourceTree = "<group>"; };
 		42E77C4C2834A48700045F3D /* XHBTransition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBTransition.m; sourceTree = "<group>"; };
 		42F74733278EC73500DD503C /* UIView+XHBLevelWeight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBLevelWeight.h"; sourceTree = "<group>"; };
 		42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBLevelWeight.m"; sourceTree = "<group>"; };
+		8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachineViewController.swift; sourceTree = "<group>"; };
+		C635B9B6283540CF00F77F1E /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -162,6 +168,9 @@
 		C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenInterpolatorQueue.swift; sourceTree = "<group>"; };
 		C6A5D8A226EBC36F00420BC1 /* XHBThemeAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBThemeAttribute.h; sourceTree = "<group>"; };
 		C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBThemeAttribute.m; sourceTree = "<group>"; };
+		C6AA5569283FC8A800829B52 /* NSObject+XHBFileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+XHBFileDownloader.h"; sourceTree = "<group>"; };
+		C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XHBFileDownloader.m"; sourceTree = "<group>"; };
+		C6AA556C28411EFC00829B52 /* FileDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		C6C772652809DFEA009FEEB4 /* HBGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBGradientProgressView.h; sourceTree = "<group>"; };
 		C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBGradientProgressView.m; sourceTree = "<group>"; };
 		C6C772682809E7BB009FEEB4 /* HBLineGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBLineGradientProgressView.h; sourceTree = "<group>"; };
@@ -189,15 +198,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		422C615C284DA659004BBA52 /* UIBlockObserver */ = {
-			isa = PBXGroup;
-			children = (
-				422C615D284DA787004BBA52 /* XHBUIBlockObserver.h */,
-				422C615E284DA787004BBA52 /* XHBUIBlockObserver.m */,
-			);
-			path = UIBlockObserver;
-			sourceTree = "<group>";
-		};
 		4294C30726E1D17200F2D97D /* ContentBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,13 +251,22 @@
 			path = Form;
 			sourceTree = "<group>";
 		};
-		42DBCD6D284EF863004AA9CC /* BacktraceLogger */ = {
+		42DBCD7128503CBE004AA9CC /* BacktraceLogger */ = {
 			isa = PBXGroup;
 			children = (
-				42DBCD6E284EF87E004AA9CC /* XHBBacktraceLogger.h */,
-				42DBCD6F284EF87E004AA9CC /* XHBBacktraceLogger.m */,
+				42DBCD7228503CBE004AA9CC /* XHBBacktraceLogger.m */,
+				42DBCD7328503CBE004AA9CC /* XHBBacktraceLogger.h */,
 			);
 			path = BacktraceLogger;
+			sourceTree = "<group>";
+		};
+		42DBCD7528503CC8004AA9CC /* UIBlockObserver */ = {
+			isa = PBXGroup;
+			children = (
+				42DBCD7628503CC8004AA9CC /* XHBUIBlockObserver.m */,
+				42DBCD7728503CC8004AA9CC /* XHBUIBlockObserver.h */,
+			);
+			path = UIBlockObserver;
 			sourceTree = "<group>";
 		};
 		42E77C412834970E00045F3D /* StateMachine */ = {
@@ -304,6 +313,7 @@
 				429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */,
 				42AA9859277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift */,
 				C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */,
+				8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */,
 			);
 			path = "CodeRecord-Swift";
 			sourceTree = "<group>";
@@ -329,6 +339,8 @@
 			isa = PBXGroup;
 			children = (
 				C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */,
+				C635B9B6283540CF00F77F1E /* StateMachine.swift */,
+				C6AA556C28411EFC00829B52 /* FileDownloader.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -393,7 +405,7 @@
 		C651ADA224485884004E76A8 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				422C615C284DA659004BBA52 /* UIBlockObserver */,
+				42DBCD7528503CC8004AA9CC /* UIBlockObserver */,
 				C66F69FB282EBD2E00D80CF9 /* XHBTweenAnimation */,
 				42C95A4026F480EF004F4B33 /* WebCacheImage */,
 				42A15D6E26EF824D009E51FA /* CustomTransitioning */,
@@ -420,7 +432,8 @@
 		C651ADA324485954004E76A8 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				42DBCD6D284EF863004AA9CC /* BacktraceLogger */,
+				42DBCD7128503CBE004AA9CC /* BacktraceLogger */,
+				C6AA5568283FC84800829B52 /* FileDownloader */,
 				42E77C412834970E00045F3D /* StateMachine */,
 				42A15D6B26EF255C009E51FA /* NSObject+XHBExtension.h */,
 				42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */,
@@ -455,6 +468,15 @@
 				C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */,
 			);
 			path = TweenAnimation;
+			sourceTree = "<group>";
+		};
+		C6AA5568283FC84800829B52 /* FileDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				C6AA5569283FC8A800829B52 /* NSObject+XHBFileDownloader.h */,
+				C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */,
+			);
+			path = FileDownloader;
 			sourceTree = "<group>";
 		};
 		C6C772642809DFCA009FEEB4 /* GradientProgressView */ = {
@@ -597,11 +619,14 @@
 				42C95A3626F31B7F004F4B33 /* CustomTransitioning.swift in Sources */,
 				4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */,
 				C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */,
+				8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */,
 				429BB2E426E8BAC300D3667C /* Theme.swift in Sources */,
 				42AA985A277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift in Sources */,
 				42AA9858277465D500C5DF89 /* AttributedInterpotationString.swift in Sources */,
 				4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */,
 				C66F6A1A2830F78700D80CF9 /* TweenInterpolator.swift in Sources */,
+				C6AA556D28411EFC00829B52 /* FileDownloader.swift in Sources */,
+				C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */,
 				4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,9 +635,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				422C615F284DA787004BBA52 /* XHBUIBlockObserver.m in Sources */,
 				C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */,
 				42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */,
+				42DBCD7828503CC8004AA9CC /* XHBUIBlockObserver.m in Sources */,
 				C6368BD326D028B20099A7D3 /* UIView+XHBTheme.m in Sources */,
 				C66F6A07282ECA5B00D80CF9 /* XHBTweenInterpolator.m in Sources */,
 				42A15D6D26EF255C009E51FA /* NSObject+XHBExtension.m in Sources */,
@@ -620,6 +645,7 @@
 				C6368BCF26D022990099A7D3 /* UIView+XHBFitSize.m in Sources */,
 				42A15D7126EF82A6009E51FA /* XHBCustomTransitioning.m in Sources */,
 				42C95A3B26F43DD1004F4B33 /* XHBMainEntranceViewController.m in Sources */,
+				C6AA556B283FC8A800829B52 /* NSObject+XHBFileDownloader.m in Sources */,
 				42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */,
 				C6368BCB26D020C50099A7D3 /* UIResponder+XHBRepsonder.m in Sources */,
 				C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */,
@@ -638,7 +664,7 @@
 				C6368BD926D0298B0099A7D3 /* XHBThemeManager.m in Sources */,
 				C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */,
 				C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */,
-				42DBCD70284EF87E004AA9CC /* XHBBacktraceLogger.m in Sources */,
+				42DBCD7428503CBE004AA9CC /* XHBBacktraceLogger.m in Sources */,
 				C66F6A0A282ED85A00D80CF9 /* XHBTweenInterpolatorQueue.m in Sources */,
 				42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */,
 			);
@@ -841,7 +867,7 @@
 				DEVELOPMENT_TEAM = Y4K7BN45NN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CodeRecord/CodeRecordGlobal.pch";
 				INFOPLIST_FILE = CodeRecord/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -860,7 +886,7 @@
 				DEVELOPMENT_TEAM = Y4K7BN45NN;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CodeRecord/CodeRecordGlobal.pch";
 				INFOPLIST_FILE = CodeRecord/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

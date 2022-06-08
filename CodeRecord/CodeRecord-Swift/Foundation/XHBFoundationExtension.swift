@@ -73,7 +73,7 @@ extension String {
         return "\(space.replacingOccurrences(of: "-", with: "_")).\(self)"
     }
     
-    public var md5String: String {
+    public var md5String: Self {
         if isEmpty { return self }
         if #available(iOS 13.0, *) {
             guard let d = self.data(using: .utf8) else { return "" }
@@ -91,6 +91,42 @@ extension String {
         }
     }
     
+    public  func appending(path: Self) -> Self {
+        let pathHasPrefixSlash = path.hasPrefix("/")
+        let currentHasSuffixSlash = self.hasSuffix("/")
+        if (pathHasPrefixSlash && !currentHasSuffixSlash) ||
+            (!pathHasPrefixSlash && currentHasSuffixSlash){
+            return appending(path)
+        } else if pathHasPrefixSlash && currentHasSuffixSlash {
+            guard let ss = self[count - 1] else { return appending(path) }
+            return ss.appending(path)
+        } else {
+            return appending("/\(path)")
+        }
+    }
+    
+    public mutating func append(path: Self) {
+        let pathHasPrefixSlash = path.hasPrefix("/")
+        let currentHasSuffixSlash = self.hasSuffix("/")
+        if (pathHasPrefixSlash && !currentHasSuffixSlash) ||
+            (!pathHasPrefixSlash && currentHasSuffixSlash){
+            self.append(path)
+        } else if pathHasPrefixSlash && currentHasSuffixSlash {
+            guard let ss = self[count - 1] else { return }
+            self = ss.appending(path)
+        } else if !pathHasPrefixSlash && !currentHasSuffixSlash {
+            self.append("/\(path)")
+        }
+    }
+    
+    public var urlEncoded: Self {
+        let encodedUrlString = addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        return encodedUrlString ?? ""
+    }
+    
+    public var urlDecoded: Self {
+        return removingPercentEncoding ?? ""
+    }
 }
 
 extension Double {
@@ -239,18 +275,6 @@ extension KeyPathEditable {
     }
 }
 
-
-@propertyWrapper
-struct Clamped<T: Comparable> {
-    
-    let wrappedValue: T
-    
-    init(wrappedValue: T, _ range: ClosedRange<T>) {
-        self.wrappedValue = min(max(wrappedValue, range.lowerBound), range.upperBound)
-    }
-    
-}
-
 extension Dictionary where Key == String {
     
     public func value(for keyPath: String, seperator: String = ".") -> Value? {
@@ -353,6 +377,46 @@ extension URLSession {
     
 }
 
+//MARK: 属性包装器
+
+@propertyWrapper
+struct Clamped<T: Comparable> {
+    
+    private var value: T
+    private var validRange: ClosedRange<T>
+    
+    public var wrappedValue: T {
+        set {
+            value = min(max(newValue, validRange.lowerBound), validRange.upperBound)
+        }
+        get { return value }
+    }
+    
+    init(wrappedValue: T, range: ClosedRange<T>) {
+        self.value = wrappedValue
+        self.validRange = range
+    }
+    
+}
+
+@propertyWrapper
+struct Trimmed {
+    
+    private var value = ""
+    
+    var wrappedValue: String {
+        get { return value }
+        set {
+            value = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+    
+    init(_ value: String) {
+        self.value = value
+    }
+    
+}
+
 @propertyWrapper
 struct Path {
     
@@ -371,4 +435,75 @@ struct Path {
         self.root = root
     }
     
+}
+
+public protocol DefaultValue {
+    
+    associatedtype Value: Codable
+    static var defaultValue: Value { get }
+}
+
+@propertyWrapper
+struct Default<T: DefaultValue> {
+    
+    var wrappedValue: T.Value
+}
+
+extension Default: Codable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        wrappedValue = (try? container.decode(T.Value.self)) ?? T.defaultValue
+    }
+}
+
+extension Bool {
+    public enum False: DefaultValue {
+        public typealias Value = Bool
+        public static var defaultValue = false
+    }
+    public enum True: DefaultValue {
+        public typealias Value = Bool
+        public static var defaultValue = true
+    }
+}
+
+extension String {
+    public enum Empty: DefaultValue {
+        public typealias Value = String
+        public static var defaultValue = ""
+    }
+}
+
+extension Int {
+    public enum Zero: DefaultValue {
+        public typealias Value = Int
+        public static var defaultValue: Int = 0
+    }
+}
+
+extension CGFloat {
+    public enum Zero: DefaultValue {
+        public typealias Value = CGFloat
+        public static var defaultValue: CGFloat = 0
+    }
+}
+
+extension Float {
+    public enum Zero: DefaultValue {
+        public typealias Value = Float
+        public static var defaultValue: Float = 0
+    }
+}
+
+extension Double {
+    public enum Zero: DefaultValue {
+        public typealias Value = Double
+        public static var defaultValue: Double = 0
+    }
+}
+
+extension Default {
+    typealias True = Default<Bool.True>
+    typealias False = Default<Bool.False>
+    typealias EmptyString = Default<String.Empty>
 }

@@ -113,112 +113,32 @@ extension UIImage {
                  alphaInfo == .premultipliedLast)
     }
     
-    open class func fetchImage(with url: URLType, thumbnail: ThumbnailConfig = .noThumbnail, completion: ImageLoadCompletion? = nil) {
-        DispatchQueue.global().async {
-            guard let cacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else {
-                DispatchQueue.main.async {
-                    completion?(.failure(FoundationError.notFoundDir))
-                }
-                return
-            }
-            let docDir = cacheDir.appending("/UIImageWebCacheDir")
-            let fileManager = FileManager.default
-            let isDirExist = fileManager.fileExists(atPath: docDir, isDirectory: nil)
-            if !isDirExist {
-                do {
-                    try fileManager.createDirectory(atPath: docDir, withIntermediateDirectories: true, attributes: nil)
-                } catch {
-                    DispatchQueue.main.async {
-                        completion?(.failure(error))
-                    }
-                    return
-                }
-            }
-            guard let url = url.url else {
-                DispatchQueue.main.async {
-                    completion?(.failure(FoundationError.nilValue))
-                }
-                return
-            }
-            if url.isFileURL {
-                if thumbnail.pointSize != .zero,
-                   let thumbnailImage = UIImage(url: url, to: thumbnail.pointSize, scale: thumbnail.scale)?.decoded {
-                    DispatchQueue.main.async {
-                        completion?(.success(thumbnailImage))
-                    }
-                   return
-                }
-                let result: Result<UIImage, Error>
-                if let image = UIImage(contentsOfFile: url.absoluteString)?.decoded {
-                    result = .success(image)
-                } else {
-                    result = .failure(FoundationError.nilValue)
-                }
-                DispatchQueue.main.async {
-                    completion?(result)
-                }
-            } else {
-                let filePath = docDir.appending("/\(url.absoluteString.md5String)")
-                let isFileExist = fileManager.fileExists(atPath: filePath, isDirectory: nil)
-                if isFileExist {
-                    if let thumbnailImage = UIImage(url: URL(fileURLWithPath: filePath), to: thumbnail.pointSize, scale: thumbnail.scale)?.decoded {
+    open class func fetchImage(with url: URLType,
+                               thumbnail: ThumbnailConfig = .noThumbnail,
+                               completion: ImageLoadCompletion? = nil) {
+        guard let urlString = url.url?.absoluteString else { return }
+        fetchCachedFile(with: urlString, dirName: "ImageCache") { result in
+            switch result {
+            case .success(let localUrl):
+                DispatchQueue.global().async {
+                    if let thumbnailImage = UIImage(url: localUrl, to: thumbnail.pointSize, scale: thumbnail.scale)?.decoded {
                         DispatchQueue.main.async {
                             completion?(.success(thumbnailImage))
                         }
                         return
                     }
-                    if let image = UIImage(contentsOfFile: filePath)?.decoded {
+                    if let image = UIImage(contentsOfFile: localUrl.relativePath)?.decoded {
                         DispatchQueue.main.async {
                             completion?(.success(image))
                         }
                         return
                     }
                 }
-                self.downloadImage(with: url, cachedFileUrl: URL(fileURLWithPath: filePath), completion: completion)
+            case .failure(let error):
+                completion?(.failure(error))
+                return
             }
         }
-    }
-    
-    private class func downloadImage(with url: URL,
-                                     cachedFileUrl: URL,
-                                     thumbnail: ThumbnailConfig = .noThumbnail,
-                                     completion: ImageLoadCompletion?) {
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        URLSession.shared.downloadTask(with: request) { location, response, error in
-            let result: Result<UIImage, Error>
-            if let happenedError = error {
-                result = .failure(happenedError)
-            }else {
-                lock.wait()
-                let fileManager = FileManager.default
-                if let httpResponse = response as? HTTPURLResponse,
-                   let locationUrl = location,
-                   httpResponse.statusCode == 200 {
-                    do {
-                        if fileManager.fileExists(atPath: cachedFileUrl.path) {
-                            try fileManager.removeItem(at: cachedFileUrl)
-                        }
-                        try fileManager.moveItem(at: locationUrl, to: cachedFileUrl)
-                        lock.signal()
-                        if let image = UIImage(contentsOfFile: cachedFileUrl.path) {
-                            result = .success(image)
-                        } else {
-                            result = .failure(FoundationError.nilValue)
-                        }
-                    } catch {
-                        lock.signal()
-                        result = .failure(error)
-                    }
-                }else {
-                    lock.signal()
-                    result = .failure(FoundationError.needToDebugDetails)
-                }
-            }
-            DispatchQueue.main.async {
-                completion?(result)
-            }
-        }.resume()
     }
     
     @available(iOS 13.0, *)
@@ -249,14 +169,6 @@ extension UIImageView {
             Task {
                 do {
                     let img = try await UIImage.fetchAsyncImage(with: url, thumbnail: thumbnail)
-                    let scale: CGFloat
-                    switch thumbnail.scale {
-                    case .auto:
-                        scale = img.size.width / img.size.height
-                    case .scale(let s_width, let s_hegith):
-                        scale = s_hegith > 0 ? s_width / s_hegith : 1
-                    }
-                    self.size = CGSize(width: self.width / scale, height: self.height)
                     self.image = img
                     completion?(.success(img))
                 } catch {
@@ -268,14 +180,6 @@ extension UIImageView {
             UIImage.fetchImage(with: url, thumbnail: thumbnail) { [weak self] result in
                 switch result {
                 case .success(let img):
-                    let scale: CGFloat
-                    switch thumbnail.scale {
-                    case .auto:
-                        scale = img.size.width / img.size.height
-                    case .scale(let s_width, let s_hegith):
-                        scale = s_hegith > 0 ? s_width / s_hegith : 1
-                    }
-                    self?.size = CGSize(width: (self?.width ?? 0) / scale, height: (self?.height ?? 0))
                     self?.image = img
                     break
                 case .failure(let error):

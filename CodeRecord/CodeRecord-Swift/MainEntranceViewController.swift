@@ -118,23 +118,6 @@ class MainEntranceViewController: UIViewController {
         view.backgroundColor = .white
         setupSubviews()
         setupEntrances()
-        
-        let testDict = [
-            
-            "key1" : [
-                
-                "key2" : [
-                    
-                    "key3" : "value3"
-                    
-                ]
-                
-            ]
-            
-        ]
-
-        let value = testDict["key1.key2.key3", "."]
-        print("value = \(String(describing: value))")
     }
     
     func setupSubviews() {
@@ -155,7 +138,8 @@ class MainEntranceViewController: UIViewController {
             MainEntranceModel(title: "CollectionView轮播", vcName: "ContentBrowserDemoViewController"),
             MainEntranceModel(title: "主题切换", vcName: "ThemeSwitchDemoViewController"),
             MainEntranceModel(title: "富文本插值初始化", vcName: "InterpotaionStringDemoViewController"),
-            MainEntranceModel(title: "渐变进度条", vcName: "GradientProgressViewController")
+            MainEntranceModel(title: "渐变进度条", vcName: "GradientProgressViewController"),
+            MainEntranceModel(title: "状态机", vcName: "StateMachineViewController")
         ])
     }
     
