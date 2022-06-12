@@ -54,6 +54,7 @@
 		C651AD962448576A004E76A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C651AD952448576A004E76A8 /* Assets.xcassets */; };
 		C651AD992448576A004E76A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C651AD972448576A004E76A8 /* LaunchScreen.storyboard */; };
 		C651AD9C2448576A004E76A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C651AD9B2448576A004E76A8 /* main.m */; };
+		C666DB61285647C700704A43 /* XHBBezierPathBubbleTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = C666DB5F285647C700704A43 /* XHBBezierPathBubbleTipsView.m */; };
 		C66F69FE282EBD5900D80CF9 /* XHBTweenEasing.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F69FD282EBD5900D80CF9 /* XHBTweenEasing.m */; };
 		C66F6A01282EC73E00D80CF9 /* XHBTweenScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A00282EC73E00D80CF9 /* XHBTweenScheduler.m */; };
 		C66F6A07282ECA5B00D80CF9 /* XHBTweenInterpolator.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A06282ECA5B00D80CF9 /* XHBTweenInterpolator.m */; };
@@ -151,6 +152,8 @@
 		C651AD982448576A004E76A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C651AD9A2448576A004E76A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C651AD9B2448576A004E76A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C666DB5F285647C700704A43 /* XHBBezierPathBubbleTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHBBezierPathBubbleTipsView.m; sourceTree = "<group>"; };
+		C666DB60285647C700704A43 /* XHBBezierPathBubbleTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHBBezierPathBubbleTipsView.h; sourceTree = "<group>"; };
 		C66F69FC282EBD5900D80CF9 /* XHBTweenEasing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTweenEasing.h; sourceTree = "<group>"; };
 		C66F69FD282EBD5900D80CF9 /* XHBTweenEasing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBTweenEasing.m; sourceTree = "<group>"; };
 		C66F69FF282EC73E00D80CF9 /* XHBTweenScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTweenScheduler.h; sourceTree = "<group>"; };
@@ -405,6 +408,7 @@
 		C651ADA224485884004E76A8 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				C666DB5E285647C700704A43 /* XHBBezierPathBubbleTipsView */,
 				42DBCD7528503CC8004AA9CC /* UIBlockObserver */,
 				C66F69FB282EBD2E00D80CF9 /* XHBTweenAnimation */,
 				42C95A4026F480EF004F4B33 /* WebCacheImage */,
@@ -439,6 +443,15 @@
 				42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */,
 			);
 			path = Foundation;
+			sourceTree = "<group>";
+		};
+		C666DB5E285647C700704A43 /* XHBBezierPathBubbleTipsView */ = {
+			isa = PBXGroup;
+			children = (
+				C666DB5F285647C700704A43 /* XHBBezierPathBubbleTipsView.m */,
+				C666DB60285647C700704A43 /* XHBBezierPathBubbleTipsView.h */,
+			);
+			path = XHBBezierPathBubbleTipsView;
 			sourceTree = "<group>";
 		};
 		C66F69FB282EBD2E00D80CF9 /* XHBTweenAnimation */ = {
@@ -662,6 +675,7 @@
 				C651AD9C2448576A004E76A8 /* main.m in Sources */,
 				C6C772672809DFEA009FEEB4 /* HBGradientProgressView.m in Sources */,
 				C6368BD926D0298B0099A7D3 /* XHBThemeManager.m in Sources */,
+				C666DB61285647C700704A43 /* XHBBezierPathBubbleTipsView.m in Sources */,
 				C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */,
 				C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */,
 				42DBCD7428503CBE004AA9CC /* XHBBacktraceLogger.m in Sources */,
