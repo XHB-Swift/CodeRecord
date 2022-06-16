@@ -24,7 +24,7 @@ extension String {
         return Int(self, radix: 16) ?? 0
     }
     
-    subscript(i: Int) -> Self? {
+    public subscript(i: Int) -> Self? {
         if i >= count {
             return nil
         }
@@ -39,7 +39,7 @@ extension String {
         return String(self[targetIndex])
     }
     
-    subscript(r: Range<Int>) -> Self? {
+    public subscript(r: Range<Int>) -> Self? {
         if r.lowerBound < 0 {
             return nil
         }
@@ -54,7 +54,7 @@ extension String {
         return String(self[index0..<index1])
     }
     
-    subscript(r: NSRange) -> Self? {
+    public subscript(r: NSRange) -> Self? {
         guard let rr = Range(r) else { return nil }
         return self[rr]
     }
@@ -322,6 +322,23 @@ extension Dictionary {
         
     }
     
+}
+
+extension Array {
+    
+    public func absElement(_ absIndex: Int) -> Element {
+        if (0..<count).contains(absIndex) {
+            return self[absIndex]
+        } else {
+            let adjustIndex = abs(absIndex) - count
+            return self[abs(adjustIndex)]
+        }
+    }
+    
+    public func safeElement(_ safeIndex: Int) -> Element? {
+        guard (0..<count).contains(safeIndex) else { return nil }
+        return self[safeIndex]
+    }
 }
 
 @available(macOS 10.15, iOS 13, *)

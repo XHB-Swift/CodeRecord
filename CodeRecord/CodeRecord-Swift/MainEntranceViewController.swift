@@ -68,10 +68,9 @@ class MainEntranceViewModel: NSObject, UITableViewDataSource {
             tableView?.register(MainEntranceTableCell.self, forCellReuseIdentifier: MainEntranceTableCell.cellIdentifier)
         }
     }
-    private var mainEntrances = Array<MainEntranceModel>()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mainEntrances.count
+        return MainEntranceManager.entranceCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -79,31 +78,11 @@ class MainEntranceViewModel: NSObject, UITableViewDataSource {
         let count = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
         if let cell = tableView.dequeueReusableCell(withIdentifier: MainEntranceTableCell.cellIdentifier, for: indexPath) as? MainEntranceTableCell,
            index < count {
-            cell.update(title: mainEntrances[index].title)
+            cell.update(title: MainEntranceManager.entranceTitle(at: index))
             return cell
         }else {
             return tableView.dequeueReusableCell(withIdentifier: "MainEntranceTableErrorCell", for: indexPath)
         }
-    }
-    
-    func append(_ entrance: MainEntranceModel) {
-        mainEntrances.append(entrance)
-        tableView?.reloadData()
-    }
-    
-    func appendEntrance(with title: String, vcName: String) {
-        mainEntrances.append(MainEntranceModel(title: title, vcName: vcName))
-        tableView?.reloadData()
-    }
-    
-    func append(_ entrances: [MainEntranceModel]) {
-        if entrances.isEmpty { return }
-        mainEntrances.append(contentsOf: entrances)
-        tableView?.reloadData()
-    }
-    
-    func entranceVCName(at index: Int) -> String? {
-        return mainEntrances[index].vcName.objectClassName
     }
 }
 
@@ -117,7 +96,8 @@ class MainEntranceViewController: UIViewController {
         
         view.backgroundColor = .white
         setupSubviews()
-        setupEntrances()
+        registerAllEntrances()
+        tableView?.reloadData()
     }
     
     func setupSubviews() {
@@ -131,18 +111,6 @@ class MainEntranceViewController: UIViewController {
         mainEntranceViewModel.tableView = tableView
     }
     
-    func setupEntrances() {
-        mainEntranceViewModel.append([
-            MainEntranceModel(title: "自定义模态转场", vcName: "CustomTransitionDemoViewController"),
-            MainEntranceModel(title: "缓存网络图片", vcName: "ImageWebCacheDemoViewController"),
-            MainEntranceModel(title: "CollectionView轮播", vcName: "ContentBrowserDemoViewController"),
-            MainEntranceModel(title: "主题切换", vcName: "ThemeSwitchDemoViewController"),
-            MainEntranceModel(title: "富文本插值初始化", vcName: "InterpotaionStringDemoViewController"),
-            MainEntranceModel(title: "渐变进度条", vcName: "GradientProgressViewController"),
-            MainEntranceModel(title: "状态机", vcName: "StateMachineViewController")
-        ])
-    }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
     }
@@ -152,12 +120,21 @@ class MainEntranceViewController: UIViewController {
 extension MainEntranceViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let vcName = mainEntranceViewModel.entranceVCName(at: indexPath.row),
-              let vcClass = NSClassFromString(vcName),
-              let vcType = vcClass as? UIViewController.Type
-        else { return }
-        let targetVC = vcType.init()
-        self.navigationController?.pushViewController(targetVC, animated: true)
+        guard let vc = MainEntranceManager.viewController(at: indexPath.row) else { return }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
+extension MainEntranceViewController {
+    
+    public func registerAllEntrances() {
+        MainEntranceManager.register(entrance: "自定义模态转场", viewControllerClassName: "CustomTransitionDemoViewController")
+        MainEntranceManager.register(entrance: "缓存网络图片", viewControllerClassName: "ImageWebCacheDemoViewController")
+        MainEntranceManager.register(entrance: "CollectionView轮播", viewControllerClassName: "ContentBrowserDemoViewController")
+        MainEntranceManager.register(entrance: "主题切换", viewControllerClassName: "ThemeSwitchDemoViewController")
+        MainEntranceManager.register(entrance: "富文本插值初始化", viewControllerClassName: "InterpotaionStringDemoViewController")
+        MainEntranceManager.register(entrance: "渐变进度条", viewControllerClassName: "GradientProgressViewController")
+        MainEntranceManager.register(entrance: "状态机", viewControllerClassName: "StateMachineViewController")
+    }
+    
+}

@@ -7,23 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		428F87872761ED4600266DE0 /* CustomStyleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428F87862761ED4600266DE0 /* CustomStyleButton.swift */; };
 		4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */; };
 		4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */; };
 		4294C30626E0AAEA00F2D97D /* scene-speach.png in Resources */ = {isa = PBXBuildFile; fileRef = 4294C30526E0AAEA00F2D97D /* scene-speach.png */; };
-		4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */; };
-		4294C30C26E5AD6900F2D97D /* UIImageViewWebCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30B26E5AD6900F2D97D /* UIImageViewWebCache.swift */; };
 		4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */; };
 		4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */; };
-		429BB2E426E8BAC300D3667C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB2E326E8BAC300D3667C /* Theme.swift */; };
 		429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */; };
 		42A15D6D26EF255C009E51FA /* NSObject+XHBExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */; };
 		42A15D7126EF82A6009E51FA /* XHBCustomTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A15D7026EF82A6009E51FA /* XHBCustomTransitioning.m */; };
 		42A15D7426F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A15D7326F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m */; };
-		42AA9858277465D500C5DF89 /* AttributedInterpotationString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AA9857277465D500C5DF89 /* AttributedInterpotationString.swift */; };
 		42AA985A277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AA9859277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift */; };
-		42C95A3626F31B7F004F4B33 /* CustomTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3526F31B7F004F4B33 /* CustomTransitioning.swift */; };
-		42C95A3826F3218D004F4B33 /* DirectionTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3726F3218D004F4B33 /* DirectionTransitioning.swift */; };
 		42C95A3B26F43DD1004F4B33 /* XHBMainEntranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3A26F43DD1004F4B33 /* XHBMainEntranceViewController.m */; };
 		42C95A3F26F47F31004F4B33 /* UIBarItem+XHBTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A3E26F47F31004F4B33 /* UIBarItem+XHBTheme.m */; };
 		42C95A4326F48176004F4B33 /* UIImage+XHBWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C95A4226F48176004F4B33 /* UIImage+XHBWebCache.m */; };
@@ -34,7 +27,6 @@
 		42E77C4D2834A48700045F3D /* XHBTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E77C4C2834A48700045F3D /* XHBTransition.m */; };
 		42F74735278EC73500DD503C /* UIView+XHBLevelWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */; };
 		8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */; };
-		C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635B9B6283540CF00F77F1E /* StateMachine.swift */; };
 		C6368BC226D01E0A0099A7D3 /* UIView+XHBBoxing.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */; };
 		C6368BC526D01EDE0099A7D3 /* UIColor+XHBColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC426D01EDE0099A7D3 /* UIColor+XHBColor.m */; };
 		C6368BC826D01F550099A7D3 /* UIImage+XHBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = C6368BC726D01F550099A7D3 /* UIImage+XHBImage.m */; };
@@ -45,8 +37,6 @@
 		C6368BE526D6B0410099A7D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6368BE426D6B0410099A7D3 /* AppDelegate.swift */; };
 		C6368BEE26D6B0440099A7D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6368BED26D6B0440099A7D3 /* Assets.xcassets */; };
 		C6368BF126D6B0440099A7D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6368BEF26D6B0440099A7D3 /* LaunchScreen.storyboard */; };
-		C6368BF826D6B0740099A7D3 /* XHBUIExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */; };
-		C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */; };
 		C6494D06276116C900B22C4E /* XHBCustomStyleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C6494D05276116C900B22C4E /* XHBCustomStyleButton.m */; };
 		C651AD8B24485767004E76A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C651AD8A24485767004E76A8 /* AppDelegate.m */; };
 		C651AD9124485767004E76A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C651AD9024485767004E76A8 /* ViewController.m */; };
@@ -55,36 +45,25 @@
 		C651AD992448576A004E76A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C651AD972448576A004E76A8 /* LaunchScreen.storyboard */; };
 		C651AD9C2448576A004E76A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C651AD9B2448576A004E76A8 /* main.m */; };
 		C666DB61285647C700704A43 /* XHBBezierPathBubbleTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = C666DB5F285647C700704A43 /* XHBBezierPathBubbleTipsView.m */; };
+		C666DB63285B744600704A43 /* MainEntranceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C666DB62285B744600704A43 /* MainEntranceManager.swift */; };
 		C66F69FE282EBD5900D80CF9 /* XHBTweenEasing.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F69FD282EBD5900D80CF9 /* XHBTweenEasing.m */; };
 		C66F6A01282EC73E00D80CF9 /* XHBTweenScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A00282EC73E00D80CF9 /* XHBTweenScheduler.m */; };
 		C66F6A07282ECA5B00D80CF9 /* XHBTweenInterpolator.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A06282ECA5B00D80CF9 /* XHBTweenInterpolator.m */; };
 		C66F6A0A282ED85A00D80CF9 /* XHBTweenInterpolatorQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A09282ED85A00D80CF9 /* XHBTweenInterpolatorQueue.m */; };
 		C66F6A0E282FEB8E00D80CF9 /* UIView+XHBTweenAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A0D282FEB8E00D80CF9 /* UIView+XHBTweenAnimation.m */; };
-		C66F6A152830ADD700D80CF9 /* TweenEasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A142830ADD700D80CF9 /* TweenEasing.swift */; };
-		C66F6A182830E20500D80CF9 /* TweenValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A172830E20500D80CF9 /* TweenValue.swift */; };
-		C66F6A1A2830F78700D80CF9 /* TweenInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A192830F78700D80CF9 /* TweenInterpolator.swift */; };
-		C66F6A1C2831091F00D80CF9 /* TweenScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A1B2831091F00D80CF9 /* TweenScheduler.swift */; };
-		C66F6A1E2831100200D80CF9 /* TweenInterpolatorQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */; };
 		C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */; };
 		C6AA556B283FC8A800829B52 /* NSObject+XHBFileDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */; };
-		C6AA556D28411EFC00829B52 /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556C28411EFC00829B52 /* FileDownloader.swift */; };
 		C6C772672809DFEA009FEEB4 /* HBGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */; };
 		C6C7726A2809E7BB009FEEB4 /* HBLineGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */; };
-		C6C7726D280AA53C009FEEB4 /* GradientProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7726C280AA53C009FEEB4 /* GradientProgressView.swift */; };
-		C6C7726F280AA797009FEEB4 /* LineGradientProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7726E280AA797009FEEB4 /* LineGradientProgressView.swift */; };
 		C6C77271280B2CD1009FEEB4 /* GradientProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		428F87862761ED4600266DE0 /* CustomStyleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyleButton.swift; sourceTree = "<group>"; };
 		4294C30126E07FCF00F2D97D /* MainEntranceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntranceViewController.swift; sourceTree = "<group>"; };
 		4294C30326E0806500F2D97D /* CustomTransitionDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionDemoViewController.swift; sourceTree = "<group>"; };
 		4294C30526E0AAEA00F2D97D /* scene-speach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scene-speach.png"; sourceTree = "<group>"; };
-		4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBrowserView.swift; sourceTree = "<group>"; };
-		4294C30B26E5AD6900F2D97D /* UIImageViewWebCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewWebCache.swift; sourceTree = "<group>"; };
 		4294C30D26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWebCacheDemoViewController.swift; sourceTree = "<group>"; };
 		4294C30F26E6469C00F2D97D /* ContentBrowserDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBrowserDemoViewController.swift; sourceTree = "<group>"; };
-		429BB2E326E8BAC300D3667C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		429BB2E526E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitchDemoViewController.swift; sourceTree = "<group>"; };
 		42A15D6B26EF255C009E51FA /* NSObject+XHBExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+XHBExtension.h"; sourceTree = "<group>"; };
 		42A15D6C26EF255C009E51FA /* NSObject+XHBExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XHBExtension.m"; sourceTree = "<group>"; };
@@ -92,10 +71,7 @@
 		42A15D7026EF82A6009E51FA /* XHBCustomTransitioning.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBCustomTransitioning.m; sourceTree = "<group>"; };
 		42A15D7226F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBCustomModalDirectionTransitioningConfiguration.h; sourceTree = "<group>"; };
 		42A15D7326F09A7D009E51FA /* XHBCustomModalDirectionTransitioningConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBCustomModalDirectionTransitioningConfiguration.m; sourceTree = "<group>"; };
-		42AA9857277465D500C5DF89 /* AttributedInterpotationString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedInterpotationString.swift; sourceTree = "<group>"; };
 		42AA9859277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpotaionStringDemoViewController.swift; sourceTree = "<group>"; };
-		42C95A3526F31B7F004F4B33 /* CustomTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitioning.swift; sourceTree = "<group>"; };
-		42C95A3726F3218D004F4B33 /* DirectionTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionTransitioning.swift; sourceTree = "<group>"; };
 		42C95A3926F43DD1004F4B33 /* XHBMainEntranceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBMainEntranceViewController.h; sourceTree = "<group>"; };
 		42C95A3A26F43DD1004F4B33 /* XHBMainEntranceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBMainEntranceViewController.m; sourceTree = "<group>"; };
 		42C95A3C26F43E44004F4B33 /* CodeRecordGlobal.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CodeRecordGlobal.pch; sourceTree = "<group>"; };
@@ -116,7 +92,6 @@
 		42F74733278EC73500DD503C /* UIView+XHBLevelWeight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBLevelWeight.h"; sourceTree = "<group>"; };
 		42F74734278EC73500DD503C /* UIView+XHBLevelWeight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBLevelWeight.m"; sourceTree = "<group>"; };
 		8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachineViewController.swift; sourceTree = "<group>"; };
-		C635B9B6283540CF00F77F1E /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		C6368BC026D01E0A0099A7D3 /* UIView+XHBBoxing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBBoxing.h"; sourceTree = "<group>"; };
 		C6368BC126D01E0A0099A7D3 /* UIView+XHBBoxing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBBoxing.m"; sourceTree = "<group>"; };
 		C6368BC326D01EDE0099A7D3 /* UIColor+XHBColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+XHBColor.h"; sourceTree = "<group>"; };
@@ -138,8 +113,6 @@
 		C6368BED26D6B0440099A7D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C6368BF026D6B0440099A7D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C6368BF226D6B0440099A7D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XHBUIExtension.swift; sourceTree = "<group>"; };
-		C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XHBFoundationExtension.swift; sourceTree = "<group>"; };
 		C6494D04276116C900B22C4E /* XHBCustomStyleButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBCustomStyleButton.h; sourceTree = "<group>"; };
 		C6494D05276116C900B22C4E /* XHBCustomStyleButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBCustomStyleButton.m; sourceTree = "<group>"; };
 		C651AD8624485767004E76A8 /* CodeRecord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CodeRecord.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +127,7 @@
 		C651AD9B2448576A004E76A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C666DB5F285647C700704A43 /* XHBBezierPathBubbleTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHBBezierPathBubbleTipsView.m; sourceTree = "<group>"; };
 		C666DB60285647C700704A43 /* XHBBezierPathBubbleTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHBBezierPathBubbleTipsView.h; sourceTree = "<group>"; };
+		C666DB62285B744600704A43 /* MainEntranceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEntranceManager.swift; sourceTree = "<group>"; };
 		C66F69FC282EBD5900D80CF9 /* XHBTweenEasing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTweenEasing.h; sourceTree = "<group>"; };
 		C66F69FD282EBD5900D80CF9 /* XHBTweenEasing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBTweenEasing.m; sourceTree = "<group>"; };
 		C66F69FF282EC73E00D80CF9 /* XHBTweenScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBTweenScheduler.h; sourceTree = "<group>"; };
@@ -164,22 +138,14 @@
 		C66F6A09282ED85A00D80CF9 /* XHBTweenInterpolatorQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBTweenInterpolatorQueue.m; sourceTree = "<group>"; };
 		C66F6A0C282FEB8E00D80CF9 /* UIView+XHBTweenAnimation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+XHBTweenAnimation.h"; sourceTree = "<group>"; };
 		C66F6A0D282FEB8E00D80CF9 /* UIView+XHBTweenAnimation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+XHBTweenAnimation.m"; sourceTree = "<group>"; };
-		C66F6A142830ADD700D80CF9 /* TweenEasing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenEasing.swift; sourceTree = "<group>"; };
-		C66F6A172830E20500D80CF9 /* TweenValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenValue.swift; sourceTree = "<group>"; };
-		C66F6A192830F78700D80CF9 /* TweenInterpolator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenInterpolator.swift; sourceTree = "<group>"; };
-		C66F6A1B2831091F00D80CF9 /* TweenScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenScheduler.swift; sourceTree = "<group>"; };
-		C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweenInterpolatorQueue.swift; sourceTree = "<group>"; };
 		C6A5D8A226EBC36F00420BC1 /* XHBThemeAttribute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XHBThemeAttribute.h; sourceTree = "<group>"; };
 		C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBThemeAttribute.m; sourceTree = "<group>"; };
 		C6AA5569283FC8A800829B52 /* NSObject+XHBFileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+XHBFileDownloader.h"; sourceTree = "<group>"; };
 		C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XHBFileDownloader.m"; sourceTree = "<group>"; };
-		C6AA556C28411EFC00829B52 /* FileDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		C6C772652809DFEA009FEEB4 /* HBGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBGradientProgressView.h; sourceTree = "<group>"; };
 		C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBGradientProgressView.m; sourceTree = "<group>"; };
 		C6C772682809E7BB009FEEB4 /* HBLineGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBLineGradientProgressView.h; sourceTree = "<group>"; };
 		C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBLineGradientProgressView.m; sourceTree = "<group>"; };
-		C6C7726C280AA53C009FEEB4 /* GradientProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientProgressView.swift; sourceTree = "<group>"; };
-		C6C7726E280AA797009FEEB4 /* LineGradientProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGradientProgressView.swift; sourceTree = "<group>"; };
 		C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientProgressViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -201,30 +167,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4294C30726E1D17200F2D97D /* ContentBrowser */ = {
-			isa = PBXGroup;
-			children = (
-				4294C30826E1D3B200F2D97D /* ContentBrowserView.swift */,
-			);
-			path = ContentBrowser;
-			sourceTree = "<group>";
-		};
-		4294C30A26E5AD3F00F2D97D /* WebCacheImage */ = {
-			isa = PBXGroup;
-			children = (
-				4294C30B26E5AD6900F2D97D /* UIImageViewWebCache.swift */,
-			);
-			path = WebCacheImage;
-			sourceTree = "<group>";
-		};
-		429BB2E226E8BAB200D3667C /* Theme */ = {
-			isa = PBXGroup;
-			children = (
-				429BB2E326E8BAC300D3667C /* Theme.swift */,
-			);
-			path = Theme;
-			sourceTree = "<group>";
-		};
 		42A15D6E26EF824D009E51FA /* CustomTransitioning */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,13 +187,6 @@
 				42C95A4526F49DB1004F4B33 /* UIImageView+XHBWebCache.m */,
 			);
 			path = WebCacheImage;
-			sourceTree = "<group>";
-		};
-		42C95A4726F5C5AA004F4B33 /* Form */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Form;
 			sourceTree = "<group>";
 		};
 		42DBCD7128503CBE004AA9CC /* BacktraceLogger */ = {
@@ -303,8 +238,6 @@
 			isa = PBXGroup;
 			children = (
 				4294C30526E0AAEA00F2D97D /* scene-speach.png */,
-				C6368BF926D6B5770099A7D3 /* Foundation */,
-				C6368BF626D6B04F0099A7D3 /* UIKit */,
 				C6368BE426D6B0410099A7D3 /* AppDelegate.swift */,
 				C6368BED26D6B0440099A7D3 /* Assets.xcassets */,
 				C6368BEF26D6B0440099A7D3 /* LaunchScreen.storyboard */,
@@ -317,52 +250,9 @@
 				42AA9859277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift */,
 				C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */,
 				8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */,
+				C666DB62285B744600704A43 /* MainEntranceManager.swift */,
 			);
 			path = "CodeRecord-Swift";
-			sourceTree = "<group>";
-		};
-		C6368BF626D6B04F0099A7D3 /* UIKit */ = {
-			isa = PBXGroup;
-			children = (
-				C66F6A132830AD7500D80CF9 /* TweenAnimation */,
-				C6C7726B280AA520009FEEB4 /* GradientProgressView */,
-				42C95A4726F5C5AA004F4B33 /* Form */,
-				429BB2E226E8BAB200D3667C /* Theme */,
-				4294C30A26E5AD3F00F2D97D /* WebCacheImage */,
-				4294C30726E1D17200F2D97D /* ContentBrowser */,
-				C6368BFC26DA7FC40099A7D3 /* CustomTransition */,
-				C6368BF726D6B0740099A7D3 /* XHBUIExtension.swift */,
-				428F87862761ED4600266DE0 /* CustomStyleButton.swift */,
-				42AA9857277465D500C5DF89 /* AttributedInterpotationString.swift */,
-			);
-			path = UIKit;
-			sourceTree = "<group>";
-		};
-		C6368BF926D6B5770099A7D3 /* Foundation */ = {
-			isa = PBXGroup;
-			children = (
-				C6368BFA26D6B5940099A7D3 /* XHBFoundationExtension.swift */,
-				C635B9B6283540CF00F77F1E /* StateMachine.swift */,
-				C6AA556C28411EFC00829B52 /* FileDownloader.swift */,
-			);
-			path = Foundation;
-			sourceTree = "<group>";
-		};
-		C6368BFC26DA7FC40099A7D3 /* CustomTransition */ = {
-			isa = PBXGroup;
-			children = (
-				C6368BFF26DA86640099A7D3 /* DirectionTransition */,
-				42C95A3526F31B7F004F4B33 /* CustomTransitioning.swift */,
-			);
-			path = CustomTransition;
-			sourceTree = "<group>";
-		};
-		C6368BFF26DA86640099A7D3 /* DirectionTransition */ = {
-			isa = PBXGroup;
-			children = (
-				42C95A3726F3218D004F4B33 /* DirectionTransitioning.swift */,
-			);
-			path = DirectionTransition;
 			sourceTree = "<group>";
 		};
 		C651AD7D24485767004E76A8 = {
@@ -471,18 +361,6 @@
 			path = XHBTweenAnimation;
 			sourceTree = "<group>";
 		};
-		C66F6A132830AD7500D80CF9 /* TweenAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				C66F6A142830ADD700D80CF9 /* TweenEasing.swift */,
-				C66F6A172830E20500D80CF9 /* TweenValue.swift */,
-				C66F6A192830F78700D80CF9 /* TweenInterpolator.swift */,
-				C66F6A1B2831091F00D80CF9 /* TweenScheduler.swift */,
-				C66F6A1D2831100200D80CF9 /* TweenInterpolatorQueue.swift */,
-			);
-			path = TweenAnimation;
-			sourceTree = "<group>";
-		};
 		C6AA5568283FC84800829B52 /* FileDownloader */ = {
 			isa = PBXGroup;
 			children = (
@@ -499,15 +377,6 @@
 				C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */,
 				C6C772682809E7BB009FEEB4 /* HBLineGradientProgressView.h */,
 				C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */,
-			);
-			path = GradientProgressView;
-			sourceTree = "<group>";
-		};
-		C6C7726B280AA520009FEEB4 /* GradientProgressView */ = {
-			isa = PBXGroup;
-			children = (
-				C6C7726C280AA53C009FEEB4 /* GradientProgressView.swift */,
-				C6C7726E280AA797009FEEB4 /* LineGradientProgressView.swift */,
 			);
 			path = GradientProgressView;
 			sourceTree = "<group>";
@@ -614,32 +483,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6368BF826D6B0740099A7D3 /* XHBUIExtension.swift in Sources */,
 				C6368BE526D6B0410099A7D3 /* AppDelegate.swift in Sources */,
-				C66F6A182830E20500D80CF9 /* TweenValue.swift in Sources */,
-				C66F6A152830ADD700D80CF9 /* TweenEasing.swift in Sources */,
-				428F87872761ED4600266DE0 /* CustomStyleButton.swift in Sources */,
-				4294C30C26E5AD6900F2D97D /* UIImageViewWebCache.swift in Sources */,
+				C666DB63285B744600704A43 /* MainEntranceManager.swift in Sources */,
 				429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */,
-				42C95A3826F3218D004F4B33 /* DirectionTransitioning.swift in Sources */,
 				C6C77271280B2CD1009FEEB4 /* GradientProgressViewController.swift in Sources */,
 				4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */,
-				C66F6A1E2831100200D80CF9 /* TweenInterpolatorQueue.swift in Sources */,
-				C66F6A1C2831091F00D80CF9 /* TweenScheduler.swift in Sources */,
-				C6C7726D280AA53C009FEEB4 /* GradientProgressView.swift in Sources */,
-				C6C7726F280AA797009FEEB4 /* LineGradientProgressView.swift in Sources */,
-				4294C30926E1D3B200F2D97D /* ContentBrowserView.swift in Sources */,
-				42C95A3626F31B7F004F4B33 /* CustomTransitioning.swift in Sources */,
 				4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */,
-				C6368BFB26D6B5940099A7D3 /* XHBFoundationExtension.swift in Sources */,
 				8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */,
-				429BB2E426E8BAC300D3667C /* Theme.swift in Sources */,
 				42AA985A277468AA00C5DF89 /* InterpotaionStringDemoViewController.swift in Sources */,
-				42AA9858277465D500C5DF89 /* AttributedInterpotationString.swift in Sources */,
 				4294C31026E6469C00F2D97D /* ContentBrowserDemoViewController.swift in Sources */,
-				C66F6A1A2830F78700D80CF9 /* TweenInterpolator.swift in Sources */,
-				C6AA556D28411EFC00829B52 /* FileDownloader.swift in Sources */,
-				C635B9B7283540CF00F77F1E /* StateMachine.swift in Sources */,
 				4294C30226E07FCF00F2D97D /* MainEntranceViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
