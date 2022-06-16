@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import XHBCommonSwiftLib
 
 class StateMachineViewController : UIViewController {
     

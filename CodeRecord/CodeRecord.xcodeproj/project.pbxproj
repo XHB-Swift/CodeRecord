@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -56,6 +56,8 @@
 		C6C772672809DFEA009FEEB4 /* HBGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */; };
 		C6C7726A2809E7BB009FEEB4 /* HBLineGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */; };
 		C6C77271280B2CD1009FEEB4 /* GradientProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */; };
+		C6EB83D0285B935E005E50ED /* XHBCommonSwiftLib in Frameworks */ = {isa = PBXBuildFile; productRef = C6EB83CF285B935E005E50ED /* XHBCommonSwiftLib */; };
+		C6EB83D3285B942C005E50ED /* XHBCommonSwiftLib in Frameworks */ = {isa = PBXBuildFile; productRef = C6EB83D2285B942C005E50ED /* XHBCommonSwiftLib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6EB83D3285B942C005E50ED /* XHBCommonSwiftLib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6EB83D0285B935E005E50ED /* XHBCommonSwiftLib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +265,7 @@
 				C651AD8824485767004E76A8 /* CodeRecord */,
 				C6368BE326D6B0410099A7D3 /* CodeRecord-Swift */,
 				C651AD8724485767004E76A8 /* Products */,
+				C6EB83D1285B942C005E50ED /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -381,6 +386,13 @@
 			path = GradientProgressView;
 			sourceTree = "<group>";
 		};
+		C6EB83D1285B942C005E50ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -397,6 +409,9 @@
 			dependencies = (
 			);
 			name = "CodeRecord-Swift";
+			packageProductDependencies = (
+				C6EB83D2285B942C005E50ED /* XHBCommonSwiftLib */,
+			);
 			productName = "CodeRecord-Swift";
 			productReference = C6368BE226D6B0410099A7D3 /* CodeRecord-Swift.app */;
 			productType = "com.apple.product-type.application";
@@ -414,6 +429,9 @@
 			dependencies = (
 			);
 			name = CodeRecord;
+			packageProductDependencies = (
+				C6EB83CF285B935E005E50ED /* XHBCommonSwiftLib */,
+			);
 			productName = CodeRecord;
 			productReference = C651AD8624485767004E76A8 /* CodeRecord.app */;
 			productType = "com.apple.product-type.application";
@@ -445,6 +463,9 @@
 				Base,
 			);
 			mainGroup = C651AD7D24485767004E76A8;
+			packageReferences = (
+				C6EB83CE285B935E005E50ED /* XCRemoteSwiftPackageReference "XHBCommonSwiftLib" */,
+			);
 			productRefGroup = C651AD8724485767004E76A8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -794,6 +815,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C6EB83CE285B935E005E50ED /* XCRemoteSwiftPackageReference "XHBCommonSwiftLib" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:XHB-Swift/XHBCommonSwiftLib.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C6EB83CF285B935E005E50ED /* XHBCommonSwiftLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6EB83CE285B935E005E50ED /* XCRemoteSwiftPackageReference "XHBCommonSwiftLib" */;
+			productName = XHBCommonSwiftLib;
+		};
+		C6EB83D2285B942C005E50ED /* XHBCommonSwiftLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6EB83CE285B935E005E50ED /* XCRemoteSwiftPackageReference "XHBCommonSwiftLib" */;
+			productName = XHBCommonSwiftLib;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C651AD7E24485767004E76A8 /* Project object */;
 }

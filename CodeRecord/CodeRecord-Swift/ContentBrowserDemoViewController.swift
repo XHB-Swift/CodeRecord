@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import XHBCommonSwiftLib
 
 open class ContentBrowserImageData: ContentBrowserPageData {
     
@@ -27,8 +28,8 @@ class ContentBrowserDemoViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        let button = UIButton(title: "弹出图片浏览", state: .normal)
-        button.addTarget(self, action: #selector(tapShowBrowser(_:)), for: .touchUpInside)
+        let button = UIButton(type: .custom, target: self, action: #selector(tapShowBrowser(_:)), for: .touchUpInside)
+        button.setTitle("弹出图片浏览器", for: .normal)
         button.origin = CGPoint(x: 50, y: 100)
         view.addSubview(button)
     }
