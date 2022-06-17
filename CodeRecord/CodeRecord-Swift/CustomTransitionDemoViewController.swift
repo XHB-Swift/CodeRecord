@@ -18,7 +18,7 @@ class ViewController1: UIViewController {
         super.viewDidLoad()
         
         title = "ViewController1"
-        view.backgroundColor = ColorData.randomColor.uiColor
+        view.backgroundColor = .randomColor
         
         let button = UIButton(type: .custom)
         button.setTitle("返回", for: .normal)
@@ -66,7 +66,7 @@ class ViewController1: UIViewController {
         self.testView?.tweenAnimation(for: \UIView.backgroundColor,
                                       duration: 1.5,
                                       easing: .InOut.bounce,
-                                      to: ColorData(hexString: "9B30FF")!.uiColor)
+                                      to: UIColor(hexString: "9B30FF")!)
     }
 }
 
@@ -80,7 +80,7 @@ class ViewController2: UIViewController {
         super.viewDidLoad()
         
         title = "ViewController2"
-        view.backgroundColor = ColorData.randomColor.uiColor
+        view.backgroundColor = .randomColor
         let button = UIButton(type: .custom)
         button.setTitle("返回", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -155,7 +155,7 @@ class CustomTransitionDemoViewController: UIViewController {
         jumpButton = button
         
         let view1 = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 200, height: 200)))
-        view1.backgroundColor = ColorData(hexString: "9d1a8c")?.uiColor
+        view1.backgroundColor = UIColor(hexString: "9d1a8c")
         view1.isUserInteractionEnabled = true
         view1.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(clickTestView(_:))))
         view.addSubview(view1)
@@ -182,7 +182,7 @@ class CustomTransitionDemoViewController: UIViewController {
 //                           configuration: halfWindowConfig,
 //                           completion: nil)
         let navigationCtrl = UINavigationController(rootViewController: ViewController1())
-        navigationCtrl.navigationBar.barTintColor = ColorData.randomColor.uiColor
+        navigationCtrl.navigationBar.barTintColor = .randomColor
 //        add(viewController: navigationController, config: halfWindowConfig)
         show(viewController: navigationCtrl, config: halfWindowConfig)
     }
