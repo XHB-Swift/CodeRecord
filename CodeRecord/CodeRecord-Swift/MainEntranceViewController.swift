@@ -135,6 +135,7 @@ extension MainEntranceViewController {
         MainEntranceManager.register(entrance: "富文本插值初始化", viewControllerClassName: "InterpotaionStringDemoViewController")
         MainEntranceManager.register(entrance: "渐变进度条", viewControllerClassName: "GradientProgressViewController")
         MainEntranceManager.register(entrance: "状态机", viewControllerClassName: "StateMachineViewController")
+        MainEntranceManager.register(entrance: "自定义气泡", viewControllerClassName: "CustomBubbleTipsViewController")
     }
     
 }

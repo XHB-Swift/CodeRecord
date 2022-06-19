@@ -32,7 +32,8 @@ public final class MainEntranceManager {
     
     public class func viewController(at index: Int) -> UIViewController? {
         let vcName = shared.entrances[index].vcName
-        guard let vcClass = NSClassFromString(vcName),
+        guard let objClassName = vcName.objectClassName,
+              let vcClass = NSClassFromString(objClassName),
               let vcType = vcClass as? UIViewController.Type
         else { return nil }
         let targetVC = vcType.init()

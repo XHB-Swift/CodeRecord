@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:XHB-Swift/XHBCommonSwiftLib.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "4c7e9b39c4bbe71daf66b17f4a3d4f79a9b1b8e5"
+        "revision" : "36e1a3af4b79736c67c933c3aec17955b68d3a34",
+        "version" : "1.0.9"
       }
     }
   ],
