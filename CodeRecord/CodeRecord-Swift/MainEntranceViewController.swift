@@ -55,11 +55,6 @@ class MainEntranceTableCell: UITableViewCell {
     }
 }
 
-struct MainEntranceModel {
-    var title: String
-    var vcName: String
-}
-
 class MainEntranceViewModel: NSObject, UITableViewDataSource {
     
     weak var tableView: UITableView? {
@@ -136,6 +131,7 @@ extension MainEntranceViewController {
         MainEntranceManager.register(entrance: "渐变进度条", viewControllerClassName: "GradientProgressViewController")
         MainEntranceManager.register(entrance: "状态机", viewControllerClassName: "StateMachineViewController")
         MainEntranceManager.register(entrance: "自定义气泡", viewControllerClassName: "CustomBubbleTipsViewController")
+        MainEntranceManager.register(entrance: "自定义CollectionView", viewControllerClassName: "CustomCollectionViewController")
     }
     
 }

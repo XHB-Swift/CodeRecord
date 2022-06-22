@@ -8,6 +8,10 @@
 
 import UIKit
 
+private struct MainEntranceModel {
+    var title: String
+    var vcName: String
+}
 
 public final class MainEntranceManager {
     

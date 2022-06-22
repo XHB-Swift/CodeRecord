@@ -53,6 +53,7 @@
 		C66F6A0E282FEB8E00D80CF9 /* UIView+XHBTweenAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = C66F6A0D282FEB8E00D80CF9 /* UIView+XHBTweenAnimation.m */; };
 		C6A5D8A426EBC36F00420BC1 /* XHBThemeAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */; };
 		C6AA556B283FC8A800829B52 /* NSObject+XHBFileDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */; };
+		C6B86C61286343AC00E52BC5 /* CustomCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B86C60286343AC00E52BC5 /* CustomCollectionViewController.swift */; };
 		C6C772672809DFEA009FEEB4 /* HBGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */; };
 		C6C7726A2809E7BB009FEEB4 /* HBLineGradientProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C772692809E7BB009FEEB4 /* HBLineGradientProgressView.m */; };
 		C6C77271280B2CD1009FEEB4 /* GradientProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C77270280B2CD1009FEEB4 /* GradientProgressViewController.swift */; };
@@ -144,6 +145,7 @@
 		C6A5D8A326EBC36F00420BC1 /* XHBThemeAttribute.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XHBThemeAttribute.m; sourceTree = "<group>"; };
 		C6AA5569283FC8A800829B52 /* NSObject+XHBFileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+XHBFileDownloader.h"; sourceTree = "<group>"; };
 		C6AA556A283FC8A800829B52 /* NSObject+XHBFileDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+XHBFileDownloader.m"; sourceTree = "<group>"; };
+		C6B86C60286343AC00E52BC5 /* CustomCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewController.swift; sourceTree = "<group>"; };
 		C6C772652809DFEA009FEEB4 /* HBGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBGradientProgressView.h; sourceTree = "<group>"; };
 		C6C772662809DFEA009FEEB4 /* HBGradientProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBGradientProgressView.m; sourceTree = "<group>"; };
 		C6C772682809E7BB009FEEB4 /* HBLineGradientProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBLineGradientProgressView.h; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				8EA6F2752839427B00DD6671 /* StateMachineViewController.swift */,
 				C666DB62285B744600704A43 /* MainEntranceManager.swift */,
 				C6EB83DD285F4AE7005E50ED /* CustomBubbleTipsViewController.swift */,
+				C6B86C60286343AC00E52BC5 /* CustomCollectionViewController.swift */,
 			);
 			path = "CodeRecord-Swift";
 			sourceTree = "<group>";
@@ -509,6 +512,7 @@
 				429BB2E626E9FC6F00D3667C /* ThemeSwitchDemoViewController.swift in Sources */,
 				C6C77271280B2CD1009FEEB4 /* GradientProgressViewController.swift in Sources */,
 				4294C30426E0806500F2D97D /* CustomTransitionDemoViewController.swift in Sources */,
+				C6B86C61286343AC00E52BC5 /* CustomCollectionViewController.swift in Sources */,
 				C6EB83DE285F4AE7005E50ED /* CustomBubbleTipsViewController.swift in Sources */,
 				4294C30E26E5EB7100F2D97D /* ImageWebCacheDemoViewController.swift in Sources */,
 				8EA6F2762839427B00DD6671 /* StateMachineViewController.swift in Sources */,
