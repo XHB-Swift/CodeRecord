@@ -8,6 +8,7 @@
 
 import UIKit
 import XHBCommonSwiftLib
+import XHBFoundationSwiftLib
 
 let imageUrl1 = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20161205%2F6da202d5a03e45129b981658fc33c210_th.jpeg&refer=http%3A%2F%2Fimg.mp.itc.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1633503003&t=23ad55080640882ef56dd62e2e4a964b"
 let imageUrl2 = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fztd00.photos.bdimg.com%2Fztd%2Fw%3D700%3Bq%3D50%2Fsign%3Dfe9d19a4037b02080cc93de152e283ee%2Fbd315c6034a85edf1d2acf2240540923dd547508.jpg&refer=http%3A%2F%2Fztd00.photos.bdimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1633513057&t=8b2909c38fdd9824c7ffbf24899d6f70"

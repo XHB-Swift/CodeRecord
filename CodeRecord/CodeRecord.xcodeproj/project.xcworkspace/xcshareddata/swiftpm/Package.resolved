@@ -5,8 +5,17 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:XHB-Swift/XHBCommonSwiftLib.git",
       "state" : {
-        "revision" : "6c7bded96ebda50f336682fcd39fd724b005f802",
-        "version" : "1.0.11"
+        "revision" : "e8e2c8704d04ca4d2475b960d13e2e00fb51348c",
+        "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "xhbfoundationswiftlib",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:XHB-Swift/XHBFoundationSwiftLib.git",
+      "state" : {
+        "revision" : "95bdd4b754a030964a26fd79e0b6edcc0d9657d8",
+        "version" : "0.0.1"
       }
     }
   ],

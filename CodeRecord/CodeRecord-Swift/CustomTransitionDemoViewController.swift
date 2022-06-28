@@ -8,6 +8,7 @@
 
 import UIKit
 import XHBCommonSwiftLib
+import XHBFoundationSwiftLib
 
 class ViewController1: UIViewController {
     
@@ -63,10 +64,11 @@ class ViewController1: UIViewController {
     }
     
     @objc func testButtonAction(_ sender: UIButton) {
+        guard let color = UIColor(hexString: "9B30FF") else { return }
         self.testView?.tweenAnimation(for: \UIView.backgroundColor,
                                       duration: 1.5,
                                       easing: .InOut.bounce,
-                                      to: UIColor(hexString: "9B30FF")!)
+                                      to: TweenColor(uiColor: color))
     }
 }
 

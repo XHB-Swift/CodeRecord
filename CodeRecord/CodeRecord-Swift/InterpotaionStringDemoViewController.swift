@@ -8,6 +8,7 @@
 
 import UIKit
 import XHBCommonSwiftLib
+import XHBFoundationSwiftLib
 
 struct Request {
     
